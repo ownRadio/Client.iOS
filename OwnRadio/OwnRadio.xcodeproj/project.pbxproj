@@ -14,6 +14,7 @@
 		0916795F1DE451CF00619B3F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0916795D1DE451CF00619B3F /* LaunchScreen.storyboard */; };
 		0916796A1DE451CF00619B3F /* OwnRadioTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 091679691DE451CF00619B3F /* OwnRadioTests.swift */; };
 		091679751DE451CF00619B3F /* OwnRadioUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 091679741DE451CF00619B3F /* OwnRadioUITests.swift */; };
+		091679C71DE47D4400619B3F /* ApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 091679C61DE47D4400619B3F /* ApiService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +48,8 @@
 		091679701DE451CF00619B3F /* OwnRadioUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OwnRadioUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		091679741DE451CF00619B3F /* OwnRadioUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OwnRadioUITests.swift; sourceTree = "<group>"; };
 		091679761DE451CF00619B3F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		091679C61DE47D4400619B3F /* ApiService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiService.swift; sourceTree = "<group>"; };
+		091679C91DE47D9900619B3F /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +84,7 @@
 				091679681DE451CF00619B3F /* OwnRadioTests */,
 				091679731DE451CF00619B3F /* OwnRadioUITests */,
 				091679521DE451CF00619B3F /* Products */,
+				091679C81DE47D9900619B3F /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -98,6 +102,7 @@
 			isa = PBXGroup;
 			children = (
 				091679541DE451CF00619B3F /* AppDelegate.swift */,
+				091679C61DE47D4400619B3F /* ApiService.swift */,
 				091679561DE451CF00619B3F /* ViewController.swift */,
 				091679581DE451CF00619B3F /* Main.storyboard */,
 				0916795B1DE451CF00619B3F /* Assets.xcassets */,
@@ -123,6 +128,14 @@
 				091679761DE451CF00619B3F /* Info.plist */,
 			);
 			path = OwnRadioUITests;
+			sourceTree = "<group>";
+		};
+		091679C81DE47D9900619B3F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				091679C91DE47D9900619B3F /* Alamofire.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -260,6 +273,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				091679571DE451CF00619B3F /* ViewController.swift in Sources */,
+				091679C71DE47D4400619B3F /* ApiService.swift in Sources */,
 				091679551DE451CF00619B3F /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -412,6 +426,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = OwnRadio/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = OR.OwnRadio;
@@ -424,6 +442,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = OwnRadio/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = OR.OwnRadio;
@@ -505,6 +527,7 @@
 				0916797B1DE451CF00619B3F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		0916797C1DE451CF00619B3F /* Build configuration list for PBXNativeTarget "OwnRadioTests" */ = {
 			isa = XCConfigurationList;
@@ -513,6 +536,7 @@
 				0916797E1DE451CF00619B3F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		0916797F1DE451CF00619B3F /* Build configuration list for PBXNativeTarget "OwnRadioUITests" */ = {
 			isa = XCConfigurationList;
@@ -521,6 +545,7 @@
 				091679811DE451CF00619B3F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

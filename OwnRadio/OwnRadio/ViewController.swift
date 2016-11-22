@@ -10,6 +10,9 @@ import UIKit
 
 class ViewController: UIViewController {
 	
+	let defaultSession = URLSession(configuration: URLSessionConfiguration.default)
+	var dataTask: URLSessionDataTask?
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		// Do any additional setup after loading the view, typically from a nib.
@@ -20,6 +23,12 @@ class ViewController: UIViewController {
 		// Dispose of any resources that can be recreated.
 	}
 	
+	@IBAction func nextTrackButtonPressed() {
+
+		let apiService = ApiService()
+		apiService.getTrackIDFromServer()
+		
+	}
 	
 }
 
