@@ -1,0 +1,8 @@
+.DS_Store
+.Trashes
+*.swp
+*~.nib
+DerivedData/
+build/
+xcuserdata/
+*.moved-aside

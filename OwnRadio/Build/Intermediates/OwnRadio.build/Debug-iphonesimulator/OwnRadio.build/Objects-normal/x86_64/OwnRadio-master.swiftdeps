@@ -1,0 +1,6 @@
+version: "Apple Swift version 3.0 (swiftlang-800.0.46.2 clang-800.0.38)"
+options: "e28596459471dedbff67fb4a6f3d061e"
+build_time: [533124818, 332110000]
+inputs:
+  "/Users/romanlitoshko/OwnRadio/OwnRadio/OwnRadio/ViewController.swift": [533124815, 0]
+  "/Users/romanlitoshko/OwnRadio/OwnRadio/OwnRadio/AppDelegate.swift": [533124815, 0]
