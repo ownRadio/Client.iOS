@@ -4,5 +4,6 @@
 *~.nib
 DerivedData/
 Build/
+Carthage/
 xcuserdata/
 *.moved-aside
