@@ -49,6 +49,8 @@ class AudioPlayerManager: NSObject {
 		player = AVPlayer(playerItem: playerItem)
 
 		player.play()
+		isPlaying = true
+		
 		
 	}
 	
@@ -90,9 +92,15 @@ class AudioPlayerManager: NSObject {
 		MPNowPlayingInfoCenter.default().nowPlayingInfo = songInfo
 	}
 	
+	func resumeSong() {
+		self.player.play()
+		isPlaying = true
+	}
 	
-	func playOrPause() {
+	func pauseSong() {
+		
 		self.player.pause()
+		isPlaying = false
 	}
 	
 	func nextTrack() {

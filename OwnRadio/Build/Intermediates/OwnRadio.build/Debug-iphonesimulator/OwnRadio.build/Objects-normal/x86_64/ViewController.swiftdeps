@@ -6,20 +6,20 @@ provides-nominal:
 provides-member:
 - ["C8OwnRadio14ViewController", ""]
 provides-dynamic-lookup:
+- "dataTask"
 - "didReceiveMemoryWarning"
+- "viewDidLoad"
 - "player"
 - "defaultSession"
 - "nextTrackButtonPressed"
-- "viewDidLoad"
-- "dataTask"
 depends-top-level:
+- "ViewController"
+- "URLSessionDataTask"
 - "AssignmentPrecedence"
-- "UIViewController"
-- "URLSessionConfiguration"
 - "URLSession"
 - "AudioPlayerManager"
-- "URLSessionDataTask"
-- "ViewController"
+- "URLSessionConfiguration"
+- "UIViewController"
 depends-member:
 - !private ["Ps9AnyObject", "AudioPlayerManager"]
 - ["Ps9AnyObject", "URLSession"]

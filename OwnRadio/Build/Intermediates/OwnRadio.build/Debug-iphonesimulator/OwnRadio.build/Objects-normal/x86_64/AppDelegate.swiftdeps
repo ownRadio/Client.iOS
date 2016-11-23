@@ -6,31 +6,31 @@ provides-nominal:
 provides-member:
 - ["C8OwnRadio11AppDelegate", ""]
 provides-dynamic-lookup:
+- "applicationDidBecomeActive"
+- "applicationWillResignActive"
+- "remoteControlReceived"
+- "window"
+- "applicationWillEnterForeground"
+- "applicationDidEnterBackground"
 - "application"
 - "applicationWillTerminate"
-- "remoteControlReceived"
-- "applicationWillEnterForeground"
-- "window"
-- "applicationWillResignActive"
-- "applicationDidBecomeActive"
-- "applicationDidEnterBackground"
 depends-top-level:
-- !private "StringLiteralType"
-- !private "UserDefaults"
-- !private "UIEventSubtype"
-- "UIWindow"
-- "UIEvent"
-- "UIApplication"
+- "UIApplicationLaunchOptionsKey"
+- "AppDelegate"
 - !private "BooleanLiteralType"
 - !private "AudioPlayerManager"
-- "Bool"
-- "UIResponder"
 - !private "UIEventType"
-- "AppDelegate"
-- !private "NSUUID"
-- "UIApplicationLaunchOptionsKey"
+- !private "StringLiteralType"
 - "UIApplicationDelegate"
+- "UIResponder"
+- "UIWindow"
 - !private "=="
+- !private "UserDefaults"
+- "UIApplication"
+- "Bool"
+- "UIEvent"
+- !private "NSUUID"
+- !private "UIEventSubtype"
 depends-member:
 - !private ["Ps9AnyObject", "AudioPlayerManager"]
 - !private ["Ps9AnyObject", "NSUUID"]
@@ -51,8 +51,9 @@ depends-member:
 - !private ["Ps9AnyObject", "init"]
 - !private ["Ps9AnyObject", "nextTrack"]
 - !private ["Ps9AnyObject", "object"]
-- !private ["Ps9AnyObject", "playOrPause"]
+- !private ["Ps9AnyObject", "pauseSong"]
 - ["Ps9AnyObject", "remoteControlReceived"]
+- !private ["Ps9AnyObject", "resumeSong"]
 - !private ["Ps9AnyObject", "set"]
 - !private ["Ps9AnyObject", "sharedInstance"]
 - !private ["Ps9AnyObject", "standard"]
@@ -90,7 +91,8 @@ depends-member:
 - ["C8OwnRadio11AppDelegate", "window"]
 - ["C8OwnRadio18AudioPlayerManager", "deinit"]
 - !private ["C8OwnRadio18AudioPlayerManager", "nextTrack"]
-- !private ["C8OwnRadio18AudioPlayerManager", "playOrPause"]
+- !private ["C8OwnRadio18AudioPlayerManager", "pauseSong"]
+- !private ["C8OwnRadio18AudioPlayerManager", "resumeSong"]
 - !private ["C8OwnRadio18AudioPlayerManager", "sharedInstance"]
 - !private ["Sb", "_getBuiltinLogicValue"]
 - ["Sb", "deinit"]
@@ -113,8 +115,9 @@ depends-member:
 - !private ["Ps7CVarArg", "init"]
 - !private ["Ps7CVarArg", "nextTrack"]
 - !private ["Ps7CVarArg", "object"]
-- !private ["Ps7CVarArg", "playOrPause"]
+- !private ["Ps7CVarArg", "pauseSong"]
 - ["Ps7CVarArg", "remoteControlReceived"]
+- !private ["Ps7CVarArg", "resumeSong"]
 - !private ["Ps7CVarArg", "set"]
 - !private ["Ps7CVarArg", "sharedInstance"]
 - !private ["Ps7CVarArg", "standard"]
@@ -144,8 +147,9 @@ depends-member:
 - !private ["Ps28CustomDebugStringConvertible", "init"]
 - !private ["Ps28CustomDebugStringConvertible", "nextTrack"]
 - !private ["Ps28CustomDebugStringConvertible", "object"]
-- !private ["Ps28CustomDebugStringConvertible", "playOrPause"]
+- !private ["Ps28CustomDebugStringConvertible", "pauseSong"]
 - ["Ps28CustomDebugStringConvertible", "remoteControlReceived"]
+- !private ["Ps28CustomDebugStringConvertible", "resumeSong"]
 - !private ["Ps28CustomDebugStringConvertible", "set"]
 - !private ["Ps28CustomDebugStringConvertible", "sharedInstance"]
 - !private ["Ps28CustomDebugStringConvertible", "standard"]
@@ -179,8 +183,9 @@ depends-member:
 - !private ["Ps23CustomStringConvertible", "init"]
 - !private ["Ps23CustomStringConvertible", "nextTrack"]
 - !private ["Ps23CustomStringConvertible", "object"]
-- !private ["Ps23CustomStringConvertible", "playOrPause"]
+- !private ["Ps23CustomStringConvertible", "pauseSong"]
 - ["Ps23CustomStringConvertible", "remoteControlReceived"]
+- !private ["Ps23CustomStringConvertible", "resumeSong"]
 - !private ["Ps23CustomStringConvertible", "set"]
 - !private ["Ps23CustomStringConvertible", "sharedInstance"]
 - !private ["Ps23CustomStringConvertible", "standard"]
@@ -211,13 +216,14 @@ depends-member:
 - !private ["Ps9Equatable", "init"]
 - !private ["Ps9Equatable", "nextTrack"]
 - !private ["Ps9Equatable", "object"]
-- !private ["Ps9Equatable", "playOrPause"]
+- !private ["Ps9Equatable", "pauseSong"]
 - !private ["Ps9Equatable", "remoteControl"]
 - ["Ps9Equatable", "remoteControlNextTrack"]
 - ["Ps9Equatable", "remoteControlPause"]
 - ["Ps9Equatable", "remoteControlPlay"]
 - ["Ps9Equatable", "remoteControlReceived"]
 - ["Ps9Equatable", "remoteControlTogglePlayPause"]
+- !private ["Ps9Equatable", "resumeSong"]
 - !private ["Ps9Equatable", "set"]
 - !private ["Ps9Equatable", "sharedInstance"]
 - !private ["Ps9Equatable", "standard"]
@@ -253,13 +259,14 @@ depends-member:
 - !private ["Ps8Hashable", "init"]
 - !private ["Ps8Hashable", "nextTrack"]
 - !private ["Ps8Hashable", "object"]
-- !private ["Ps8Hashable", "playOrPause"]
+- !private ["Ps8Hashable", "pauseSong"]
 - !private ["Ps8Hashable", "remoteControl"]
 - ["Ps8Hashable", "remoteControlNextTrack"]
 - ["Ps8Hashable", "remoteControlPause"]
 - ["Ps8Hashable", "remoteControlPlay"]
 - ["Ps8Hashable", "remoteControlReceived"]
 - ["Ps8Hashable", "remoteControlTogglePlayPause"]
+- !private ["Ps8Hashable", "resumeSong"]
 - !private ["Ps8Hashable", "set"]
 - !private ["Ps8Hashable", "sharedInstance"]
 - !private ["Ps8Hashable", "standard"]
@@ -302,8 +309,9 @@ depends-member:
 - ["CSo8NSObject", "init"]
 - !private ["CSo8NSObject", "nextTrack"]
 - !private ["CSo8NSObject", "object"]
-- !private ["CSo8NSObject", "playOrPause"]
+- !private ["CSo8NSObject", "pauseSong"]
 - ["CSo8NSObject", "remoteControlReceived"]
+- !private ["CSo8NSObject", "resumeSong"]
 - !private ["CSo8NSObject", "set"]
 - !private ["CSo8NSObject", "sharedInstance"]
 - !private ["CSo8NSObject", "standard"]
@@ -331,8 +339,9 @@ depends-member:
 - !private ["PSo16NSObjectProtocol", "init"]
 - !private ["PSo16NSObjectProtocol", "nextTrack"]
 - !private ["PSo16NSObjectProtocol", "object"]
-- !private ["PSo16NSObjectProtocol", "playOrPause"]
+- !private ["PSo16NSObjectProtocol", "pauseSong"]
 - ["PSo16NSObjectProtocol", "remoteControlReceived"]
+- !private ["PSo16NSObjectProtocol", "resumeSong"]
 - !private ["PSo16NSObjectProtocol", "set"]
 - !private ["PSo16NSObjectProtocol", "sharedInstance"]
 - !private ["PSo16NSObjectProtocol", "standard"]
@@ -468,13 +477,14 @@ depends-member:
 - !private ["Ps9_Hashable", "init"]
 - !private ["Ps9_Hashable", "nextTrack"]
 - !private ["Ps9_Hashable", "object"]
-- !private ["Ps9_Hashable", "playOrPause"]
+- !private ["Ps9_Hashable", "pauseSong"]
 - !private ["Ps9_Hashable", "remoteControl"]
 - ["Ps9_Hashable", "remoteControlNextTrack"]
 - ["Ps9_Hashable", "remoteControlPause"]
 - ["Ps9_Hashable", "remoteControlPlay"]
 - ["Ps9_Hashable", "remoteControlReceived"]
 - ["Ps9_Hashable", "remoteControlTogglePlayPause"]
+- !private ["Ps9_Hashable", "resumeSong"]
 - !private ["Ps9_Hashable", "set"]
 - !private ["Ps9_Hashable", "sharedInstance"]
 - !private ["Ps9_Hashable", "standard"]

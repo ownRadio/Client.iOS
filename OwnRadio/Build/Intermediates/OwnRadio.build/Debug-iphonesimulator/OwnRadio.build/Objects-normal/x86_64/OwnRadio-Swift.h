@@ -152,7 +152,8 @@ SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, strong) AudioPlayerM
   confirure album cover and other params for playing song
 */
 - (void)configurePlayingSong;
-- (void)playOrPause;
+- (void)resumeSong;
+- (void)pauseSong;
 - (void)nextTrack;
 @end
 
