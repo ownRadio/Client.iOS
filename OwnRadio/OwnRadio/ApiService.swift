@@ -11,14 +11,14 @@ import Foundation
 
 class ApiService {
 	
-	var nextTrackIDString: String
-	
+//	var nextTrackIDString: String
 	
 	init() {
-		self.nextTrackIDString = ""
+//		self.nextTrackIDString = ""
 	}
 	
-	func getTrackIDFromServerWithComplition(resultString:String -> void){
+	
+	func getTrackIDFromServer (complition: @escaping (String) -> Void)  {
 		
 		let urlString = "http://java.ownradio.ru/api/v2/tracks/" + (UserDefaults.standard.object(forKey: "UUIDDevice") as! String) + "/next"
 		guard let url = NSURL(string: urlString) else {
@@ -41,7 +41,8 @@ class ApiService {
 		return
 			}
 			
-			self.nextTrackIDString = String(data: data!, encoding: String.Encoding.utf8)!
+			let nextTrackIDString = String(data: data!, encoding: String.Encoding.utf8)!
+			complition(nextTrackIDString)
 			
 			self.getMediaTrackFromServer()
 			
@@ -51,32 +52,32 @@ class ApiService {
 	
 	func getMediaTrackFromServer() {
 		
-		let urlString = "http://java.ownradio.ru/api/v2/tracks/" + self.nextTrackIDString
-		
-		guard let url = NSURL(string: urlString) else {
-			print("Error: cannot create URL")
-			return
-		}
-		let urlRequest = NSURLRequest(url: url as URL)
-		
-		// set up the session
-		let config = URLSessionConfiguration.default
-		let session = URLSession(configuration: config)
-		
-		// make the request
-		
-		let task = session.dataTask(with: urlRequest as URLRequest, completionHandler: { (data, response, error) in
-			// do stuff with response, data & error here
-			print(data?.description)
-			
-			guard error == nil else {
-				return
-			}
-			
-			
-			
-		})
-		task.resume()
+////		let urlString = "http://java.ownradio.ru/api/v2/tracks/" + self.nextTrackIDString
+//		
+//		guard let url = NSURL(string: urlString) else {
+//			print("Error: cannot create URL")
+//			return
+//		}
+//		let urlRequest = NSURLRequest(url: url as URL)
+//		
+//		// set up the session
+//		let config = URLSessionConfiguration.default
+//		let session = URLSession(configuration: config)
+//		
+//		// make the request
+//		
+//		let task = session.dataTask(with: urlRequest as URLRequest, completionHandler: { (data, response, error) in
+//			// do stuff with response, data & error here
+//			print(data?.description)
+//			
+//			guard error == nil else {
+//				return
+//			}
+//			
+//			
+//			
+//		})
+//		task.resume()
 
 		
 	}

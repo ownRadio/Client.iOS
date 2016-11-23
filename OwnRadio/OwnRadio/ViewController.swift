@@ -26,8 +26,11 @@ class ViewController: UIViewController {
 	@IBAction func nextTrackButtonPressed() {
 
 		let apiService = ApiService()
-		apiService.getTrackIDFromServer()
-		
+		apiService.getTrackIDFromServer { (resultString) in
+		let player = AudioPlayerManager.sharedInstance
+		player.playAudioWith(trackID: resultString)
+			
+		}
 	}
 	
 }

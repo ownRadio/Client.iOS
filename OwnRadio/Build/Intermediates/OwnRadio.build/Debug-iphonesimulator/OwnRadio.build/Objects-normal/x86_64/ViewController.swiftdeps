@@ -6,20 +6,22 @@ provides-nominal:
 provides-member:
 - ["C8OwnRadio14ViewController", ""]
 provides-dynamic-lookup:
-- "defaultSession"
-- "viewDidLoad"
+- "didReceiveMemoryWarning"
 - "nextTrackButtonPressed"
 - "dataTask"
-- "didReceiveMemoryWarning"
+- "defaultSession"
+- "viewDidLoad"
 depends-top-level:
+- "URLSessionDataTask"
+- "ViewController"
 - "UIViewController"
+- !private "AudioPlayerManager"
+- "URLSessionConfiguration"
 - !private "ApiService"
 - "URLSession"
-- "URLSessionConfiguration"
-- "ViewController"
-- "URLSessionDataTask"
 depends-member:
 - !private ["Ps9AnyObject", "ApiService"]
+- !private ["Ps9AnyObject", "AudioPlayerManager"]
 - ["Ps9AnyObject", "URLSession"]
 - ["Ps9AnyObject", "URLSessionConfiguration"]
 - ["Ps9AnyObject", "dataTask"]
@@ -29,12 +31,18 @@ depends-member:
 - !private ["Ps9AnyObject", "getTrackIDFromServer"]
 - ["Ps9AnyObject", "init"]
 - ["Ps9AnyObject", "nextTrackButtonPressed"]
+- !private ["Ps9AnyObject", "playAudioWith"]
+- !private ["Ps9AnyObject", "sharedInstance"]
 - ["Ps9AnyObject", "viewDidLoad"]
 - ["Ps9AnyObject", ""]
 - ["C8OwnRadio10ApiService", "deinit"]
 - !private ["C8OwnRadio10ApiService", "getTrackIDFromServer"]
 - !private ["C8OwnRadio10ApiService", "init"]
+- !private ["C8OwnRadio18AudioPlayerManager", "deinit"]
+- !private ["C8OwnRadio18AudioPlayerManager", "playAudioWith"]
+- !private ["C8OwnRadio18AudioPlayerManager", "sharedInstance"]
 - !private ["Ps7CVarArg", "ApiService"]
+- !private ["Ps7CVarArg", "AudioPlayerManager"]
 - ["Ps7CVarArg", "URLSession"]
 - ["Ps7CVarArg", "URLSessionConfiguration"]
 - ["Ps7CVarArg", "dataTask"]
@@ -46,6 +54,7 @@ depends-member:
 - ["Ps7CVarArg", "viewDidLoad"]
 - ["Ps7CVarArg", ""]
 - !private ["Ps28CustomDebugStringConvertible", "ApiService"]
+- !private ["Ps28CustomDebugStringConvertible", "AudioPlayerManager"]
 - ["Ps28CustomDebugStringConvertible", "URLSession"]
 - ["Ps28CustomDebugStringConvertible", "URLSessionConfiguration"]
 - ["Ps28CustomDebugStringConvertible", "dataTask"]
@@ -57,6 +66,7 @@ depends-member:
 - ["Ps28CustomDebugStringConvertible", "viewDidLoad"]
 - ["Ps28CustomDebugStringConvertible", ""]
 - !private ["Ps23CustomStringConvertible", "ApiService"]
+- !private ["Ps23CustomStringConvertible", "AudioPlayerManager"]
 - ["Ps23CustomStringConvertible", "URLSession"]
 - ["Ps23CustomStringConvertible", "URLSessionConfiguration"]
 - ["Ps23CustomStringConvertible", "dataTask"]
@@ -68,6 +78,7 @@ depends-member:
 - ["Ps23CustomStringConvertible", "viewDidLoad"]
 - ["Ps23CustomStringConvertible", ""]
 - !private ["Ps9Equatable", "ApiService"]
+- !private ["Ps9Equatable", "AudioPlayerManager"]
 - ["Ps9Equatable", "URLSession"]
 - ["Ps9Equatable", "URLSessionConfiguration"]
 - ["Ps9Equatable", "dataTask"]
@@ -79,6 +90,7 @@ depends-member:
 - ["Ps9Equatable", "viewDidLoad"]
 - ["Ps9Equatable", ""]
 - !private ["Ps8Hashable", "ApiService"]
+- !private ["Ps8Hashable", "AudioPlayerManager"]
 - ["Ps8Hashable", "URLSession"]
 - ["Ps8Hashable", "URLSessionConfiguration"]
 - ["Ps8Hashable", "dataTask"]
@@ -91,6 +103,7 @@ depends-member:
 - ["Ps8Hashable", ""]
 - ["CSo7NSCoder", "deinit"]
 - !private ["PSo8NSCoding", "ApiService"]
+- !private ["PSo8NSCoding", "AudioPlayerManager"]
 - ["PSo8NSCoding", "URLSession"]
 - ["PSo8NSCoding", "URLSessionConfiguration"]
 - ["PSo8NSCoding", "dataTask"]
@@ -102,6 +115,7 @@ depends-member:
 - ["PSo8NSCoding", ""]
 - ["PSo9NSCopying", "default"]
 - !private ["PSo26NSExtensionRequestHandling", "ApiService"]
+- !private ["PSo26NSExtensionRequestHandling", "AudioPlayerManager"]
 - ["PSo26NSExtensionRequestHandling", "URLSession"]
 - ["PSo26NSExtensionRequestHandling", "URLSessionConfiguration"]
 - ["PSo26NSExtensionRequestHandling", "dataTask"]
@@ -112,6 +126,7 @@ depends-member:
 - ["PSo26NSExtensionRequestHandling", "viewDidLoad"]
 - ["PSo26NSExtensionRequestHandling", ""]
 - !private ["CSo8NSObject", "ApiService"]
+- !private ["CSo8NSObject", "AudioPlayerManager"]
 - ["CSo8NSObject", "URLSession"]
 - ["CSo8NSObject", "URLSessionConfiguration"]
 - ["CSo8NSObject", "URLSessionDataTask"]
@@ -123,6 +138,7 @@ depends-member:
 - ["CSo8NSObject", "nextTrackButtonPressed"]
 - ["CSo8NSObject", "viewDidLoad"]
 - !private ["PSo16NSObjectProtocol", "ApiService"]
+- !private ["PSo16NSObjectProtocol", "AudioPlayerManager"]
 - ["PSo16NSObjectProtocol", "URLSession"]
 - ["PSo16NSObjectProtocol", "URLSessionConfiguration"]
 - ["PSo16NSObjectProtocol", "dataTask"]
@@ -134,7 +150,9 @@ depends-member:
 - ["PSo16NSObjectProtocol", "viewDidLoad"]
 - ["PSo16NSObjectProtocol", ""]
 - ["Sq", "deinit"]
+- !private ["SS", "deinit"]
 - !private ["PSo21UIAppearanceContainer", "ApiService"]
+- !private ["PSo21UIAppearanceContainer", "AudioPlayerManager"]
 - ["PSo21UIAppearanceContainer", "URLSession"]
 - ["PSo21UIAppearanceContainer", "URLSessionConfiguration"]
 - ["PSo21UIAppearanceContainer", "dataTask"]
@@ -145,6 +163,7 @@ depends-member:
 - ["PSo21UIAppearanceContainer", "viewDidLoad"]
 - ["PSo21UIAppearanceContainer", ""]
 - !private ["PSo18UIContentContainer", "ApiService"]
+- !private ["PSo18UIContentContainer", "AudioPlayerManager"]
 - ["PSo18UIContentContainer", "URLSession"]
 - ["PSo18UIContentContainer", "URLSessionConfiguration"]
 - ["PSo18UIContentContainer", "dataTask"]
@@ -155,6 +174,7 @@ depends-member:
 - ["PSo18UIContentContainer", "viewDidLoad"]
 - ["PSo18UIContentContainer", ""]
 - !private ["PSo18UIFocusEnvironment", "ApiService"]
+- !private ["PSo18UIFocusEnvironment", "AudioPlayerManager"]
 - ["PSo18UIFocusEnvironment", "URLSession"]
 - ["PSo18UIFocusEnvironment", "URLSessionConfiguration"]
 - ["PSo18UIFocusEnvironment", "dataTask"]
@@ -165,6 +185,7 @@ depends-member:
 - ["PSo18UIFocusEnvironment", "viewDidLoad"]
 - ["PSo18UIFocusEnvironment", ""]
 - !private ["CSo11UIResponder", "ApiService"]
+- !private ["CSo11UIResponder", "AudioPlayerManager"]
 - ["CSo11UIResponder", "URLSession"]
 - ["CSo11UIResponder", "URLSessionConfiguration"]
 - ["CSo11UIResponder", "URLSessionDataTask"]
@@ -175,6 +196,7 @@ depends-member:
 - ["CSo11UIResponder", "nextTrackButtonPressed"]
 - ["CSo11UIResponder", "viewDidLoad"]
 - !private ["PSo30UIResponderStandardEditActions", "ApiService"]
+- !private ["PSo30UIResponderStandardEditActions", "AudioPlayerManager"]
 - ["PSo30UIResponderStandardEditActions", "URLSession"]
 - ["PSo30UIResponderStandardEditActions", "URLSessionConfiguration"]
 - ["PSo30UIResponderStandardEditActions", "dataTask"]
@@ -185,6 +207,7 @@ depends-member:
 - ["PSo30UIResponderStandardEditActions", "viewDidLoad"]
 - ["PSo30UIResponderStandardEditActions", ""]
 - !private ["PSo16UIStateRestoring", "ApiService"]
+- !private ["PSo16UIStateRestoring", "AudioPlayerManager"]
 - ["PSo16UIStateRestoring", "URLSession"]
 - ["PSo16UIStateRestoring", "URLSessionConfiguration"]
 - ["PSo16UIStateRestoring", "dataTask"]
@@ -195,6 +218,7 @@ depends-member:
 - ["PSo16UIStateRestoring", "viewDidLoad"]
 - ["PSo16UIStateRestoring", ""]
 - !private ["PSo18UITraitEnvironment", "ApiService"]
+- !private ["PSo18UITraitEnvironment", "AudioPlayerManager"]
 - ["PSo18UITraitEnvironment", "URLSession"]
 - ["PSo18UITraitEnvironment", "URLSessionConfiguration"]
 - ["PSo18UITraitEnvironment", "dataTask"]
@@ -205,6 +229,7 @@ depends-member:
 - ["PSo18UITraitEnvironment", "viewDidLoad"]
 - ["PSo18UITraitEnvironment", ""]
 - !private ["CSo16UIViewController", "ApiService"]
+- !private ["CSo16UIViewController", "AudioPlayerManager"]
 - ["CSo16UIViewController", "URLSession"]
 - ["CSo16UIViewController", "URLSessionConfiguration"]
 - ["CSo16UIViewController", "URLSessionDataTask"]
@@ -221,6 +246,7 @@ depends-member:
 - ["CSo23URLSessionConfiguration", "default"]
 - ["CSo23URLSessionConfiguration", "deinit"]
 - !private ["C8OwnRadio14ViewController", "ApiService"]
+- !private ["C8OwnRadio14ViewController", "AudioPlayerManager"]
 - ["C8OwnRadio14ViewController", "URLSession"]
 - ["C8OwnRadio14ViewController", "URLSessionConfiguration"]
 - ["C8OwnRadio14ViewController", "URLSessionDataTask"]
@@ -232,6 +258,7 @@ depends-member:
 - ["C8OwnRadio14ViewController", "nextTrackButtonPressed"]
 - ["C8OwnRadio14ViewController", "viewDidLoad"]
 - !private ["Ps9_Hashable", "ApiService"]
+- !private ["Ps9_Hashable", "AudioPlayerManager"]
 - ["Ps9_Hashable", "URLSession"]
 - ["Ps9_Hashable", "URLSessionConfiguration"]
 - ["Ps9_Hashable", "dataTask"]
@@ -245,6 +272,7 @@ depends-member:
 depends-nominal:
 - "Ps9AnyObject"
 - "C8OwnRadio10ApiService"
+- !private "C8OwnRadio18AudioPlayerManager"
 - "Ps7CVarArg"
 - "Ps28CustomDebugStringConvertible"
 - "Ps23CustomStringConvertible"
@@ -257,6 +285,7 @@ depends-nominal:
 - "CSo8NSObject"
 - "PSo16NSObjectProtocol"
 - "Sq"
+- !private "SS"
 - "PSo21UIAppearanceContainer"
 - "PSo18UIContentContainer"
 - "PSo18UIFocusEnvironment"
@@ -280,4 +309,7 @@ depends-external:
 - "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/ObjectiveC.swiftmodule"
 - "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/CoreGraphics.swiftmodule"
 - "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/CoreImage.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/AVFoundation.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/CoreMedia.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/CoreAudio.swiftmodule"
 interface-hash: "117db9ce17c01f331ba7c538d55556c3"
