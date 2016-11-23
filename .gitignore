@@ -3,6 +3,6 @@
 *.swp
 *~.nib
 DerivedData/
-build/
+Build/
 xcuserdata/
 *.moved-aside
