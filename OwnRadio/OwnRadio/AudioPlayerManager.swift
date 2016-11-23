@@ -18,9 +18,9 @@ class AudioPlayerManager: NSObject {
 	var isPlaying: Bool!
 	
 	var titleSong: String!
-	var playbackProgres: Float!
-	var currentPlaybackTime: Float!
-	var playbackDuration: Float!
+	var playbackProgres: CMTime!
+	var currentPlaybackTime: CMTime!
+	
 	
 	static let sharedInstance = AudioPlayerManager()
 	override init() {
@@ -45,10 +45,9 @@ class AudioPlayerManager: NSObject {
 		
 		let asset = AVURLAsset(url: url)
 		playerItem = AVPlayerItem(asset: asset)
-		
+
 		player = AVPlayer(playerItem: playerItem)
-		
-		
+
 		player.play()
 		
 	}
@@ -59,6 +58,8 @@ class AudioPlayerManager: NSObject {
 		try! audioSession.setActive(true)
 		
 		UIApplication.shared.beginReceivingRemoteControlEvents()
+		
+		
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(onAudioSessionEvent(_:)), name: Notification.Name.AVAudioSessionInterruption, object: AVAudioSession.sharedInstance())
 	}
@@ -82,8 +83,9 @@ class AudioPlayerManager: NSObject {
 		var songInfo = [String:AnyObject]()
 		songInfo[MPMediaItemPropertyTitle] = titleSong as AnyObject?
 		songInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = playbackProgres as AnyObject?
-		songInfo[MPMediaItemPropertyPlaybackDuration] = currentPlaybackTime as AnyObject?
+		songInfo[MPMediaItemPropertyPlaybackDuration] =  currentPlaybackTime as AnyObject?
 		songInfo[MPMediaItemPropertyArtwork] = albumArt as AnyObject?
+		
 		
 		MPNowPlayingInfoCenter.default().nowPlayingInfo = songInfo
 	}

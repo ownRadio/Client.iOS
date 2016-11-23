@@ -1,8 +1,8 @@
 version: "Apple Swift version 3.0 (swiftlang-800.0.46.2 clang-800.0.38)"
 options: "3e71e7a865a0ef3d239df9c41a0c1410"
-build_time: [533229052, 60873000]
+build_time: [533232056, 301679000]
 inputs:
   "/Users/romanlitoshko/OwnRadio/OwnRadio/OwnRadio/ViewController.swift": [533228208, 0]
   "/Users/romanlitoshko/OwnRadio/OwnRadio/OwnRadio/ApiService.swift": [533227618, 0]
-  "/Users/romanlitoshko/OwnRadio/OwnRadio/OwnRadio/AppDelegate.swift": [533229051, 0]
-  "/Users/romanlitoshko/OwnRadio/OwnRadio/OwnRadio/AudioPlayerManager.swift": [533229051, 0]
+  "/Users/romanlitoshko/OwnRadio/OwnRadio/OwnRadio/AppDelegate.swift": [533232044, 0]
+  "/Users/romanlitoshko/OwnRadio/OwnRadio/OwnRadio/AudioPlayerManager.swift": [533232056, 0]

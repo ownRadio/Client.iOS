@@ -32,9 +32,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		if event?.type == UIEventType.remoteControl {
 			switch event!.subtype {
 			case UIEventSubtype.remoteControlPause:
-				break
-			case .remoteControlPlay:
 				AudioPlayerManager.sharedInstance.playOrPause()
+			case .remoteControlPlay:
+				break
+//				AudioPlayerManager.sharedInstance.playOrPause()
 				
 			case .remoteControlTogglePlayPause:
 				AudioPlayerManager.sharedInstance.playOrPause()
