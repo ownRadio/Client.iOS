@@ -12,10 +12,12 @@ class ViewController: UIViewController {
 	
 	let defaultSession = URLSession(configuration: URLSessionConfiguration.default)
 	var dataTask: URLSessionDataTask?
+	var player: AudioPlayerManager!
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		// Do any additional setup after loading the view, typically from a nib.
+		self.player = AudioPlayerManager.sharedInstance
 	}
 	
 	override func didReceiveMemoryWarning() {
@@ -24,14 +26,10 @@ class ViewController: UIViewController {
 	}
 	
 	@IBAction func nextTrackButtonPressed() {
-
-		let apiService = ApiService()
-		apiService.getTrackIDFromServer { (resultString) in
-		let player = AudioPlayerManager.sharedInstance
-		player.playAudioWith(trackID: resultString)
-			
-		}
+		self.player.nextTrack()
 	}
+	
+	
 	
 }
 

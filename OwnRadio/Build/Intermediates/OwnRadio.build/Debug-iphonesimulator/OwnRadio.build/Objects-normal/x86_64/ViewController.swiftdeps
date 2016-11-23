@@ -7,20 +7,20 @@ provides-member:
 - ["C8OwnRadio14ViewController", ""]
 provides-dynamic-lookup:
 - "didReceiveMemoryWarning"
-- "nextTrackButtonPressed"
-- "dataTask"
+- "player"
 - "defaultSession"
+- "nextTrackButtonPressed"
 - "viewDidLoad"
+- "dataTask"
 depends-top-level:
+- "AssignmentPrecedence"
+- "UIViewController"
+- "URLSessionConfiguration"
+- "URLSession"
+- "AudioPlayerManager"
 - "URLSessionDataTask"
 - "ViewController"
-- "UIViewController"
-- !private "AudioPlayerManager"
-- "URLSessionConfiguration"
-- !private "ApiService"
-- "URLSession"
 depends-member:
-- !private ["Ps9AnyObject", "ApiService"]
 - !private ["Ps9AnyObject", "AudioPlayerManager"]
 - ["Ps9AnyObject", "URLSession"]
 - ["Ps9AnyObject", "URLSessionConfiguration"]
@@ -28,20 +28,16 @@ depends-member:
 - ["Ps9AnyObject", "default"]
 - ["Ps9AnyObject", "defaultSession"]
 - ["Ps9AnyObject", "didReceiveMemoryWarning"]
-- !private ["Ps9AnyObject", "getTrackIDFromServer"]
 - ["Ps9AnyObject", "init"]
+- !private ["Ps9AnyObject", "nextTrack"]
 - ["Ps9AnyObject", "nextTrackButtonPressed"]
-- !private ["Ps9AnyObject", "playAudioWith"]
+- ["Ps9AnyObject", "player"]
 - !private ["Ps9AnyObject", "sharedInstance"]
 - ["Ps9AnyObject", "viewDidLoad"]
 - ["Ps9AnyObject", ""]
-- ["C8OwnRadio10ApiService", "deinit"]
-- !private ["C8OwnRadio10ApiService", "getTrackIDFromServer"]
-- !private ["C8OwnRadio10ApiService", "init"]
-- !private ["C8OwnRadio18AudioPlayerManager", "deinit"]
-- !private ["C8OwnRadio18AudioPlayerManager", "playAudioWith"]
+- ["C8OwnRadio18AudioPlayerManager", "deinit"]
+- !private ["C8OwnRadio18AudioPlayerManager", "nextTrack"]
 - !private ["C8OwnRadio18AudioPlayerManager", "sharedInstance"]
-- !private ["Ps7CVarArg", "ApiService"]
 - !private ["Ps7CVarArg", "AudioPlayerManager"]
 - ["Ps7CVarArg", "URLSession"]
 - ["Ps7CVarArg", "URLSessionConfiguration"]
@@ -50,10 +46,12 @@ depends-member:
 - ["Ps7CVarArg", "defaultSession"]
 - ["Ps7CVarArg", "didReceiveMemoryWarning"]
 - ["Ps7CVarArg", "init"]
+- !private ["Ps7CVarArg", "nextTrack"]
 - ["Ps7CVarArg", "nextTrackButtonPressed"]
+- ["Ps7CVarArg", "player"]
+- !private ["Ps7CVarArg", "sharedInstance"]
 - ["Ps7CVarArg", "viewDidLoad"]
 - ["Ps7CVarArg", ""]
-- !private ["Ps28CustomDebugStringConvertible", "ApiService"]
 - !private ["Ps28CustomDebugStringConvertible", "AudioPlayerManager"]
 - ["Ps28CustomDebugStringConvertible", "URLSession"]
 - ["Ps28CustomDebugStringConvertible", "URLSessionConfiguration"]
@@ -62,10 +60,12 @@ depends-member:
 - ["Ps28CustomDebugStringConvertible", "defaultSession"]
 - ["Ps28CustomDebugStringConvertible", "didReceiveMemoryWarning"]
 - ["Ps28CustomDebugStringConvertible", "init"]
+- !private ["Ps28CustomDebugStringConvertible", "nextTrack"]
 - ["Ps28CustomDebugStringConvertible", "nextTrackButtonPressed"]
+- ["Ps28CustomDebugStringConvertible", "player"]
+- !private ["Ps28CustomDebugStringConvertible", "sharedInstance"]
 - ["Ps28CustomDebugStringConvertible", "viewDidLoad"]
 - ["Ps28CustomDebugStringConvertible", ""]
-- !private ["Ps23CustomStringConvertible", "ApiService"]
 - !private ["Ps23CustomStringConvertible", "AudioPlayerManager"]
 - ["Ps23CustomStringConvertible", "URLSession"]
 - ["Ps23CustomStringConvertible", "URLSessionConfiguration"]
@@ -74,10 +74,12 @@ depends-member:
 - ["Ps23CustomStringConvertible", "defaultSession"]
 - ["Ps23CustomStringConvertible", "didReceiveMemoryWarning"]
 - ["Ps23CustomStringConvertible", "init"]
+- !private ["Ps23CustomStringConvertible", "nextTrack"]
 - ["Ps23CustomStringConvertible", "nextTrackButtonPressed"]
+- ["Ps23CustomStringConvertible", "player"]
+- !private ["Ps23CustomStringConvertible", "sharedInstance"]
 - ["Ps23CustomStringConvertible", "viewDidLoad"]
 - ["Ps23CustomStringConvertible", ""]
-- !private ["Ps9Equatable", "ApiService"]
 - !private ["Ps9Equatable", "AudioPlayerManager"]
 - ["Ps9Equatable", "URLSession"]
 - ["Ps9Equatable", "URLSessionConfiguration"]
@@ -86,10 +88,12 @@ depends-member:
 - ["Ps9Equatable", "defaultSession"]
 - ["Ps9Equatable", "didReceiveMemoryWarning"]
 - ["Ps9Equatable", "init"]
+- !private ["Ps9Equatable", "nextTrack"]
 - ["Ps9Equatable", "nextTrackButtonPressed"]
+- ["Ps9Equatable", "player"]
+- !private ["Ps9Equatable", "sharedInstance"]
 - ["Ps9Equatable", "viewDidLoad"]
 - ["Ps9Equatable", ""]
-- !private ["Ps8Hashable", "ApiService"]
 - !private ["Ps8Hashable", "AudioPlayerManager"]
 - ["Ps8Hashable", "URLSession"]
 - ["Ps8Hashable", "URLSessionConfiguration"]
@@ -98,11 +102,14 @@ depends-member:
 - ["Ps8Hashable", "defaultSession"]
 - ["Ps8Hashable", "didReceiveMemoryWarning"]
 - ["Ps8Hashable", "init"]
+- !private ["Ps8Hashable", "nextTrack"]
 - ["Ps8Hashable", "nextTrackButtonPressed"]
+- ["Ps8Hashable", "player"]
+- !private ["Ps8Hashable", "sharedInstance"]
 - ["Ps8Hashable", "viewDidLoad"]
 - ["Ps8Hashable", ""]
+- ["SQ", "deinit"]
 - ["CSo7NSCoder", "deinit"]
-- !private ["PSo8NSCoding", "ApiService"]
 - !private ["PSo8NSCoding", "AudioPlayerManager"]
 - ["PSo8NSCoding", "URLSession"]
 - ["PSo8NSCoding", "URLSessionConfiguration"]
@@ -111,10 +118,10 @@ depends-member:
 - ["PSo8NSCoding", "didReceiveMemoryWarning"]
 - !private ["PSo8NSCoding", "init"]
 - ["PSo8NSCoding", "nextTrackButtonPressed"]
+- ["PSo8NSCoding", "player"]
 - ["PSo8NSCoding", "viewDidLoad"]
 - ["PSo8NSCoding", ""]
 - ["PSo9NSCopying", "default"]
-- !private ["PSo26NSExtensionRequestHandling", "ApiService"]
 - !private ["PSo26NSExtensionRequestHandling", "AudioPlayerManager"]
 - ["PSo26NSExtensionRequestHandling", "URLSession"]
 - ["PSo26NSExtensionRequestHandling", "URLSessionConfiguration"]
@@ -123,10 +130,10 @@ depends-member:
 - ["PSo26NSExtensionRequestHandling", "didReceiveMemoryWarning"]
 - !private ["PSo26NSExtensionRequestHandling", "init"]
 - ["PSo26NSExtensionRequestHandling", "nextTrackButtonPressed"]
+- ["PSo26NSExtensionRequestHandling", "player"]
 - ["PSo26NSExtensionRequestHandling", "viewDidLoad"]
 - ["PSo26NSExtensionRequestHandling", ""]
-- !private ["CSo8NSObject", "ApiService"]
-- !private ["CSo8NSObject", "AudioPlayerManager"]
+- ["CSo8NSObject", "AudioPlayerManager"]
 - ["CSo8NSObject", "URLSession"]
 - ["CSo8NSObject", "URLSessionConfiguration"]
 - ["CSo8NSObject", "URLSessionDataTask"]
@@ -135,9 +142,11 @@ depends-member:
 - ["CSo8NSObject", "defaultSession"]
 - ["CSo8NSObject", "didReceiveMemoryWarning"]
 - ["CSo8NSObject", "init"]
+- !private ["CSo8NSObject", "nextTrack"]
 - ["CSo8NSObject", "nextTrackButtonPressed"]
+- ["CSo8NSObject", "player"]
+- !private ["CSo8NSObject", "sharedInstance"]
 - ["CSo8NSObject", "viewDidLoad"]
-- !private ["PSo16NSObjectProtocol", "ApiService"]
 - !private ["PSo16NSObjectProtocol", "AudioPlayerManager"]
 - ["PSo16NSObjectProtocol", "URLSession"]
 - ["PSo16NSObjectProtocol", "URLSessionConfiguration"]
@@ -146,12 +155,13 @@ depends-member:
 - ["PSo16NSObjectProtocol", "defaultSession"]
 - ["PSo16NSObjectProtocol", "didReceiveMemoryWarning"]
 - ["PSo16NSObjectProtocol", "init"]
+- !private ["PSo16NSObjectProtocol", "nextTrack"]
 - ["PSo16NSObjectProtocol", "nextTrackButtonPressed"]
+- ["PSo16NSObjectProtocol", "player"]
+- !private ["PSo16NSObjectProtocol", "sharedInstance"]
 - ["PSo16NSObjectProtocol", "viewDidLoad"]
 - ["PSo16NSObjectProtocol", ""]
 - ["Sq", "deinit"]
-- !private ["SS", "deinit"]
-- !private ["PSo21UIAppearanceContainer", "ApiService"]
 - !private ["PSo21UIAppearanceContainer", "AudioPlayerManager"]
 - ["PSo21UIAppearanceContainer", "URLSession"]
 - ["PSo21UIAppearanceContainer", "URLSessionConfiguration"]
@@ -160,9 +170,9 @@ depends-member:
 - ["PSo21UIAppearanceContainer", "didReceiveMemoryWarning"]
 - !private ["PSo21UIAppearanceContainer", "init"]
 - ["PSo21UIAppearanceContainer", "nextTrackButtonPressed"]
+- ["PSo21UIAppearanceContainer", "player"]
 - ["PSo21UIAppearanceContainer", "viewDidLoad"]
 - ["PSo21UIAppearanceContainer", ""]
-- !private ["PSo18UIContentContainer", "ApiService"]
 - !private ["PSo18UIContentContainer", "AudioPlayerManager"]
 - ["PSo18UIContentContainer", "URLSession"]
 - ["PSo18UIContentContainer", "URLSessionConfiguration"]
@@ -171,9 +181,9 @@ depends-member:
 - ["PSo18UIContentContainer", "didReceiveMemoryWarning"]
 - !private ["PSo18UIContentContainer", "init"]
 - ["PSo18UIContentContainer", "nextTrackButtonPressed"]
+- ["PSo18UIContentContainer", "player"]
 - ["PSo18UIContentContainer", "viewDidLoad"]
 - ["PSo18UIContentContainer", ""]
-- !private ["PSo18UIFocusEnvironment", "ApiService"]
 - !private ["PSo18UIFocusEnvironment", "AudioPlayerManager"]
 - ["PSo18UIFocusEnvironment", "URLSession"]
 - ["PSo18UIFocusEnvironment", "URLSessionConfiguration"]
@@ -182,10 +192,10 @@ depends-member:
 - ["PSo18UIFocusEnvironment", "didReceiveMemoryWarning"]
 - !private ["PSo18UIFocusEnvironment", "init"]
 - ["PSo18UIFocusEnvironment", "nextTrackButtonPressed"]
+- ["PSo18UIFocusEnvironment", "player"]
 - ["PSo18UIFocusEnvironment", "viewDidLoad"]
 - ["PSo18UIFocusEnvironment", ""]
-- !private ["CSo11UIResponder", "ApiService"]
-- !private ["CSo11UIResponder", "AudioPlayerManager"]
+- ["CSo11UIResponder", "AudioPlayerManager"]
 - ["CSo11UIResponder", "URLSession"]
 - ["CSo11UIResponder", "URLSessionConfiguration"]
 - ["CSo11UIResponder", "URLSessionDataTask"]
@@ -194,8 +204,8 @@ depends-member:
 - ["CSo11UIResponder", "didReceiveMemoryWarning"]
 - ["CSo11UIResponder", "init"]
 - ["CSo11UIResponder", "nextTrackButtonPressed"]
+- ["CSo11UIResponder", "player"]
 - ["CSo11UIResponder", "viewDidLoad"]
-- !private ["PSo30UIResponderStandardEditActions", "ApiService"]
 - !private ["PSo30UIResponderStandardEditActions", "AudioPlayerManager"]
 - ["PSo30UIResponderStandardEditActions", "URLSession"]
 - ["PSo30UIResponderStandardEditActions", "URLSessionConfiguration"]
@@ -204,9 +214,9 @@ depends-member:
 - ["PSo30UIResponderStandardEditActions", "didReceiveMemoryWarning"]
 - !private ["PSo30UIResponderStandardEditActions", "init"]
 - ["PSo30UIResponderStandardEditActions", "nextTrackButtonPressed"]
+- ["PSo30UIResponderStandardEditActions", "player"]
 - ["PSo30UIResponderStandardEditActions", "viewDidLoad"]
 - ["PSo30UIResponderStandardEditActions", ""]
-- !private ["PSo16UIStateRestoring", "ApiService"]
 - !private ["PSo16UIStateRestoring", "AudioPlayerManager"]
 - ["PSo16UIStateRestoring", "URLSession"]
 - ["PSo16UIStateRestoring", "URLSessionConfiguration"]
@@ -215,9 +225,9 @@ depends-member:
 - ["PSo16UIStateRestoring", "didReceiveMemoryWarning"]
 - !private ["PSo16UIStateRestoring", "init"]
 - ["PSo16UIStateRestoring", "nextTrackButtonPressed"]
+- ["PSo16UIStateRestoring", "player"]
 - ["PSo16UIStateRestoring", "viewDidLoad"]
 - ["PSo16UIStateRestoring", ""]
-- !private ["PSo18UITraitEnvironment", "ApiService"]
 - !private ["PSo18UITraitEnvironment", "AudioPlayerManager"]
 - ["PSo18UITraitEnvironment", "URLSession"]
 - ["PSo18UITraitEnvironment", "URLSessionConfiguration"]
@@ -226,10 +236,10 @@ depends-member:
 - ["PSo18UITraitEnvironment", "didReceiveMemoryWarning"]
 - !private ["PSo18UITraitEnvironment", "init"]
 - ["PSo18UITraitEnvironment", "nextTrackButtonPressed"]
+- ["PSo18UITraitEnvironment", "player"]
 - ["PSo18UITraitEnvironment", "viewDidLoad"]
 - ["PSo18UITraitEnvironment", ""]
-- !private ["CSo16UIViewController", "ApiService"]
-- !private ["CSo16UIViewController", "AudioPlayerManager"]
+- ["CSo16UIViewController", "AudioPlayerManager"]
 - ["CSo16UIViewController", "URLSession"]
 - ["CSo16UIViewController", "URLSessionConfiguration"]
 - ["CSo16UIViewController", "URLSessionDataTask"]
@@ -239,14 +249,14 @@ depends-member:
 - ["CSo16UIViewController", "didReceiveMemoryWarning"]
 - ["CSo16UIViewController", "init"]
 - ["CSo16UIViewController", "nextTrackButtonPressed"]
+- ["CSo16UIViewController", "player"]
 - ["CSo16UIViewController", "viewDidLoad"]
 - ["CSo16UIViewController", ""]
 - ["CSo10URLSession", "deinit"]
 - ["CSo10URLSession", "init"]
 - ["CSo23URLSessionConfiguration", "default"]
 - ["CSo23URLSessionConfiguration", "deinit"]
-- !private ["C8OwnRadio14ViewController", "ApiService"]
-- !private ["C8OwnRadio14ViewController", "AudioPlayerManager"]
+- ["C8OwnRadio14ViewController", "AudioPlayerManager"]
 - ["C8OwnRadio14ViewController", "URLSession"]
 - ["C8OwnRadio14ViewController", "URLSessionConfiguration"]
 - ["C8OwnRadio14ViewController", "URLSessionDataTask"]
@@ -256,8 +266,8 @@ depends-member:
 - ["C8OwnRadio14ViewController", "didReceiveMemoryWarning"]
 - ["C8OwnRadio14ViewController", "init"]
 - ["C8OwnRadio14ViewController", "nextTrackButtonPressed"]
+- ["C8OwnRadio14ViewController", "player"]
 - ["C8OwnRadio14ViewController", "viewDidLoad"]
-- !private ["Ps9_Hashable", "ApiService"]
 - !private ["Ps9_Hashable", "AudioPlayerManager"]
 - ["Ps9_Hashable", "URLSession"]
 - ["Ps9_Hashable", "URLSessionConfiguration"]
@@ -266,18 +276,21 @@ depends-member:
 - ["Ps9_Hashable", "defaultSession"]
 - ["Ps9_Hashable", "didReceiveMemoryWarning"]
 - ["Ps9_Hashable", "init"]
+- !private ["Ps9_Hashable", "nextTrack"]
 - ["Ps9_Hashable", "nextTrackButtonPressed"]
+- ["Ps9_Hashable", "player"]
+- !private ["Ps9_Hashable", "sharedInstance"]
 - ["Ps9_Hashable", "viewDidLoad"]
 - ["Ps9_Hashable", ""]
 depends-nominal:
 - "Ps9AnyObject"
-- "C8OwnRadio10ApiService"
-- !private "C8OwnRadio18AudioPlayerManager"
+- "C8OwnRadio18AudioPlayerManager"
 - "Ps7CVarArg"
 - "Ps28CustomDebugStringConvertible"
 - "Ps23CustomStringConvertible"
 - "Ps9Equatable"
 - "Ps8Hashable"
+- "SQ"
 - "CSo7NSCoder"
 - "PSo8NSCoding"
 - "PSo9NSCopying"
@@ -285,7 +298,6 @@ depends-nominal:
 - "CSo8NSObject"
 - "PSo16NSObjectProtocol"
 - "Sq"
-- !private "SS"
 - "PSo21UIAppearanceContainer"
 - "PSo18UIContentContainer"
 - "PSo18UIFocusEnvironment"
@@ -312,4 +324,4 @@ depends-external:
 - "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/AVFoundation.swiftmodule"
 - "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/CoreMedia.swiftmodule"
 - "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/CoreAudio.swiftmodule"
-interface-hash: "117db9ce17c01f331ba7c538d55556c3"
+interface-hash: "dbcfd8afc6096cea4caaf5b4afa213ec"

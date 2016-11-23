@@ -5,6 +5,7 @@
 //  Created by Roman Litoshko on 11/22/16.
 //  Copyright © 2016 Roll'n'Code. All rights reserved.
 //
+// Managed
 
 import Foundation
 
@@ -12,7 +13,7 @@ import Foundation
 class ApiService {
 	
 //	var nextTrackIDString: String
-	
+	static let shared = ApiService()
 	init() {
 //		self.nextTrackIDString = ""
 	}

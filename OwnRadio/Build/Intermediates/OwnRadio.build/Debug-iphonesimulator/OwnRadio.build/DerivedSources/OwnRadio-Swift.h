@@ -111,23 +111,49 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 #endif
 #if defined(__has_feature) && __has_feature(modules)
 @import UIKit;
+@import ObjectiveC;
+@import Foundation;
 #endif
 
 #pragma clang diagnostic ignored "-Wproperty-attribute-mismatch"
 #pragma clang diagnostic ignored "-Wduplicate-method-arg"
 @class UIWindow;
 @class UIApplication;
+@class UIEvent;
 
 SWIFT_CLASS("_TtC8OwnRadio11AppDelegate")
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 @property (nonatomic, strong) UIWindow * _Nullable window;
 - (BOOL)application:(UIApplication * _Nonnull)application didFinishLaunchingWithOptions:(NSDictionary<UIApplicationLaunchOptionsKey, id> * _Nullable)launchOptions;
+- (void)remoteControlReceivedWithEvent:(UIEvent * _Nullable)event;
 - (void)applicationWillResignActive:(UIApplication * _Nonnull)application;
 - (void)applicationDidEnterBackground:(UIApplication * _Nonnull)application;
 - (void)applicationWillEnterForeground:(UIApplication * _Nonnull)application;
 - (void)applicationDidBecomeActive:(UIApplication * _Nonnull)application;
 - (void)applicationWillTerminate:(UIApplication * _Nonnull)application;
 - (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
+@end
+
+@class AVPlayer;
+@class AVPlayerItem;
+
+SWIFT_CLASS("_TtC8OwnRadio18AudioPlayerManager")
+@interface AudioPlayerManager : NSObject
+@property (nonatomic, strong) AVPlayer * _Null_unspecified player;
+@property (nonatomic, strong) AVPlayerItem * _Null_unspecified playerItem;
+@property (nonatomic, copy) NSString * _Null_unspecified titleSong;
+SWIFT_CLASS_PROPERTY(@property (nonatomic, class, readonly, strong) AudioPlayerManager * _Nonnull sharedInstance;)
++ (AudioPlayerManager * _Nonnull)sharedInstance;
+- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
+- (void)playAudioWithTrackID:(NSString * _Nonnull)trackID;
+- (void)setup;
+- (void)onAudioSessionEvent:(NSNotification * _Nonnull)notification;
+/**
+  confirure album cover and other params for playing song
+*/
+- (void)configurePlayingSong;
+- (void)playOrPause;
+- (void)nextTrack;
 @end
 
 @class NSURLSession;
@@ -139,6 +165,7 @@ SWIFT_CLASS("_TtC8OwnRadio14ViewController")
 @interface ViewController : UIViewController
 @property (nonatomic, readonly, strong) NSURLSession * _Nonnull defaultSession;
 @property (nonatomic, strong) NSURLSessionDataTask * _Nullable dataTask;
+@property (nonatomic, strong) AudioPlayerManager * _Null_unspecified player;
 - (void)viewDidLoad;
 - (void)didReceiveMemoryWarning;
 - (IBAction)nextTrackButtonPressed;

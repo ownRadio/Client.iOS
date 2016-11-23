@@ -6,28 +6,35 @@ provides-nominal:
 provides-member:
 - ["C8OwnRadio11AppDelegate", ""]
 provides-dynamic-lookup:
-- "applicationWillResignActive"
-- "window"
-- "applicationWillTerminate"
+- "remoteControlReceived"
 - "applicationDidBecomeActive"
-- "application"
+- "window"
+- "applicationWillResignActive"
+- "applicationWillTerminate"
 - "applicationDidEnterBackground"
 - "applicationWillEnterForeground"
+- "application"
 depends-top-level:
-- !private "StringLiteralType"
+- "UIApplicationLaunchOptionsKey"
+- !private "UIEventType"
+- "AppDelegate"
+- !private "AudioPlayerManager"
 - "UIApplicationDelegate"
-- "UIResponder"
+- "UIEvent"
+- !private "=="
+- "Bool"
 - !private "UserDefaults"
+- !private "UIEventSubtype"
+- "UIResponder"
+- !private "StringLiteralType"
 - !private "BooleanLiteralType"
 - "UIApplication"
-- "Bool"
-- !private "NSUUID"
 - "UIWindow"
-- !private "=="
-- "UIApplicationLaunchOptionsKey"
-- "AppDelegate"
+- !private "NSUUID"
 depends-member:
+- !private ["Ps9AnyObject", "AudioPlayerManager"]
 - !private ["Ps9AnyObject", "NSUUID"]
+- !private ["Ps9AnyObject", "UIEventType"]
 - !private ["Ps9AnyObject", "UserDefaults"]
 - ["Ps9AnyObject", "application"]
 - ["Ps9AnyObject", "applicationDidBecomeActive"]
@@ -42,17 +49,27 @@ depends-member:
 - ["Ps9AnyObject", "applicationWillResignActive"]
 - ["Ps9AnyObject", "applicationWillTerminate"]
 - !private ["Ps9AnyObject", "init"]
+- !private ["Ps9AnyObject", "nextTrack"]
 - !private ["Ps9AnyObject", "object"]
+- !private ["Ps9AnyObject", "playOrPause"]
+- ["Ps9AnyObject", "remoteControlReceived"]
 - !private ["Ps9AnyObject", "set"]
+- !private ["Ps9AnyObject", "sharedInstance"]
 - !private ["Ps9AnyObject", "standard"]
+- !private ["Ps9AnyObject", "subtype"]
 - !private ["Ps9AnyObject", "synchronize"]
+- !private ["Ps9AnyObject", "type"]
 - !private ["Ps9AnyObject", "uuidString"]
 - ["Ps9AnyObject", "window"]
 - ["Ps9AnyObject", ""]
+- !private ["C8OwnRadio11AppDelegate", "AudioPlayerManager"]
 - ["C8OwnRadio11AppDelegate", "Bool"]
 - !private ["C8OwnRadio11AppDelegate", "NSUUID"]
 - ["C8OwnRadio11AppDelegate", "UIApplication"]
 - ["C8OwnRadio11AppDelegate", "UIApplicationLaunchOptionsKey"]
+- ["C8OwnRadio11AppDelegate", "UIEvent"]
+- !private ["C8OwnRadio11AppDelegate", "UIEventSubtype"]
+- !private ["C8OwnRadio11AppDelegate", "UIEventType"]
 - ["C8OwnRadio11AppDelegate", "UIWindow"]
 - !private ["C8OwnRadio11AppDelegate", "UserDefaults"]
 - ["C8OwnRadio11AppDelegate", "application"]
@@ -69,10 +86,17 @@ depends-member:
 - ["C8OwnRadio11AppDelegate", "applicationWillTerminate"]
 - ["C8OwnRadio11AppDelegate", "deinit"]
 - ["C8OwnRadio11AppDelegate", "init"]
+- ["C8OwnRadio11AppDelegate", "remoteControlReceived"]
 - ["C8OwnRadio11AppDelegate", "window"]
+- ["C8OwnRadio18AudioPlayerManager", "deinit"]
+- !private ["C8OwnRadio18AudioPlayerManager", "nextTrack"]
+- !private ["C8OwnRadio18AudioPlayerManager", "playOrPause"]
+- !private ["C8OwnRadio18AudioPlayerManager", "sharedInstance"]
 - !private ["Sb", "_getBuiltinLogicValue"]
 - ["Sb", "deinit"]
+- !private ["Ps7CVarArg", "AudioPlayerManager"]
 - !private ["Ps7CVarArg", "NSUUID"]
+- !private ["Ps7CVarArg", "UIEventType"]
 - !private ["Ps7CVarArg", "UserDefaults"]
 - ["Ps7CVarArg", "application"]
 - ["Ps7CVarArg", "applicationDidBecomeActive"]
@@ -87,15 +111,23 @@ depends-member:
 - ["Ps7CVarArg", "applicationWillResignActive"]
 - ["Ps7CVarArg", "applicationWillTerminate"]
 - !private ["Ps7CVarArg", "init"]
+- !private ["Ps7CVarArg", "nextTrack"]
 - !private ["Ps7CVarArg", "object"]
+- !private ["Ps7CVarArg", "playOrPause"]
+- ["Ps7CVarArg", "remoteControlReceived"]
 - !private ["Ps7CVarArg", "set"]
+- !private ["Ps7CVarArg", "sharedInstance"]
 - !private ["Ps7CVarArg", "standard"]
+- !private ["Ps7CVarArg", "subtype"]
 - !private ["Ps7CVarArg", "synchronize"]
+- !private ["Ps7CVarArg", "type"]
 - !private ["Ps7CVarArg", "uuidString"]
 - ["Ps7CVarArg", "window"]
 - ["Ps7CVarArg", ""]
 - !private ["Ps10Comparable", "init"]
+- !private ["Ps28CustomDebugStringConvertible", "AudioPlayerManager"]
 - !private ["Ps28CustomDebugStringConvertible", "NSUUID"]
+- !private ["Ps28CustomDebugStringConvertible", "UIEventType"]
 - !private ["Ps28CustomDebugStringConvertible", "UserDefaults"]
 - ["Ps28CustomDebugStringConvertible", "application"]
 - ["Ps28CustomDebugStringConvertible", "applicationDidBecomeActive"]
@@ -110,10 +142,16 @@ depends-member:
 - ["Ps28CustomDebugStringConvertible", "applicationWillResignActive"]
 - ["Ps28CustomDebugStringConvertible", "applicationWillTerminate"]
 - !private ["Ps28CustomDebugStringConvertible", "init"]
+- !private ["Ps28CustomDebugStringConvertible", "nextTrack"]
 - !private ["Ps28CustomDebugStringConvertible", "object"]
+- !private ["Ps28CustomDebugStringConvertible", "playOrPause"]
+- ["Ps28CustomDebugStringConvertible", "remoteControlReceived"]
 - !private ["Ps28CustomDebugStringConvertible", "set"]
+- !private ["Ps28CustomDebugStringConvertible", "sharedInstance"]
 - !private ["Ps28CustomDebugStringConvertible", "standard"]
+- !private ["Ps28CustomDebugStringConvertible", "subtype"]
 - !private ["Ps28CustomDebugStringConvertible", "synchronize"]
+- !private ["Ps28CustomDebugStringConvertible", "type"]
 - !private ["Ps28CustomDebugStringConvertible", "uuidString"]
 - ["Ps28CustomDebugStringConvertible", "window"]
 - ["Ps28CustomDebugStringConvertible", ""]
@@ -121,7 +159,9 @@ depends-member:
 - !private ["Ps29CustomPlaygroundQuickLookable", "init"]
 - !private ["Ps17CustomReflectable", "_getBuiltinLogicValue"]
 - !private ["Ps17CustomReflectable", "init"]
+- !private ["Ps23CustomStringConvertible", "AudioPlayerManager"]
 - !private ["Ps23CustomStringConvertible", "NSUUID"]
+- !private ["Ps23CustomStringConvertible", "UIEventType"]
 - !private ["Ps23CustomStringConvertible", "UserDefaults"]
 - !private ["Ps23CustomStringConvertible", "_getBuiltinLogicValue"]
 - ["Ps23CustomStringConvertible", "application"]
@@ -137,14 +177,23 @@ depends-member:
 - ["Ps23CustomStringConvertible", "applicationWillResignActive"]
 - ["Ps23CustomStringConvertible", "applicationWillTerminate"]
 - !private ["Ps23CustomStringConvertible", "init"]
+- !private ["Ps23CustomStringConvertible", "nextTrack"]
 - !private ["Ps23CustomStringConvertible", "object"]
+- !private ["Ps23CustomStringConvertible", "playOrPause"]
+- ["Ps23CustomStringConvertible", "remoteControlReceived"]
 - !private ["Ps23CustomStringConvertible", "set"]
+- !private ["Ps23CustomStringConvertible", "sharedInstance"]
 - !private ["Ps23CustomStringConvertible", "standard"]
+- !private ["Ps23CustomStringConvertible", "subtype"]
 - !private ["Ps23CustomStringConvertible", "synchronize"]
+- !private ["Ps23CustomStringConvertible", "type"]
 - !private ["Ps23CustomStringConvertible", "uuidString"]
 - ["Ps23CustomStringConvertible", "window"]
 - ["Ps23CustomStringConvertible", ""]
+- !private ["Ps9Equatable", "AudioPlayerManager"]
 - !private ["Ps9Equatable", "NSUUID"]
+- !private ["Ps9Equatable", "RawValue"]
+- !private ["Ps9Equatable", "UIEventType"]
 - !private ["Ps9Equatable", "UserDefaults"]
 - !private ["Ps9Equatable", "_getBuiltinLogicValue"]
 - ["Ps9Equatable", "application"]
@@ -160,10 +209,21 @@ depends-member:
 - ["Ps9Equatable", "applicationWillResignActive"]
 - ["Ps9Equatable", "applicationWillTerminate"]
 - !private ["Ps9Equatable", "init"]
+- !private ["Ps9Equatable", "nextTrack"]
 - !private ["Ps9Equatable", "object"]
+- !private ["Ps9Equatable", "playOrPause"]
+- !private ["Ps9Equatable", "remoteControl"]
+- ["Ps9Equatable", "remoteControlNextTrack"]
+- ["Ps9Equatable", "remoteControlPause"]
+- ["Ps9Equatable", "remoteControlPlay"]
+- ["Ps9Equatable", "remoteControlReceived"]
+- ["Ps9Equatable", "remoteControlTogglePlayPause"]
 - !private ["Ps9Equatable", "set"]
+- !private ["Ps9Equatable", "sharedInstance"]
 - !private ["Ps9Equatable", "standard"]
+- !private ["Ps9Equatable", "subtype"]
 - !private ["Ps9Equatable", "synchronize"]
+- !private ["Ps9Equatable", "type"]
 - !private ["Ps9Equatable", "uuidString"]
 - ["Ps9Equatable", "window"]
 - ["Ps9Equatable", ""]
@@ -172,7 +232,10 @@ depends-member:
 - !private ["Ps32ExpressibleByStringInterpolation", "init"]
 - !private ["Ps26ExpressibleByStringLiteral", "init"]
 - !private ["Ps33ExpressibleByUnicodeScalarLiteral", "init"]
+- !private ["Ps8Hashable", "AudioPlayerManager"]
 - !private ["Ps8Hashable", "NSUUID"]
+- !private ["Ps8Hashable", "RawValue"]
+- !private ["Ps8Hashable", "UIEventType"]
 - !private ["Ps8Hashable", "UserDefaults"]
 - !private ["Ps8Hashable", "_getBuiltinLogicValue"]
 - ["Ps8Hashable", "application"]
@@ -188,10 +251,21 @@ depends-member:
 - ["Ps8Hashable", "applicationWillResignActive"]
 - ["Ps8Hashable", "applicationWillTerminate"]
 - !private ["Ps8Hashable", "init"]
+- !private ["Ps8Hashable", "nextTrack"]
 - !private ["Ps8Hashable", "object"]
+- !private ["Ps8Hashable", "playOrPause"]
+- !private ["Ps8Hashable", "remoteControl"]
+- ["Ps8Hashable", "remoteControlNextTrack"]
+- ["Ps8Hashable", "remoteControlPause"]
+- ["Ps8Hashable", "remoteControlPlay"]
+- ["Ps8Hashable", "remoteControlReceived"]
+- ["Ps8Hashable", "remoteControlTogglePlayPause"]
 - !private ["Ps8Hashable", "set"]
+- !private ["Ps8Hashable", "sharedInstance"]
 - !private ["Ps8Hashable", "standard"]
+- !private ["Ps8Hashable", "subtype"]
 - !private ["Ps8Hashable", "synchronize"]
+- !private ["Ps8Hashable", "type"]
 - !private ["Ps8Hashable", "uuidString"]
 - ["Ps8Hashable", "window"]
 - ["Ps8Hashable", ""]
@@ -203,10 +277,14 @@ depends-member:
 - !private ["PSo9NSCopying", "init"]
 - !private ["PSo9NSCopying", "uuidString"]
 - !private ["PSo16NSMutableCopying", "init"]
+- !private ["CSo8NSObject", "AudioPlayerManager"]
 - ["CSo8NSObject", "Bool"]
 - !private ["CSo8NSObject", "NSUUID"]
 - ["CSo8NSObject", "UIApplication"]
 - ["CSo8NSObject", "UIApplicationLaunchOptionsKey"]
+- ["CSo8NSObject", "UIEvent"]
+- !private ["CSo8NSObject", "UIEventSubtype"]
+- !private ["CSo8NSObject", "UIEventType"]
 - ["CSo8NSObject", "UIWindow"]
 - !private ["CSo8NSObject", "UserDefaults"]
 - ["CSo8NSObject", "application"]
@@ -222,13 +300,21 @@ depends-member:
 - ["CSo8NSObject", "applicationWillResignActive"]
 - ["CSo8NSObject", "applicationWillTerminate"]
 - ["CSo8NSObject", "init"]
+- !private ["CSo8NSObject", "nextTrack"]
 - !private ["CSo8NSObject", "object"]
+- !private ["CSo8NSObject", "playOrPause"]
+- ["CSo8NSObject", "remoteControlReceived"]
 - !private ["CSo8NSObject", "set"]
+- !private ["CSo8NSObject", "sharedInstance"]
 - !private ["CSo8NSObject", "standard"]
+- !private ["CSo8NSObject", "subtype"]
 - !private ["CSo8NSObject", "synchronize"]
+- !private ["CSo8NSObject", "type"]
 - !private ["CSo8NSObject", "uuidString"]
 - ["CSo8NSObject", "window"]
+- !private ["PSo16NSObjectProtocol", "AudioPlayerManager"]
 - !private ["PSo16NSObjectProtocol", "NSUUID"]
+- !private ["PSo16NSObjectProtocol", "UIEventType"]
 - !private ["PSo16NSObjectProtocol", "UserDefaults"]
 - ["PSo16NSObjectProtocol", "application"]
 - ["PSo16NSObjectProtocol", "applicationDidBecomeActive"]
@@ -243,10 +329,16 @@ depends-member:
 - ["PSo16NSObjectProtocol", "applicationWillResignActive"]
 - ["PSo16NSObjectProtocol", "applicationWillTerminate"]
 - !private ["PSo16NSObjectProtocol", "init"]
+- !private ["PSo16NSObjectProtocol", "nextTrack"]
 - !private ["PSo16NSObjectProtocol", "object"]
+- !private ["PSo16NSObjectProtocol", "playOrPause"]
+- ["PSo16NSObjectProtocol", "remoteControlReceived"]
 - !private ["PSo16NSObjectProtocol", "set"]
+- !private ["PSo16NSObjectProtocol", "sharedInstance"]
 - !private ["PSo16NSObjectProtocol", "standard"]
+- !private ["PSo16NSObjectProtocol", "subtype"]
 - !private ["PSo16NSObjectProtocol", "synchronize"]
+- !private ["PSo16NSObjectProtocol", "type"]
 - !private ["PSo16NSObjectProtocol", "uuidString"]
 - ["PSo16NSObjectProtocol", "window"]
 - ["PSo16NSObjectProtocol", ""]
@@ -257,11 +349,19 @@ depends-member:
 - !private ["CSo6NSUUID", "init"]
 - !private ["CSo6NSUUID", "uuidString"]
 - ["Sq", "deinit"]
+- !private ["Ps16RawRepresentable", "RawValue"]
+- !private ["Ps16RawRepresentable", "remoteControl"]
+- ["Ps16RawRepresentable", "remoteControlNextTrack"]
+- ["Ps16RawRepresentable", "remoteControlPause"]
+- ["Ps16RawRepresentable", "remoteControlPlay"]
+- ["Ps16RawRepresentable", "remoteControlTogglePlayPause"]
 - ["SS", "deinit"]
 - !private ["SS", "init"]
 - !private ["Ps16TextOutputStream", "init"]
 - !private ["Ps20TextOutputStreamable", "init"]
+- !private ["PSo21UIApplicationDelegate", "AudioPlayerManager"]
 - !private ["PSo21UIApplicationDelegate", "NSUUID"]
+- !private ["PSo21UIApplicationDelegate", "UIEventType"]
 - !private ["PSo21UIApplicationDelegate", "UserDefaults"]
 - ["PSo21UIApplicationDelegate", "application"]
 - ["PSo21UIApplicationDelegate", "applicationDidBecomeActive"]
@@ -277,10 +377,25 @@ depends-member:
 - ["PSo21UIApplicationDelegate", "applicationWillTerminate"]
 - ["PSo21UIApplicationDelegate", "window"]
 - ["PSo21UIApplicationDelegate", ""]
+- ["CSo7UIEvent", "deinit"]
+- !private ["CSo7UIEvent", "subtype"]
+- !private ["CSo7UIEvent", "type"]
+- ["OSC14UIEventSubtype", "deinit"]
+- ["OSC14UIEventSubtype", "remoteControlNextTrack"]
+- ["OSC14UIEventSubtype", "remoteControlPause"]
+- ["OSC14UIEventSubtype", "remoteControlPlay"]
+- ["OSC14UIEventSubtype", "remoteControlTogglePlayPause"]
+- !private ["OSC11UIEventType", "RawValue"]
+- ["OSC11UIEventType", "deinit"]
+- !private ["OSC11UIEventType", "remoteControl"]
+- !private ["CSo11UIResponder", "AudioPlayerManager"]
 - ["CSo11UIResponder", "Bool"]
 - !private ["CSo11UIResponder", "NSUUID"]
 - ["CSo11UIResponder", "UIApplication"]
 - ["CSo11UIResponder", "UIApplicationLaunchOptionsKey"]
+- ["CSo11UIResponder", "UIEvent"]
+- !private ["CSo11UIResponder", "UIEventSubtype"]
+- !private ["CSo11UIResponder", "UIEventType"]
 - ["CSo11UIResponder", "UIWindow"]
 - !private ["CSo11UIResponder", "UserDefaults"]
 - ["CSo11UIResponder", "application"]
@@ -297,9 +412,12 @@ depends-member:
 - ["CSo11UIResponder", "applicationWillTerminate"]
 - ["CSo11UIResponder", "deinit"]
 - ["CSo11UIResponder", "init"]
+- ["CSo11UIResponder", "remoteControlReceived"]
 - ["CSo11UIResponder", "window"]
 - ["CSo11UIResponder", ""]
+- !private ["PSo30UIResponderStandardEditActions", "AudioPlayerManager"]
 - !private ["PSo30UIResponderStandardEditActions", "NSUUID"]
+- !private ["PSo30UIResponderStandardEditActions", "UIEventType"]
 - !private ["PSo30UIResponderStandardEditActions", "UserDefaults"]
 - ["PSo30UIResponderStandardEditActions", "application"]
 - ["PSo30UIResponderStandardEditActions", "applicationDidBecomeActive"]
@@ -314,6 +432,7 @@ depends-member:
 - ["PSo30UIResponderStandardEditActions", "applicationWillResignActive"]
 - ["PSo30UIResponderStandardEditActions", "applicationWillTerminate"]
 - !private ["PSo30UIResponderStandardEditActions", "init"]
+- ["PSo30UIResponderStandardEditActions", "remoteControlReceived"]
 - ["PSo30UIResponderStandardEditActions", "window"]
 - ["PSo30UIResponderStandardEditActions", ""]
 - ["CSo12UserDefaults", "deinit"]
@@ -328,7 +447,10 @@ depends-member:
 - !private ["Ps41_ExpressibleByBuiltinUnicodeScalarLiteral", "init"]
 - !private ["Ps35_HasCustomAnyHashableRepresentation", "init"]
 - !private ["Ps35_HasCustomAnyHashableRepresentation", "uuidString"]
+- !private ["Ps9_Hashable", "AudioPlayerManager"]
 - !private ["Ps9_Hashable", "NSUUID"]
+- !private ["Ps9_Hashable", "RawValue"]
+- !private ["Ps9_Hashable", "UIEventType"]
 - !private ["Ps9_Hashable", "UserDefaults"]
 - !private ["Ps9_Hashable", "_getBuiltinLogicValue"]
 - ["Ps9_Hashable", "application"]
@@ -344,10 +466,21 @@ depends-member:
 - ["Ps9_Hashable", "applicationWillResignActive"]
 - ["Ps9_Hashable", "applicationWillTerminate"]
 - !private ["Ps9_Hashable", "init"]
+- !private ["Ps9_Hashable", "nextTrack"]
 - !private ["Ps9_Hashable", "object"]
+- !private ["Ps9_Hashable", "playOrPause"]
+- !private ["Ps9_Hashable", "remoteControl"]
+- ["Ps9_Hashable", "remoteControlNextTrack"]
+- ["Ps9_Hashable", "remoteControlPause"]
+- ["Ps9_Hashable", "remoteControlPlay"]
+- ["Ps9_Hashable", "remoteControlReceived"]
+- ["Ps9_Hashable", "remoteControlTogglePlayPause"]
 - !private ["Ps9_Hashable", "set"]
+- !private ["Ps9_Hashable", "sharedInstance"]
 - !private ["Ps9_Hashable", "standard"]
+- !private ["Ps9_Hashable", "subtype"]
 - !private ["Ps9_Hashable", "synchronize"]
+- !private ["Ps9_Hashable", "type"]
 - !private ["Ps9_Hashable", "uuidString"]
 - ["Ps9_Hashable", "window"]
 - ["Ps9_Hashable", ""]
@@ -357,6 +490,7 @@ depends-member:
 depends-nominal:
 - "Ps9AnyObject"
 - "C8OwnRadio11AppDelegate"
+- "C8OwnRadio18AudioPlayerManager"
 - "Sb"
 - "Ps7CVarArg"
 - !private "Ps10Comparable"
@@ -382,10 +516,14 @@ depends-nominal:
 - !private "CSo8NSString"
 - "CSo6NSUUID"
 - "Sq"
+- "Ps16RawRepresentable"
 - "SS"
 - !private "Ps16TextOutputStream"
 - !private "Ps20TextOutputStreamable"
 - "PSo21UIApplicationDelegate"
+- "CSo7UIEvent"
+- "OSC14UIEventSubtype"
+- "OSC11UIEventType"
 - "CSo11UIResponder"
 - "PSo30UIResponderStandardEditActions"
 - "CSo12UserDefaults"
@@ -412,4 +550,4 @@ depends-external:
 - "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/AVFoundation.swiftmodule"
 - "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/CoreMedia.swiftmodule"
 - "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/CoreAudio.swiftmodule"
-interface-hash: "7e85a999868267b7cde0941f4dd635ac"
+interface-hash: "4cdf4161fb1845be82db6824013c55de"
