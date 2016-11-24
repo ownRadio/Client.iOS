@@ -34,6 +34,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			case UIEventSubtype.remoteControlPause:
 				AudioPlayerManager.sharedInstance.pauseSong()
 			case .remoteControlPlay:
+
 				AudioPlayerManager.sharedInstance.resumeSong()
 				
 			case .remoteControlTogglePlayPause:

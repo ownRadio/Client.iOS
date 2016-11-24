@@ -5,6 +5,14 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="SFUIDisplay-Regular.otf">
+            <string>SFUIDisplay-Regular</string>
+        </array>
+        <array key="SFUIText-Regular.otf">
+            <string>SFUIText-Regular</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
@@ -15,50 +23,103 @@
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iPhone 4" translatesAutoresizingMaskIntoConstraints="NO" id="rOy-th-Dzd"/>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5On-GH-ikO">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xSr-6c-3j9">
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kuP-oH-VBW">
+                                        <state key="normal" image="playImg"/>
+                                        <connections>
+                                            <action selector="playBtnPressed" destination="BYZ-38-t0r" eventType="touchUpInside" id="AjH-uV-PLm"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.30588235294117649" green="0.67843137254901964" blue="0.88627450980392153" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="150" id="wDe-6v-MzH"/>
-                                    <constraint firstAttribute="height" constant="150" id="zti-oQ-bm7"/>
+                                    <constraint firstAttribute="height" constant="150" id="2bA-HS-lrw"/>
+                                    <constraint firstItem="kuP-oH-VBW" firstAttribute="centerX" secondItem="xSr-6c-3j9" secondAttribute="centerX" constant="5" id="DNi-Ge-Vuv"/>
+                                    <constraint firstItem="kuP-oH-VBW" firstAttribute="centerY" secondItem="xSr-6c-3j9" secondAttribute="centerY" id="SbI-p8-Wdu"/>
+                                    <constraint firstAttribute="width" constant="150" id="cxP-K2-fj8"/>
                                 </constraints>
-                                <state key="normal" title="Button"/>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="a9r-W3-kMR">
-                                <state key="normal" title="Next"/>
-                                <connections>
-                                    <action selector="nextTrackButtonPressed" destination="BYZ-38-t0r" eventType="touchUpInside" id="usl-yd-mR8"/>
-                                </connections>
-                            </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Track_Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7O9-cK-pwb">
-                                <fontDescription key="fontDescription" type="system" pointSize="25"/>
-                                <color key="textColor" red="0.30588235294117649" green="0.67843137254901964" blue="0.88627450980392153" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="75"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BLr-xa-DLt">
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YTu-Iv-xLQ">
+                                        <state key="normal" image="nextImg"/>
+                                        <connections>
+                                            <action selector="nextTrackButtonPressed" destination="BYZ-38-t0r" eventType="touchUpInside" id="Si4-7s-8n3"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="YTu-Iv-xLQ" firstAttribute="centerY" secondItem="BLr-xa-DLt" secondAttribute="centerY" id="Qau-wL-60e"/>
+                                    <constraint firstItem="YTu-Iv-xLQ" firstAttribute="centerX" secondItem="BLr-xa-DLt" secondAttribute="centerX" id="Ylo-kv-fUR"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cjQ-kN-iGY">
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Track_Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QXq-lk-UPI">
+                                        <fontDescription key="fontDescription" name="SFUIDisplay-Regular" family="SF UI Display" pointSize="40"/>
+                                        <color key="textColor" red="0.30588235289999999" green="0.67843137249999996" blue="0.8862745098" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Author_Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rju-F7-awb">
+                                        <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI  Text" pointSize="18"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="QXq-lk-UPI" firstAttribute="centerY" secondItem="cjQ-kN-iGY" secondAttribute="centerY" constant="-30" id="5Sf-Gk-3yU"/>
+                                    <constraint firstItem="QXq-lk-UPI" firstAttribute="centerX" secondItem="cjQ-kN-iGY" secondAttribute="centerX" id="CE1-Mw-ulf"/>
+                                    <constraint firstItem="Rju-F7-awb" firstAttribute="top" secondItem="QXq-lk-UPI" secondAttribute="bottom" constant="7.3333333333333712" id="XEd-cO-jnZ"/>
+                                    <constraint firstItem="Rju-F7-awb" firstAttribute="centerX" secondItem="QXq-lk-UPI" secondAttribute="centerX" id="ffg-4Y-yjH"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="rOy-th-Dzd" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="2DC-zh-uOL"/>
                             <constraint firstItem="rOy-th-Dzd" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="2ED-Yj-7kX"/>
-                            <constraint firstItem="7O9-cK-pwb" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="70" id="69X-Vg-Svi"/>
+                            <constraint firstItem="xSr-6c-3j9" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="3MT-6G-P71"/>
+                            <constraint firstAttribute="bottom" secondItem="BLr-xa-DLt" secondAttribute="bottom" id="7qm-fc-yWc"/>
                             <constraint firstItem="rOy-th-Dzd" firstAttribute="bottom" secondItem="wfy-db-euE" secondAttribute="top" id="B0a-hx-A70"/>
-                            <constraint firstItem="a9r-W3-kMR" firstAttribute="top" secondItem="5On-GH-ikO" secondAttribute="bottom" constant="8" id="LwM-99-jgO"/>
-                            <constraint firstItem="5On-GH-ikO" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="cg0-KA-zmv"/>
-                            <constraint firstItem="a9r-W3-kMR" firstAttribute="centerX" secondItem="5On-GH-ikO" secondAttribute="centerX" id="deD-Qk-exe"/>
-                            <constraint firstItem="5On-GH-ikO" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="n29-78-O3V"/>
+                            <constraint firstItem="cjQ-kN-iGY" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="I3Y-go-eRD"/>
+                            <constraint firstItem="BLr-xa-DLt" firstAttribute="top" secondItem="xSr-6c-3j9" secondAttribute="bottom" id="efO-r4-Cz3"/>
+                            <constraint firstItem="xSr-6c-3j9" firstAttribute="top" secondItem="cjQ-kN-iGY" secondAttribute="bottom" id="gqk-tD-3Y0"/>
+                            <constraint firstItem="BLr-xa-DLt" firstAttribute="trailing" secondItem="xSr-6c-3j9" secondAttribute="trailing" id="gva-FE-J1Q"/>
+                            <constraint firstAttribute="trailing" secondItem="cjQ-kN-iGY" secondAttribute="trailing" id="hNi-1x-IgG"/>
+                            <constraint firstItem="xSr-6c-3j9" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="kkO-n2-OnI"/>
                             <constraint firstAttribute="trailing" secondItem="rOy-th-Dzd" secondAttribute="trailing" id="nV0-4k-6wH"/>
-                            <constraint firstItem="7O9-cK-pwb" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="oTS-t3-PH0"/>
+                            <constraint firstItem="cjQ-kN-iGY" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="ngK-WB-tyz"/>
+                            <constraint firstItem="BLr-xa-DLt" firstAttribute="leading" secondItem="xSr-6c-3j9" secondAttribute="leading" id="sFi-pB-FNz"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="authorNameLbl" destination="Rju-F7-awb" id="kbd-rl-hxo"/>
+                        <outlet property="backgroundImageView" destination="rOy-th-Dzd" id="uOQ-I1-Fr4"/>
+                        <outlet property="nextButton" destination="YTu-Iv-xLQ" id="BMO-N8-vAQ"/>
+                        <outlet property="playPauseBtn" destination="kuP-oH-VBW" id="RSB-WG-s4B"/>
+                        <outlet property="trackNameLbl" destination="QXq-lk-UPI" id="Qmj-ey-PEd"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="118.125" y="105"/>
+            <point key="canvasLocation" x="117.39130434782609" y="104.34782608695653"/>
         </scene>
     </scenes>
     <resources>
         <image name="iPhone 4" width="320" height="480"/>
+        <image name="nextImg" width="65" height="30"/>
+        <image name="playImg" width="46" height="51"/>
     </resources>
 </document>
