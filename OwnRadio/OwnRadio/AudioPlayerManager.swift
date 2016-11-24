@@ -89,13 +89,19 @@ class AudioPlayerManager: NSObject {
 	
 	
 	func resumeSong() {
-		self.player.play()
+		if self.player != nil {
+		self.player?.play()
+		} else {
+			self.nextTrack()
+		}
 		isPlaying = true
+
+
 	}
 	
 	func pauseSong() {
 		
-		self.player.pause()
+		self.player?.pause()
 		isPlaying = false
 	}
 	

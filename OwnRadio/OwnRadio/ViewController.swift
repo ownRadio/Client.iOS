@@ -33,13 +33,20 @@ class ViewController: UIViewController {
 	
 	func changePlayBtnState() {
 		if isPlaying == true {
-			self.playPauseBtn.setImage(UIImage(named: "pauseImg"), for: UIControlState.normal)
 
 			isPlaying = false
-		}else {
 			self.playPauseBtn.setImage(UIImage(named: "playImg"), for: UIControlState.normal)
-			
+
+			player.pauseSong()
+
+		}else {
+
 			isPlaying = true
+			self.playPauseBtn.setImage(UIImage(named: "pauseImg"), for: UIControlState.normal)
+
+
+			player.resumeSong()
+
 		}
 		
 	}
@@ -53,11 +60,12 @@ class ViewController: UIViewController {
 	
 	@IBAction func nextTrackButtonPressed() {
 		self.player.nextTrack()
-		isPlaying = true
+		isPlaying = false
 		changePlayBtnState()
 	}
 	
 	@IBAction func playBtnPressed() {
+
 		changePlayBtnState()
 	}
 	
