@@ -478,8 +478,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.netvoxlab.ownradio;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "4098cd29-1b78-4d0c-a8ff-1219f4c83a5d";
+				PROVISIONING_PROFILE_SPECIFIER = own_radio_adhoc241116;
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -499,8 +499,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.netvoxlab.ownradio;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = "";
+				PROVISIONING_PROFILE = "4098cd29-1b78-4d0c-a8ff-1219f4c83a5d";
+				PROVISIONING_PROFILE_SPECIFIER = own_radio_adhoc241116;
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
