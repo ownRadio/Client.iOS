@@ -16,6 +16,8 @@
 		091679751DE451CF00619B3F /* OwnRadioUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 091679741DE451CF00619B3F /* OwnRadioUITests.swift */; };
 		091679C71DE47D4400619B3F /* ApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 091679C61DE47D4400619B3F /* ApiService.swift */; };
 		09EA799B1DE57D040034B8DF /* AudioPlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EA799A1DE57D040034B8DF /* AudioPlayerManager.swift */; };
+		50D8269A1DE74B0800238F96 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50D826981DE74B0800238F96 /* Fabric.framework */; };
+		50D8269B1DE74B0800238F96 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50D826991DE74B0800238F96 /* Crashlytics.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +56,8 @@
 		091679C61DE47D4400619B3F /* ApiService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiService.swift; sourceTree = "<group>"; };
 		091679C91DE47D9900619B3F /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
 		09EA799A1DE57D040034B8DF /* AudioPlayerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioPlayerManager.swift; sourceTree = "<group>"; };
+		50D826981DE74B0800238F96 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
+		50D826991DE74B0800238F96 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +65,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				50D8269B1DE74B0800238F96 /* Crashlytics.framework in Frameworks */,
+				50D8269A1DE74B0800238F96 /* Fabric.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -148,6 +154,8 @@
 		091679C81DE47D9900619B3F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				50D826981DE74B0800238F96 /* Fabric.framework */,
+				50D826991DE74B0800238F96 /* Crashlytics.framework */,
 				091679C91DE47D9900619B3F /* Alamofire.framework */,
 			);
 			name = Frameworks;
@@ -163,6 +171,7 @@
 				0916794D1DE451CF00619B3F /* Sources */,
 				0916794E1DE451CF00619B3F /* Frameworks */,
 				0916794F1DE451CF00619B3F /* Resources */,
+				50D826971DE747C900238F96 /* Fabric */,
 			);
 			buildRules = (
 			);
@@ -221,7 +230,7 @@
 				TargetAttributes = {
 					091679501DE451CF00619B3F = {
 						CreatedOnToolsVersion = 8.0;
-						ProvisioningStyle = Automatic;
+						ProvisioningStyle = Manual;
 					};
 					091679641DE451CF00619B3F = {
 						CreatedOnToolsVersion = 8.0;
@@ -281,6 +290,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		50D826971DE747C900238F96 /* Fabric */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = Fabric;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "./Fabric.framework/run 4f387d4a5ac1a6e637ca2612469b2b3e73907300 38045f3dcae2e3516adb4ab559ad717d3aee5bac901419478df668dfa222ab37";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		0916794D1DE451CF00619B3F /* Sources */ = {
@@ -442,14 +468,18 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = OwnRadio/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = OR.OwnRadio;
+				PRODUCT_BUNDLE_IDENTIFIER = com.netvoxlab.ownradio;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "4098cd29-1b78-4d0c-a8ff-1219f4c83a5d";
+				PROVISIONING_PROFILE_SPECIFIER = own_radio_adhoc241116;
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -458,14 +488,19 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: NETVOKS LAB, OOO (V37A835M4B)";
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = OwnRadio/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = OR.OwnRadio;
+				PRODUCT_BUNDLE_IDENTIFIER = com.netvoxlab.ownradio;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "4098cd29-1b78-4d0c-a8ff-1219f4c83a5d";
+				PROVISIONING_PROFILE_SPECIFIER = own_radio_adhoc241116;
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;

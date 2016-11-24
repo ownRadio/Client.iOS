@@ -21,8 +21,11 @@ class ApiService {
 	
 	func getTrackIDFromServer (complition: @escaping (String) -> Void)  {
 		
-		let urlString = "http://java.ownradio.ru/api/v2/tracks/" + (UserDefaults.standard.object(forKey: "UUIDDevice") as! String) + "/next"
-		guard let url = NSURL(string: urlString) else {
+		
+		let tracksUrl = URL(string: "http://java.ownradio.ru/api/v2/tracks/")
+		let trackurl = tracksUrl?.appendingPathComponent((UserDefaults.standard.object(forKey: "UUIDDevice") as! String)).appendingPathComponent("/next")
+		
+		guard let url = trackurl else {
 			print("Error: cannot create URL")
 			return
 		}
@@ -44,44 +47,54 @@ class ApiService {
 			
 			let nextTrackIDString = String(data: data!, encoding: String.Encoding.utf8)!
 			complition(nextTrackIDString)
-			
-			self.getMediaTrackFromServer()
-			
+			self.saveHistory(trackId: nextTrackIDString, isListen: true)
 		})
 		task.resume()
 	}
 	
-	func getMediaTrackFromServer() {
-		
-////		let urlString = "http://java.ownradio.ru/api/v2/tracks/" + self.nextTrackIDString
-//		
-//		guard let url = NSURL(string: urlString) else {
-//			print("Error: cannot create URL")
-//			return
-//		}
-//		let urlRequest = NSURLRequest(url: url as URL)
-//		
-//		// set up the session
-//		let config = URLSessionConfiguration.default
-//		let session = URLSession(configuration: config)
-//		
-//		// make the request
-//		
-//		let task = session.dataTask(with: urlRequest as URLRequest, completionHandler: { (data, response, error) in
-//			// do stuff with response, data & error here
-//			print(data?.description)
-//			
-//			guard error == nil else {
-//				return
-//			}
-//			
-//			
-//			
-//		})
-//		task.resume()
 
+	func saveHistory(trackId: String, isListen:Bool) {
 		
+		let historyUrl = URL(string: "http://java.ownradio.ru/api/v2/histories/")
+		let trackIDValue = trackId.trimmingCharacters(in: CharacterSet(charactersIn: "\""))
+		let trackHistoryUrl = historyUrl?.appendingPathComponent((UserDefaults.standard.object(forKey: "UUIDDevice") as! String)).appendingPathComponent(trackIDValue)
+		
+		guard let url = trackHistoryUrl else {
+			print("Error: cannot create URL")
+			return
+		}
+
+		let request = NSMutableURLRequest(url: url as URL)
+		request.httpMethod = "POST"
+		let nowDate = NSDate()
+		let dateFormatter = DateFormatter()
+		dateFormatter.dateFormat = "dd/MM/yyyy HH:mm:ss"
+		let lastListen = dateFormatter.string(from: nowDate as Date)
+		
+		let numberListen = NSNumber(booleanLiteral: isListen)
+		let dict = ["lastListen":lastListen, "isListen":numberListen, "method":"random"] as [String : Any]
+		do {
+			
+			let data = try JSONSerialization.data(withJSONObject: dict, options: [])
+			let dataString = String(data: data, encoding: String.Encoding.utf8)!
+			request.httpBody = data
+			
+		} catch {
+			print("JSON serialization failed:  \(error)")
+		}
+		
+		let task = URLSession.shared.dataTask(with: request as URLRequest){ data,response,error in
+			if error != nil{
+				print(error?.localizedDescription)
+				return
+			}
+//			if let responseJSON = try! JSONSerialization.jsonObject(with: data!, options: []) as? [String:AnyObject]{
+//				print(responseJSON)
+//			}
+		}
+		
+		task.resume()
+
 	}
-	
 	
 }
