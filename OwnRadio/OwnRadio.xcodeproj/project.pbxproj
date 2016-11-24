@@ -36,6 +36,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0905010F1DE70FA600B1841C /* SFUIText-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SFUIText-Regular.otf"; path = "../../../Downloads/SFUIText-Regular.otf"; sourceTree = "<group>"; };
+		090501111DE7106300B1841C /* SFUIDisplay-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SFUIDisplay-Regular.otf"; path = "../../../Downloads/SFUIDisplay-Regular.otf"; sourceTree = "<group>"; };
 		091679511DE451CF00619B3F /* OwnRadio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OwnRadio.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		091679541DE451CF00619B3F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		091679561DE451CF00619B3F /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -79,6 +81,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		090501101DE70FB400B1841C /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				090501111DE7106300B1841C /* SFUIDisplay-Regular.otf */,
+				0905010F1DE70FA600B1841C /* SFUIText-Regular.otf */,
+			);
+			name = Fonts;
+			sourceTree = "<group>";
+		};
 		091679481DE451CF00619B3F = {
 			isa = PBXGroup;
 			children = (
@@ -111,6 +122,7 @@
 				0916795B1DE451CF00619B3F /* Assets.xcassets */,
 				0916795D1DE451CF00619B3F /* LaunchScreen.storyboard */,
 				091679601DE451CF00619B3F /* Info.plist */,
+				090501101DE70FB400B1841C /* Fonts */,
 			);
 			path = OwnRadio;
 			sourceTree = "<group>";
