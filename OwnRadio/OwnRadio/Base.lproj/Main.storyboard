@@ -39,8 +39,10 @@
                                 <color key="backgroundColor" red="0.30588235294117649" green="0.67843137254901964" blue="0.88627450980392153" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="150" id="2bA-HS-lrw"/>
-                                    <constraint firstItem="kuP-oH-VBW" firstAttribute="centerX" secondItem="xSr-6c-3j9" secondAttribute="centerX" constant="5" id="DNi-Ge-Vuv"/>
-                                    <constraint firstItem="kuP-oH-VBW" firstAttribute="centerY" secondItem="xSr-6c-3j9" secondAttribute="centerY" id="SbI-p8-Wdu"/>
+                                    <constraint firstItem="kuP-oH-VBW" firstAttribute="top" secondItem="xSr-6c-3j9" secondAttribute="top" constant="10" id="4TA-K1-tfO"/>
+                                    <constraint firstAttribute="bottom" secondItem="kuP-oH-VBW" secondAttribute="bottom" constant="10" id="4mQ-tv-7Wh"/>
+                                    <constraint firstAttribute="trailing" secondItem="kuP-oH-VBW" secondAttribute="trailing" constant="10" id="Wiw-JO-yZP"/>
+                                    <constraint firstItem="kuP-oH-VBW" firstAttribute="leading" secondItem="xSr-6c-3j9" secondAttribute="leading" constant="15" id="ZbW-Ke-wpW"/>
                                     <constraint firstAttribute="width" constant="150" id="cxP-K2-fj8"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
@@ -107,6 +109,7 @@
                     <connections>
                         <outlet property="authorNameLbl" destination="Rju-F7-awb" id="kbd-rl-hxo"/>
                         <outlet property="backgroundImageView" destination="rOy-th-Dzd" id="uOQ-I1-Fr4"/>
+                        <outlet property="leftPlayBtnConstraint" destination="ZbW-Ke-wpW" id="31t-FB-cLO"/>
                         <outlet property="nextButton" destination="YTu-Iv-xLQ" id="BMO-N8-vAQ"/>
                         <outlet property="playPauseBtn" destination="kuP-oH-VBW" id="RSB-WG-s4B"/>
                         <outlet property="trackNameLbl" destination="QXq-lk-UPI" id="Qmj-ey-PEd"/>
@@ -114,7 +117,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="117.39130434782609" y="104.34782608695653"/>
+            <point key="canvasLocation" x="116.25" y="103.52112676056338"/>
         </scene>
     </scenes>
     <resources>

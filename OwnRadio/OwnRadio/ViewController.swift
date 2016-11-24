@@ -16,6 +16,7 @@ class ViewController: UIViewController {
 	@IBOutlet weak var trackNameLbl: UILabel!
 	@IBOutlet weak var authorNameLbl: UILabel!
 	
+	@IBOutlet weak var leftPlayBtnConstraint: NSLayoutConstraint!
 	@IBOutlet weak var playPauseBtn: UIButton!
 	@IBOutlet weak var nextButton: UIButton!
 	
@@ -23,32 +24,92 @@ class ViewController: UIViewController {
 	var dataTask: URLSessionDataTask?
 	var player: AudioPlayerManager!
 	var isPlaying: Bool!
+	var itFirst: Bool!
+	let playBtnConstraintConstant = CGFloat(15.0)
+	let pauseBtnConstraintConstant = CGFloat(10.0)
+	
+	let iphone4Size = CGSize.init(width: 320, height: 480)
+	let iphone5Size = CGSize.init(width: 320, height: 568)
+	let iphone6Size = CGSize.init(width: 375, height: 667)
+	let iphone7PlusSize = CGSize.init(width: 414, height: 736)
+	let iPadPortraitSize = CGSize.init(width: 768, height: 1024)
+	let iPadLandscapeSize = CGSize.init(width: 1024, height: 768)
+	let iPadProLandscapeSize = CGSize.init(width: 1366, height: 1024)
+	let iPadProPortraitSize = CGSize.init(width: 1024, height: 1366)
+	
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		// Do any additional setup after loading the view, typically from a nib.
+		setBackgroudImage()
 		self.player = AudioPlayerManager.sharedInstance
 		self.isPlaying = false
+		itFirst = true
+	}
+	
+	func setBackgroudImage() {
+		switch UIScreen.main.bounds.size {
+		case iphone4Size:
+			self.backgroundImageView.image = UIImage(named: "iPhone 4")
+		case iphone5Size:
+			self.backgroundImageView.image = UIImage(named: "iPhone 5")
+		case iphone6Size:
+			self.backgroundImageView.image = UIImage(named: "iPhone 7")
+		case iphone7PlusSize:
+			self.backgroundImageView.image = UIImage(named: "iPhone 7 Plus")
+		case iPadPortraitSize:
+			self.backgroundImageView.image = UIImage(named: "iPad Portrait")
+		case iPadLandscapeSize:
+			self.backgroundImageView.image = UIImage(named: "iPad Landscape")
+		case iPadProPortraitSize:
+			self.backgroundImageView.image = UIImage(named: "iPad Pro Portrait")
+		case iPadProLandscapeSize:
+			self.backgroundImageView.image = UIImage(named: "iPad Pro Landscape")
+		default: break
+			
+		}
 	}
 	
 	func changePlayBtnState() {
+
 		if isPlaying == true {
 
 			isPlaying = false
 			self.playPauseBtn.setImage(UIImage(named: "playImg"), for: UIControlState.normal)
-
+			self.leftPlayBtnConstraint.constant = playBtnConstraintConstant
 			player.pauseSong()
 
 		}else {
 
 			isPlaying = true
 			self.playPauseBtn.setImage(UIImage(named: "pauseImg"), for: UIControlState.normal)
-
+			self.leftPlayBtnConstraint.constant = pauseBtnConstraintConstant
 
 			player.resumeSong()
 
 		}
 		
+	}
+	
+	override func remoteControlReceived(with event: UIEvent?) {
+		
+		if event?.type == UIEventType.remoteControl {
+			switch event!.subtype {
+			case UIEventSubtype.remoteControlPause:
+				changePlayBtnState()
+			case .remoteControlPlay:
+
+				changePlayBtnState()
+				
+			case .remoteControlTogglePlayPause:
+				break
+			//				AudioPlayerManager.sharedInstance.playOrPause()
+			case .remoteControlNextTrack:
+				player.nextTrack()
+			default:
+				break
+			}
+		}
 	}
 	
 	override func didReceiveMemoryWarning() {
