@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
@@ -8,9 +8,6 @@
     <customFonts key="customFonts">
         <array key="SFUIDisplay-Regular.otf">
             <string>SFUIDisplay-Regular</string>
-        </array>
-        <array key="SFUIText-Regular.otf">
-            <string>SFUIText-Regular</string>
         </array>
     </customFonts>
     <scenes>
@@ -23,7 +20,7 @@
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iPhone 4" translatesAutoresizingMaskIntoConstraints="NO" id="rOy-th-Dzd"/>
@@ -68,23 +65,75 @@
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cjQ-kN-iGY">
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Track_Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QXq-lk-UPI">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ownRadio" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QXq-lk-UPI">
                                         <fontDescription key="fontDescription" name="SFUIDisplay-Regular" family="SF UI Display" pointSize="40"/>
                                         <color key="textColor" red="0.30588235289999999" green="0.67843137249999996" blue="0.8862745098" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Author_Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rju-F7-awb">
-                                        <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI  Text" pointSize="18"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ifw-5N-ebI">
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Playing:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CLb-qM-Gz4">
+                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TrackID:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QfG-Ow-1wG">
+                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Played Track:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IY3-Yy-ttG">
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="92" id="ApM-cn-LUK"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Track_Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vds-Zf-D4w">
+                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Track_ID" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wCB-G2-6rJ">
+                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Played_Track_ID" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OwP-Dt-Wqz">
+                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                        </subviews>
+                                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.25524400684931509" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstItem="wCB-G2-6rJ" firstAttribute="leading" secondItem="OwP-Dt-Wqz" secondAttribute="leading" id="0Nh-Sc-8kh"/>
+                                            <constraint firstAttribute="height" constant="90" id="6V4-GO-QLI"/>
+                                            <constraint firstItem="QfG-Ow-1wG" firstAttribute="leading" secondItem="Ifw-5N-ebI" secondAttribute="leading" constant="8" id="AHq-TQ-ELi"/>
+                                            <constraint firstItem="OwP-Dt-Wqz" firstAttribute="leading" secondItem="IY3-Yy-ttG" secondAttribute="trailing" constant="15" id="CnD-D9-r4x"/>
+                                            <constraint firstItem="wCB-G2-6rJ" firstAttribute="top" secondItem="QfG-Ow-1wG" secondAttribute="top" id="H60-9M-XlZ"/>
+                                            <constraint firstItem="OwP-Dt-Wqz" firstAttribute="top" secondItem="IY3-Yy-ttG" secondAttribute="top" id="I9a-ru-czi"/>
+                                            <constraint firstItem="vds-Zf-D4w" firstAttribute="leading" secondItem="wCB-G2-6rJ" secondAttribute="leading" id="QC1-Dk-tFn"/>
+                                            <constraint firstItem="QfG-Ow-1wG" firstAttribute="top" secondItem="CLb-qM-Gz4" secondAttribute="bottom" constant="8" id="Sdn-mx-PAq"/>
+                                            <constraint firstItem="IY3-Yy-ttG" firstAttribute="top" secondItem="QfG-Ow-1wG" secondAttribute="bottom" constant="8" id="ap4-6T-9O8"/>
+                                            <constraint firstItem="QfG-Ow-1wG" firstAttribute="centerY" secondItem="Ifw-5N-ebI" secondAttribute="centerY" id="buQ-v0-xsv"/>
+                                            <constraint firstItem="IY3-Yy-ttG" firstAttribute="leading" secondItem="Ifw-5N-ebI" secondAttribute="leading" constant="8" id="cIz-xq-KNb"/>
+                                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="wCB-G2-6rJ" secondAttribute="trailing" constant="15" id="fPI-2G-FOK"/>
+                                            <constraint firstItem="CLb-qM-Gz4" firstAttribute="leading" secondItem="QfG-Ow-1wG" secondAttribute="leading" id="h5E-Q2-wfJ"/>
+                                            <constraint firstItem="vds-Zf-D4w" firstAttribute="top" secondItem="CLb-qM-Gz4" secondAttribute="top" id="hO7-GK-Rg2"/>
+                                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="vds-Zf-D4w" secondAttribute="trailing" constant="15" id="hhm-Il-zRe"/>
+                                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="OwP-Dt-Wqz" secondAttribute="trailing" constant="5" id="mqO-YP-gw3"/>
+                                        </constraints>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="QXq-lk-UPI" firstAttribute="centerY" secondItem="cjQ-kN-iGY" secondAttribute="centerY" constant="-30" id="5Sf-Gk-3yU"/>
                                     <constraint firstItem="QXq-lk-UPI" firstAttribute="centerX" secondItem="cjQ-kN-iGY" secondAttribute="centerX" id="CE1-Mw-ulf"/>
-                                    <constraint firstItem="Rju-F7-awb" firstAttribute="top" secondItem="QXq-lk-UPI" secondAttribute="bottom" constant="7.3333333333333712" id="XEd-cO-jnZ"/>
-                                    <constraint firstItem="Rju-F7-awb" firstAttribute="centerX" secondItem="QXq-lk-UPI" secondAttribute="centerX" id="ffg-4Y-yjH"/>
+                                    <constraint firstAttribute="trailing" secondItem="Ifw-5N-ebI" secondAttribute="trailing" id="FCh-q7-Wkw"/>
+                                    <constraint firstItem="Ifw-5N-ebI" firstAttribute="top" secondItem="QXq-lk-UPI" secondAttribute="bottom" id="eBL-DY-gMW"/>
+                                    <constraint firstItem="Ifw-5N-ebI" firstAttribute="leading" secondItem="cjQ-kN-iGY" secondAttribute="leading" id="yrd-fZ-Sod"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -107,11 +156,12 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="authorNameLbl" destination="Rju-F7-awb" id="kbd-rl-hxo"/>
                         <outlet property="backgroundImageView" destination="rOy-th-Dzd" id="uOQ-I1-Fr4"/>
                         <outlet property="leftPlayBtnConstraint" destination="ZbW-Ke-wpW" id="31t-FB-cLO"/>
                         <outlet property="nextButton" destination="YTu-Iv-xLQ" id="BMO-N8-vAQ"/>
                         <outlet property="playPauseBtn" destination="kuP-oH-VBW" id="RSB-WG-s4B"/>
+                        <outlet property="playedTrackID" destination="OwP-Dt-Wqz" id="WAL-nY-vxC"/>
+                        <outlet property="trackIDLbl" destination="wCB-G2-6rJ" id="nry-P9-0rE"/>
                         <outlet property="trackNameLbl" destination="QXq-lk-UPI" id="Qmj-ey-PEd"/>
                     </connections>
                 </viewController>

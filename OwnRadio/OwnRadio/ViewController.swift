@@ -15,7 +15,8 @@ class ViewController: UIViewController {
 	@IBOutlet weak var backgroundImageView: UIImageView!
 	@IBOutlet weak var trackNameLbl: UILabel!
 	@IBOutlet weak var authorNameLbl: UILabel!
-	
+	@IBOutlet weak var trackIDLbl: UILabel!
+	@IBOutlet weak var playedTrackID: UILabel!
 	@IBOutlet weak var leftPlayBtnConstraint: NSLayoutConstraint!
 	@IBOutlet weak var playPauseBtn: UIButton!
 	@IBOutlet weak var nextButton: UIButton!
@@ -45,6 +46,14 @@ class ViewController: UIViewController {
 		self.player = AudioPlayerManager.sharedInstance
 		self.isPlaying = false
 		itFirst = true
+		
+		NotificationCenter.default.addObserver(self, selector: #selector(crashNetwork), name: NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: nil)
+		
+	}
+	
+	override func viewDidDisappear(_ animated: Bool) {
+		super.viewDidDisappear(animated)
+		NotificationCenter.default.removeObserver(self, name:  NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: nil)
 	}
 	
 	func setBackgroudImage() {
@@ -91,6 +100,14 @@ class ViewController: UIViewController {
 		
 	}
 	
+	func crashNetwork() {
+		isPlaying = false
+		self.playPauseBtn.setImage(UIImage(named: "playImg"), for: UIControlState.normal)
+		self.leftPlayBtnConstraint.constant = pauseBtnConstraintConstant
+		self.trackIDLbl.text = ""
+		self.playedTrackID.text = ""
+	}
+	
 	override func remoteControlReceived(with event: UIEvent?) {
 		
 		if event?.type == UIEventType.remoteControl {
@@ -120,9 +137,11 @@ class ViewController: UIViewController {
 	// Actions
 	
 	@IBAction func nextTrackButtonPressed() {
-		self.player.nextTrack()
+		self.player.skipSong()
 		isPlaying = false
 		changePlayBtnState()
+		self.playedTrackID.text = player.playedSongID
+		self.trackIDLbl.text = player.playingSongID
 	}
 	
 	@IBAction func playBtnPressed() {
