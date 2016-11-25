@@ -142,11 +142,13 @@ class ViewController: UIViewController {
 	// Actions
 	
 	
-	@IBAction func tripleTapAction(_ sender: AnyObject) {
+	@IBAction func tripleTapAction(_ sender: UIGestureRecognizer) {
 		if self.visibleInfoView == true {
 			self.infoView.isHidden = false
+			self.visibleInfoView = false
 		}else {
 			self.infoView.isHidden = true
+			self.visibleInfoView = true
 		}
 
 	}
