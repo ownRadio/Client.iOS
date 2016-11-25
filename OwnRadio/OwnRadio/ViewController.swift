@@ -20,6 +20,7 @@ class ViewController: UIViewController {
 	@IBOutlet weak var leftPlayBtnConstraint: NSLayoutConstraint!
 	@IBOutlet weak var playPauseBtn: UIButton!
 	@IBOutlet weak var nextButton: UIButton!
+	@IBOutlet weak var infoView: UIView!
 	
 	let defaultSession = URLSession(configuration: URLSessionConfiguration.default)
 	var dataTask: URLSessionDataTask?
@@ -28,6 +29,7 @@ class ViewController: UIViewController {
 	var itFirst: Bool!
 	let playBtnConstraintConstant = CGFloat(15.0)
 	let pauseBtnConstraintConstant = CGFloat(10.0)
+	var visibleInfoView: Bool!
 	
 	let iphone4Size = CGSize.init(width: 320, height: 480)
 	let iphone5Size = CGSize.init(width: 320, height: 568)
@@ -38,7 +40,6 @@ class ViewController: UIViewController {
 	let iPadProLandscapeSize = CGSize.init(width: 1366, height: 1024)
 	let iPadProPortraitSize = CGSize.init(width: 1024, height: 1366)
 	
-	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		// Do any additional setup after loading the view, typically from a nib.
@@ -48,6 +49,10 @@ class ViewController: UIViewController {
 		itFirst = true
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(crashNetwork), name: NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: nil)
+		
+		self.playedTrackID.text = (UserDefaults.standard.object(forKey: "UUIDDevice") as! String)
+		self.visibleInfoView = false
+		
 		
 	}
 	
@@ -105,7 +110,7 @@ class ViewController: UIViewController {
 		self.playPauseBtn.setImage(UIImage(named: "playImg"), for: UIControlState.normal)
 		self.leftPlayBtnConstraint.constant = pauseBtnConstraintConstant
 		self.trackIDLbl.text = ""
-		self.playedTrackID.text = ""
+		
 	}
 	
 	override func remoteControlReceived(with event: UIEvent?) {
@@ -136,11 +141,21 @@ class ViewController: UIViewController {
 	
 	// Actions
 	
+	
+	@IBAction func tripleTapAction(_ sender: AnyObject) {
+		if self.visibleInfoView == true {
+			self.infoView.isHidden = false
+		}else {
+			self.infoView.isHidden = true
+		}
+
+	}
+
 	@IBAction func nextTrackButtonPressed() {
 		self.player.skipSong()
 		isPlaying = false
 		changePlayBtnState()
-		self.playedTrackID.text = player.playedSongID
+		
 		self.trackIDLbl.text = player.playingSongID
 	}
 	
