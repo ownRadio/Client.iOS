@@ -22,6 +22,8 @@ class ViewController: UIViewController {
 	@IBOutlet weak var nextButton: UIButton!
 	@IBOutlet weak var infoView: UIView!
 	
+	@IBOutlet var versionLabel: UILabel!
+
 	let defaultSession = URLSession(configuration: URLSessionConfiguration.default)
 	var dataTask: URLSessionDataTask?
 	var player: AudioPlayerManager!
@@ -31,19 +33,20 @@ class ViewController: UIViewController {
 	let pauseBtnConstraintConstant = CGFloat(10.0)
 	var visibleInfoView: Bool!
 	
-	let iphone4Size = CGSize.init(width: 320, height: 480)
-	let iphone5Size = CGSize.init(width: 320, height: 568)
-	let iphone6Size = CGSize.init(width: 375, height: 667)
-	let iphone7PlusSize = CGSize.init(width: 414, height: 736)
-	let iPadPortraitSize = CGSize.init(width: 768, height: 1024)
-	let iPadLandscapeSize = CGSize.init(width: 1024, height: 768)
-	let iPadProLandscapeSize = CGSize.init(width: 1366, height: 1024)
-	let iPadProPortraitSize = CGSize.init(width: 1024, height: 1366)
-	
+
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		// Do any additional setup after loading the view, typically from a nib.
-		setBackgroudImage()
+
+		if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
+
+			if let text = Bundle.main.infoDictionary?["CFBundleVersion"] as? String {
+				self.versionLabel.text = "version:" + version + "(" + text + ")"
+
+			}
+
+		}
+
+
 		self.player = AudioPlayerManager.sharedInstance
 		self.isPlaying = false
 		itFirst = true
@@ -61,28 +64,6 @@ class ViewController: UIViewController {
 		NotificationCenter.default.removeObserver(self, name:  NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: nil)
 	}
 	
-	func setBackgroudImage() {
-		switch UIScreen.main.bounds.size {
-		case iphone4Size:
-			self.backgroundImageView.image = UIImage(named: "iPhone 4")
-		case iphone5Size:
-			self.backgroundImageView.image = UIImage(named: "iPhone 5")
-		case iphone6Size:
-			self.backgroundImageView.image = UIImage(named: "iPhone 7")
-		case iphone7PlusSize:
-			self.backgroundImageView.image = UIImage(named: "iPhone 7 Plus")
-		case iPadPortraitSize:
-			self.backgroundImageView.image = UIImage(named: "iPad Portrait")
-		case iPadLandscapeSize:
-			self.backgroundImageView.image = UIImage(named: "iPad Landscape")
-		case iPadProPortraitSize:
-			self.backgroundImageView.image = UIImage(named: "iPad Pro Portrait")
-		case iPadProLandscapeSize:
-			self.backgroundImageView.image = UIImage(named: "iPad Pro Landscape")
-		default: break
-			
-		}
-	}
 	
 	func changePlayBtnState() {
 
@@ -143,7 +124,7 @@ class ViewController: UIViewController {
 	
 	
 	@IBAction func tripleTapAction(_ sender: AnyObject) {
-		if self.visibleInfoView == true {
+		if self.infoView.isHidden == true {
 			self.infoView.isHidden = false
 		}else {
 			self.infoView.isHidden = true

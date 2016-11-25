@@ -82,10 +82,12 @@ class AudioPlayerManager: NSObject {
 	///  confirure album cover and other params for playing song
 	func configurePlayingSong() {
 		
-		let albumArt = MPMediaItemArtwork(image: UIImage())
+		let albumArt = MPMediaItemArtwork(image: UIImage(named:"iconBig")!)
 		var songInfo = [String:Any]()
 		
-		songInfo[MPMediaItemPropertyTitle] = titleSong
+//		songInfo[MPMediaItemPropertyTitle] = titleSong
+		songInfo[MPMediaItemPropertyTitle] = "ownRadio"
+		
 //		songInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = playbackProgres
 //		songInfo[MPMediaItemPropertyPlaybackDuration] = currentPlaybackTime
 		songInfo[MPMediaItemPropertyArtwork] = albumArt
