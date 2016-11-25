@@ -230,12 +230,8 @@
 				TargetAttributes = {
 					091679501DE451CF00619B3F = {
 						CreatedOnToolsVersion = 8.0;
-<<<<<<< HEAD
 						DevelopmentTeam = V37A835M4B;
 						ProvisioningStyle = Automatic;
-=======
-						ProvisioningStyle = Manual;
->>>>>>> 964a27f6f9eb66b2002ab736fbd869878a1602f1
 					};
 					091679641DE451CF00619B3F = {
 						CreatedOnToolsVersion = 8.0;
