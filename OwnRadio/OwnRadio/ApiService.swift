@@ -47,54 +47,61 @@ class ApiService {
 			
 			let nextTrackIDString = String(data: data!, encoding: String.Encoding.utf8)!
 			complition(nextTrackIDString)
-			self.saveHistory(trackId: nextTrackIDString, isListen: true)
 		})
 		task.resume()
 	}
 	
 
-	func saveHistory(trackId: String, isListen:Bool) {
-		
-		let historyUrl = URL(string: "http://java.ownradio.ru/api/v2/histories/")
-		let trackIDValue = trackId.trimmingCharacters(in: CharacterSet(charactersIn: "\""))
-		let trackHistoryUrl = historyUrl?.appendingPathComponent((UserDefaults.standard.object(forKey: "UUIDDevice") as! String)).appendingPathComponent(trackIDValue)
-		
-		guard let url = trackHistoryUrl else {
-			print("Error: cannot create URL")
-			return
-		}
-
-		let request = NSMutableURLRequest(url: url as URL)
-		request.httpMethod = "POST"
-		let nowDate = NSDate()
-		let dateFormatter = DateFormatter()
-		dateFormatter.dateFormat = "dd/MM/yyyy HH:mm:ss"
-		let lastListen = dateFormatter.string(from: nowDate as Date)
-		
-		let numberListen = NSNumber(booleanLiteral: isListen)
-		let dict = ["lastListen":lastListen, "isListen":numberListen, "method":"random"] as [String : Any]
-		do {
-			
-			let data = try JSONSerialization.data(withJSONObject: dict, options: [])
-			let dataString = String(data: data, encoding: String.Encoding.utf8)!
-			request.httpBody = data
-			
-		} catch {
-			print("JSON serialization failed:  \(error)")
-		}
-		
-		let task = URLSession.shared.dataTask(with: request as URLRequest){ data,response,error in
-			if error != nil{
-				print(error?.localizedDescription)
-				return
-			}
-//			if let responseJSON = try! JSONSerialization.jsonObject(with: data!, options: []) as? [String:AnyObject]{
-//				print(responseJSON)
+//	func saveHistory(trackId: String, isListen:String) {
+//		
+//		let historyUrl = URL(string: "http://java.ownradio.ru/api/v2/histories/")
+//		let trackIDValue = trackId.trimmingCharacters(in: CharacterSet(charactersIn: "\""))
+//		let trackHistoryUrl = historyUrl?.appendingPathComponent((UserDefaults.standard.object(forKey: "UUIDDevice") as! String)).appendingPathComponent(trackIDValue)
+//		
+//		guard let url = trackHistoryUrl else {
+//			print("Error: cannot create URL")
+//			return
+//		}
+//		
+//		let request = NSMutableURLRequest(url: url as URL)
+//		request.httpMethod = "POST"
+//		let nowDate = NSDate()
+//		let dateFormatter = DateFormatter()
+//		dateFormatter.dateFormat = "dd/MM/yyyy HH:mm:ss"
+//		let lastListen = dateFormatter.string(from: nowDate as Date)
+//		
+//		//		let numberListen = NSNumber.init(integerLiteral: isListen)
+//		let dict = ["lastListen":lastListen, "isListen":isListen, "method":"random"] as [String : Any]
+//		do {
+//			
+//			
+//			let data = try JSONSerialization.data(withJSONObject: dict, options: [])
+////			let dataString = String(data: data, encoding: String.Encoding.utf8)!
+//			request.httpBody = data
+//			
+//		} catch {
+//			print("JSON serialization failed:  \(error)")
+//		}
+//		
+//		let task = URLSession.shared.dataTask(with: request as URLRequest){ data,response,error in
+//			
+//			if data != nil {
+//				
+//			let dataString = String(data: data!, encoding: String.Encoding.utf8)!
+//				print(dataString);
 //			}
-		}
-		
-		task.resume()
-
-	}
+//
+//			if error != nil{
+//				print(error?.localizedDescription)
+//				return
+//			}
+////			if let responseJSON = try! JSONSerialization.jsonObject(with: data!, options: []) as? [String:AnyObject]{
+////				print(responseJSON)
+////			}
+//		}
+//		
+//		task.resume()
+//
+//	}
 	
 }

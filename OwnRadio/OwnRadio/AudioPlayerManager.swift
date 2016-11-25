@@ -16,21 +16,25 @@ class AudioPlayerManager: NSObject {
 	var player: AVPlayer!
 	var playerItem: AVPlayerItem!
 	var isPlaying: Bool!
+	var playedSongID: String!
+	var playingSongID: String!
 	
 	var titleSong: String!
 	var playbackProgres: CMTime!
 	var currentPlaybackTime: CMTime!
 	
-	
 	static let sharedInstance = AudioPlayerManager()
 	override init() {
 		super.init()
-		NotificationCenter.default.addObserver(self, selector: #selector(nextTrack), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: playerItem)
-		setup()
+		NotificationCenter.default.addObserver(self, selector: #selector(songDidPlay), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: playerItem)
+		
+		NotificationCenter.default.addObserver(self, selector: #selector(crashNetwork), name: NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: nil)
+				setup()
 	}
 	
 	deinit {
-		
+		NotificationCenter.default.removeObserver(self, name:  NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: playerItem)
+		NotificationCenter.default.removeObserver(self, name:  NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: nil)
 	}
 	
 	// playing audio by track id
@@ -49,6 +53,8 @@ class AudioPlayerManager: NSObject {
 		player.play()
 		isPlaying = true
 		
+		playedSongID = playingSongID
+		playingSongID = trackIDValue
 	}
 	
 	func setup() {
@@ -76,10 +82,12 @@ class AudioPlayerManager: NSObject {
 	///  confirure album cover and other params for playing song
 	func configurePlayingSong() {
 		
-		let albumArt = MPMediaItemArtwork(image: UIImage())
+		let albumArt = MPMediaItemArtwork(image: UIImage(named:"iconBig")!)
 		var songInfo = [String:Any]()
 		
-		songInfo[MPMediaItemPropertyTitle] = titleSong
+//		songInfo[MPMediaItemPropertyTitle] = titleSong
+		songInfo[MPMediaItemPropertyTitle] = "ownRadio"
+		
 //		songInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = playbackProgres
 //		songInfo[MPMediaItemPropertyPlaybackDuration] = currentPlaybackTime
 		songInfo[MPMediaItemPropertyArtwork] = albumArt
@@ -87,16 +95,18 @@ class AudioPlayerManager: NSObject {
 		MPNowPlayingInfoCenter.default().nowPlayingInfo = songInfo
 	}
 	
-	
+	func crashNetwork() {
+		self.player = nil
+		self.playerItem = nil
+	}
 	func resumeSong() {
+
 		if self.player != nil {
 		self.player?.play()
 		} else {
 			self.nextTrack()
 		}
 		isPlaying = true
-
-
 	}
 	
 	func pauseSong() {
@@ -105,12 +115,24 @@ class AudioPlayerManager: NSObject {
 		isPlaying = false
 	}
 	
+	func songDidPlay() {
+//		ApiService.shared.saveHistory(trackId: playingSongID, isListen: "1")
+		nextTrack()
+	}
+	func skipSong() {
+		if (self.playingSongID != nil) {
+//			ApiService.shared.saveHistory(trackId: playingSongID, isListen: "-1")
+		}
+		nextTrack()
+	}
+	
 	func nextTrack() {
 		ApiService.shared.getTrackIDFromServer { (resultString) in
 			self.playAudioWith(trackID: resultString)
 			
 			self.titleSong = resultString
 			self.configurePlayingSong()
+			
 		}
 	}
 }
