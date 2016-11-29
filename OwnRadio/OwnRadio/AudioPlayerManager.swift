@@ -28,7 +28,7 @@ class AudioPlayerManager: NSObject {
 		super.init()
 		NotificationCenter.default.addObserver(self, selector: #selector(songDidPlay), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: playerItem)
 		
-		NotificationCenter.default.addObserver(self, selector: #selector(crashNetwork), name: NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(crashNetwork(_:)), name: NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: nil)
 				setup()
 	}
 	
@@ -51,6 +51,7 @@ class AudioPlayerManager: NSObject {
 		playerItem = AVPlayerItem(asset: asset)
 		player = AVPlayer(playerItem: playerItem)
 		player.play()
+		
 		isPlaying = true
 		
 		playedSongID = playingSongID
@@ -82,24 +83,28 @@ class AudioPlayerManager: NSObject {
 	///  confirure album cover and other params for playing song
 	func configurePlayingSong() {
 		
-		let albumArt = MPMediaItemArtwork(image: UIImage())
+		let albumArt = MPMediaItemArtwork(image: UIImage(named:"iconBig")!)
 		var songInfo = [String:Any]()
 		
-		songInfo[MPMediaItemPropertyTitle] = titleSong
+//		songInfo[MPMediaItemPropertyTitle] = titleSong
+		songInfo[MPMediaItemPropertyTitle] = "ownRadio"
+		songInfo[MPMediaItemPropertyAlbumTitle] = "ownRadio"
+		songInfo[MPMediaItemPropertyArtist] = "ownRadio"
+		songInfo[MPMediaItemPropertyArtwork] = albumArt
 //		songInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = playbackProgres
 //		songInfo[MPMediaItemPropertyPlaybackDuration] = currentPlaybackTime
-		songInfo[MPMediaItemPropertyArtwork] = albumArt
-		
+
 		MPNowPlayingInfoCenter.default().nowPlayingInfo = songInfo
 	}
 	
-	func crashNetwork() {
-		self.player = nil
+	func crashNetwork(_ notification: Notification) {
+//		self.player = nil
 		self.playerItem = nil
+		
 	}
 	func resumeSong() {
 
-		if self.player != nil {
+		if self.playerItem != nil {
 		self.player?.play()
 		} else {
 			self.nextTrack()
