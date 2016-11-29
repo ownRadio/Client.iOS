@@ -22,6 +22,7 @@ class ViewController: UIViewController {
 	@IBOutlet weak var nextButton: UIButton!
 	@IBOutlet weak var infoView: UIView!
 	
+	@IBOutlet var timerLabel: UILabel!
 	@IBOutlet var versionLabel: UILabel!
 
 	let defaultSession = URLSession(configuration: URLSessionConfiguration.default)
@@ -33,6 +34,8 @@ class ViewController: UIViewController {
 	let pauseBtnConstraintConstant = CGFloat(10.0)
 	var visibleInfoView: Bool!
 	
+	var currentTime = 0.0
+	
 
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -40,7 +43,8 @@ class ViewController: UIViewController {
 		if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
 
 			if let text = Bundle.main.infoDictionary?["CFBundleVersion"] as? String {
-				self.versionLabel.text = "version:" + version + "(" + text + ")"
+//				self.versionLabel.text = "version:" + version + "(" + text + ")"
+				self.versionLabel.text = "version: " + "v" + text
 
 			}
 
@@ -51,7 +55,7 @@ class ViewController: UIViewController {
 		self.isPlaying = false
 		itFirst = true
 		
-		NotificationCenter.default.addObserver(self, selector: #selector(crashNetwork), name: NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(crashNetwork(_:)), name: NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: nil)
 		
 		self.playedTrackID.text = (UserDefaults.standard.object(forKey: "UUIDDevice") as! String)
 		self.visibleInfoView = false
@@ -64,6 +68,9 @@ class ViewController: UIViewController {
 		NotificationCenter.default.removeObserver(self, name:  NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: nil)
 	}
 	
+	func setTime() {
+		
+	}
 	
 	func changePlayBtnState() {
 
@@ -86,7 +93,7 @@ class ViewController: UIViewController {
 		
 	}
 	
-	func crashNetwork() {
+	func crashNetwork(_ notification: Notification) {
 		isPlaying = false
 		self.playPauseBtn.setImage(UIImage(named: "playImg"), for: UIControlState.normal)
 		self.leftPlayBtnConstraint.constant = pauseBtnConstraintConstant
@@ -123,11 +130,15 @@ class ViewController: UIViewController {
 	// Actions
 	
 	
+
 	@IBAction func tripleTapAction(_ sender: AnyObject) {
 		if self.infoView.isHidden == true {
+
 			self.infoView.isHidden = false
+			self.visibleInfoView = false
 		}else {
 			self.infoView.isHidden = true
+			self.visibleInfoView = true
 		}
 
 	}
