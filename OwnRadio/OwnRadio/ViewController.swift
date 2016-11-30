@@ -44,8 +44,7 @@ class ViewController: UIViewController {
 		if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
 
 			if let text = Bundle.main.infoDictionary?["CFBundleVersion"] as? String {
-				self.versionLabel.text =  version
-
+				self.versionLabel.text =  "v" + version
 			}
 
 		}
@@ -56,7 +55,7 @@ class ViewController: UIViewController {
 		itFirst = true
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(crashNetwork(_:)), name: NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: nil)
-//		NotificationCenter.default.addObserver(self, selector: #selector(songDidPlay), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player.player.currentItem)
+		NotificationCenter.default.addObserver(self, selector: #selector(songDidPlay), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
 		
 		self.playedTrackID.text = (UserDefaults.standard.object(forKey: "UUIDDevice") as! String)
 		self.visibleInfoView = false
@@ -67,14 +66,15 @@ class ViewController: UIViewController {
 	override func viewDidDisappear(_ animated: Bool) {
 		super.viewDidDisappear(animated)
 		NotificationCenter.default.removeObserver(self, name:  NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: nil)
+		NotificationCenter.default.removeObserver(self, name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
 	}
-//	
-//	func songDidPlay() {
-//		//		ApiService.shared.saveHistory(trackId: playingSongID, isListen: "1")
-//		self.player.nextTrack { 
-//			<#code#>
-//		}
-//	}
+	
+	func songDidPlay() {
+		//		ApiService.shared.saveHistory(trackId: playingSongID, isListen: "1")
+		self.player.nextTrack { 
+			self.trackIDLbl.text = self.player.playedSongID
+		}
+	}
 	
 	func setTime() {
 		

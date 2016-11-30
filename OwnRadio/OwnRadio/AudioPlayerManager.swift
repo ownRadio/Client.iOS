@@ -26,14 +26,14 @@ class AudioPlayerManager: NSObject {
 	static let sharedInstance = AudioPlayerManager()
 	override init() {
 		super.init()
-		NotificationCenter.default.addObserver(self, selector: #selector(songDidPlay), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: playerItem)
+//		NotificationCenter.default.addObserver(self, selector: #selector(songDidPlay), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: playerItem)
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(crashNetwork(_:)), name: NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: nil)
 				setup()
 	}
 	
 	deinit {
-		NotificationCenter.default.removeObserver(self, name:  NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: playerItem)
+//		NotificationCenter.default.removeObserver(self, name:  NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: playerItem)
 		NotificationCenter.default.removeObserver(self, name:  NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: nil)
 	}
 	
@@ -117,10 +117,10 @@ class AudioPlayerManager: NSObject {
 		isPlaying = false
 	}
 	
-	func songDidPlay() {
-//		ApiService.shared.saveHistory(trackId: playingSongID, isListen: "1")
-		nextTrack(complition: nil)
-	}
+//	func songDidPlay() {
+////		ApiService.shared.saveHistory(trackId: playingSongID, isListen: "1")
+//		nextTrack(complition: nil)
+//	}
 	func skipSong() {
 		if (self.playingSongID != nil) {
 //			ApiService.shared.saveHistory(trackId: playingSongID, isListen: "-1")
