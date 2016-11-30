@@ -21,6 +21,7 @@ class ViewController: UIViewController {
 	@IBOutlet weak var playPauseBtn: UIButton!
 	@IBOutlet weak var nextButton: UIButton!
 	@IBOutlet weak var infoView: UIView!
+	@IBOutlet weak var exceptionLbl: UILabel!
 	
 	@IBOutlet var timerLabel: UILabel!
 	@IBOutlet var versionLabel: UILabel!
@@ -43,9 +44,7 @@ class ViewController: UIViewController {
 		if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
 
 			if let text = Bundle.main.infoDictionary?["CFBundleVersion"] as? String {
-//				self.versionLabel.text = "version:" + version + "(" + text + ")"
-				self.versionLabel.text = "version: " + "v" + text
-
+				self.versionLabel.text =  "v" + version
 			}
 
 		}
@@ -56,6 +55,7 @@ class ViewController: UIViewController {
 		itFirst = true
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(crashNetwork(_:)), name: NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(songDidPlay), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
 		
 		self.playedTrackID.text = (UserDefaults.standard.object(forKey: "UUIDDevice") as! String)
 		self.visibleInfoView = false
@@ -66,6 +66,14 @@ class ViewController: UIViewController {
 	override func viewDidDisappear(_ animated: Bool) {
 		super.viewDidDisappear(animated)
 		NotificationCenter.default.removeObserver(self, name:  NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: nil)
+		NotificationCenter.default.removeObserver(self, name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
+	}
+	
+	func songDidPlay() {
+		//		ApiService.shared.saveHistory(trackId: playingSongID, isListen: "1")
+		self.player.nextTrack { 
+			self.trackIDLbl.text = self.player.playedSongID
+		}
 	}
 	
 	func setTime() {
@@ -90,7 +98,8 @@ class ViewController: UIViewController {
 			player.resumeSong()
 
 		}
-		
+		self.exceptionLbl.text = ""
+		self.trackIDLbl.text = player.playingSongID
 	}
 	
 	func crashNetwork(_ notification: Notification) {
@@ -98,6 +107,7 @@ class ViewController: UIViewController {
 		self.playPauseBtn.setImage(UIImage(named: "playImg"), for: UIControlState.normal)
 		self.leftPlayBtnConstraint.constant = pauseBtnConstraintConstant
 		self.trackIDLbl.text = ""
+		self.exceptionLbl.text = notification.description
 		
 	}
 	
@@ -115,7 +125,9 @@ class ViewController: UIViewController {
 				break
 			//				AudioPlayerManager.sharedInstance.playOrPause()
 			case .remoteControlNextTrack:
-				player.nextTrack()
+				player.nextTrack(complition: { 
+					self.trackIDLbl.text = self.player.playingSongID
+				})
 			default:
 				break
 			}
@@ -148,7 +160,7 @@ class ViewController: UIViewController {
 		isPlaying = false
 		changePlayBtnState()
 		
-		self.trackIDLbl.text = player.playingSongID
+		
 	}
 	
 	@IBAction func playBtnPressed() {
