@@ -71,7 +71,7 @@ class ViewController: UIViewController {
 	
 	func songDidPlay() {
 		//		ApiService.shared.saveHistory(trackId: playingSongID, isListen: "1")
-		self.player.nextTrack { 
+		self.player.nextTrack { [unowned self] in
 			self.trackIDLbl.text = self.player.playedSongID
 		}
 	}
@@ -125,7 +125,7 @@ class ViewController: UIViewController {
 				break
 			//				AudioPlayerManager.sharedInstance.playOrPause()
 			case .remoteControlNextTrack:
-				player.nextTrack(complition: { 
+				player.nextTrack(complition: { [unowned self] in
 					self.trackIDLbl.text = self.player.playingSongID
 				})
 			default:

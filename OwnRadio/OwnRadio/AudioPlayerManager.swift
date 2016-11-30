@@ -28,7 +28,7 @@ class AudioPlayerManager: NSObject {
 		super.init()
 //		NotificationCenter.default.addObserver(self, selector: #selector(songDidPlay), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: playerItem)
 		
-		NotificationCenter.default.addObserver(self, selector: #selector(crashNetwork(_:)), name: NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(crashNetwork(_:)), name: NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: playerItem)
 				setup()
 	}
 	
@@ -53,8 +53,6 @@ class AudioPlayerManager: NSObject {
 		player.play()
 		
 		isPlaying = true
-		
-
 	}
 	
 	func setup() {
@@ -129,7 +127,7 @@ class AudioPlayerManager: NSObject {
 	}
 	
 	func nextTrack(complition: (() -> Void)?) {
-		ApiService.shared.getTrackIDFromServer { (resultString) in
+		ApiService.shared.getTrackIDFromServer { [unowned self] (resultString) in
 			let trackIDValue = resultString.trimmingCharacters(in: CharacterSet(charactersIn: "\""))
 			self.playAudioWith(trackID: trackIDValue)
 			self.playedSongID = self.playingSongID
