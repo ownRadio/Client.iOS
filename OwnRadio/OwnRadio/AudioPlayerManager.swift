@@ -39,9 +39,9 @@ class AudioPlayerManager: NSObject {
 	
 	// playing audio by track id
 	func playAudioWith(trackID:String) {
-		let trackIDValue = trackID.trimmingCharacters(in: CharacterSet(charactersIn: "\""))
+		
 		let baseURL = URL(string: "http://java.ownradio.ru/api/v2/tracks/")
-		let trackURL = baseURL?.appendingPathComponent(trackIDValue)
+		let trackURL = baseURL?.appendingPathComponent(trackID)
 		
 		guard let url = trackURL else {
 			return
@@ -54,8 +54,7 @@ class AudioPlayerManager: NSObject {
 		
 		isPlaying = true
 		
-		playedSongID = playingSongID
-		playingSongID = trackIDValue
+
 	}
 	
 	func setup() {
@@ -107,7 +106,7 @@ class AudioPlayerManager: NSObject {
 		if self.playerItem != nil {
 		self.player?.play()
 		} else {
-			self.nextTrack()
+			self.nextTrack(complition: nil)
 		}
 		isPlaying = true
 	}
@@ -120,22 +119,26 @@ class AudioPlayerManager: NSObject {
 	
 	func songDidPlay() {
 //		ApiService.shared.saveHistory(trackId: playingSongID, isListen: "1")
-		nextTrack()
+		nextTrack(complition: nil)
 	}
 	func skipSong() {
 		if (self.playingSongID != nil) {
 //			ApiService.shared.saveHistory(trackId: playingSongID, isListen: "-1")
 		}
-		nextTrack()
+		nextTrack(complition: nil)
 	}
 	
-	func nextTrack() {
+	func nextTrack(complition: (() -> Void)?) {
 		ApiService.shared.getTrackIDFromServer { (resultString) in
-			self.playAudioWith(trackID: resultString)
-			
+			let trackIDValue = resultString.trimmingCharacters(in: CharacterSet(charactersIn: "\""))
+			self.playAudioWith(trackID: trackIDValue)
+			self.playedSongID = self.playingSongID
+			self.playingSongID = trackIDValue
 			self.titleSong = resultString
 			self.configurePlayingSong()
-			
+			if complition != nil {
+			complition!()
+			}
 		}
 	}
 }
