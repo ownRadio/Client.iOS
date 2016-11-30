@@ -22,10 +22,12 @@ class ViewController: UIViewController {
 	@IBOutlet weak var nextButton: UIButton!
 	@IBOutlet weak var infoView: UIView!
 	@IBOutlet weak var exceptionLbl: UILabel!
+	@IBOutlet weak var debugTrackNameLbl: UILabel!
 	
 	@IBOutlet var timerLabel: UILabel!
 	@IBOutlet var versionLabel: UILabel!
 
+	// Variables
 	let defaultSession = URLSession(configuration: URLSessionConfiguration.default)
 	var dataTask: URLSessionDataTask?
 	var player: AudioPlayerManager!
@@ -34,6 +36,7 @@ class ViewController: UIViewController {
 	let playBtnConstraintConstant = CGFloat(15.0)
 	let pauseBtnConstraintConstant = CGFloat(10.0)
 	var visibleInfoView: Bool!
+	var timer = Timer()
 	
 	var currentTime = 0.0
 	
@@ -43,7 +46,7 @@ class ViewController: UIViewController {
 
 		if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
 
-			if let text = Bundle.main.infoDictionary?["CFBundleVersion"] as? String {
+			if (Bundle.main.infoDictionary?["CFBundleVersion"] as? String) != nil {
 				self.versionLabel.text =  "v" + version
 			}
 
@@ -70,14 +73,16 @@ class ViewController: UIViewController {
 	}
 	
 	func songDidPlay() {
-		//		ApiService.shared.saveHistory(trackId: playingSongID, isListen: "1")
+		ApiService.shared.saveHistory(trackId: player.playingSongID!, isListen: "1")
 		self.player.nextTrack { [unowned self] in
-			self.trackIDLbl.text = self.player.playedSongID
+			DispatchQueue.main.async {
+				self.updateUI()
+			}
 		}
 	}
 	
 	func setTime() {
-		
+
 	}
 	
 	func changePlayBtnState() {
@@ -95,11 +100,14 @@ class ViewController: UIViewController {
 			self.playPauseBtn.setImage(UIImage(named: "pauseImg"), for: UIControlState.normal)
 			self.leftPlayBtnConstraint.constant = pauseBtnConstraintConstant
 
-			player.resumeSong()
+			player.resumeSong(complition: { [unowned self] in
+				DispatchQueue.main.async {
+				self.updateUI()
+					}
+			})
 
 		}
 		self.exceptionLbl.text = ""
-		self.trackIDLbl.text = player.playingSongID
 	}
 	
 	func crashNetwork(_ notification: Notification) {
@@ -108,7 +116,6 @@ class ViewController: UIViewController {
 		self.leftPlayBtnConstraint.constant = pauseBtnConstraintConstant
 		self.trackIDLbl.text = ""
 		self.exceptionLbl.text = notification.description
-		
 	}
 	
 	override func remoteControlReceived(with event: UIEvent?) {
@@ -126,7 +133,7 @@ class ViewController: UIViewController {
 			//				AudioPlayerManager.sharedInstance.playOrPause()
 			case .remoteControlNextTrack:
 				player.nextTrack(complition: { [unowned self] in
-					self.trackIDLbl.text = self.player.playingSongID
+					self.updateUI()
 				})
 			default:
 				break
@@ -134,9 +141,10 @@ class ViewController: UIViewController {
 		}
 	}
 	
-	override func didReceiveMemoryWarning() {
-		super.didReceiveMemoryWarning()
-		// Dispose of any resources that can be recreated.
+	func updateUI() {
+		self.trackIDLbl.text = self.player.playingSong.trackID
+		self.trackNameLbl.text = self.player.playingSong.name
+		self.debugTrackNameLbl.text = self.trackNameLbl.text
 	}
 	
 	// Actions
@@ -156,15 +164,18 @@ class ViewController: UIViewController {
 	}
 
 	@IBAction func nextTrackButtonPressed() {
-		self.player.skipSong()
-		isPlaying = false
+		self.player.skipSong { [unowned self] in
+			
+			DispatchQueue.main.async { [unowned self] in
+				self.updateUI()
+			}
+			
+		}
+		isPlaying = false 
 		changePlayBtnState()
-		
-		
 	}
 	
 	@IBAction func playBtnPressed() {
-
 		changePlayBtnState()
 	}
 	

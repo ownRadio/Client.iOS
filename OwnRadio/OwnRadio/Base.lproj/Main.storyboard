@@ -118,7 +118,7 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Proggress" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JoS-0Y-gcY">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Progress" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JoS-0Y-gcY">
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -171,6 +171,8 @@
                                     <constraint firstItem="Ifw-5N-ebI" firstAttribute="top" secondItem="cjQ-kN-iGY" secondAttribute="top" constant="20" id="6yX-3o-7SI"/>
                                     <constraint firstItem="QXq-lk-UPI" firstAttribute="centerX" secondItem="cjQ-kN-iGY" secondAttribute="centerX" id="CE1-Mw-ulf"/>
                                     <constraint firstAttribute="trailing" secondItem="Ifw-5N-ebI" secondAttribute="trailing" id="FCh-q7-Wkw"/>
+                                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="QXq-lk-UPI" secondAttribute="trailing" constant="10" id="H0F-4J-K7y"/>
+                                    <constraint firstItem="QXq-lk-UPI" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="cjQ-kN-iGY" secondAttribute="leading" constant="10" id="V5o-fR-rSG"/>
                                     <constraint firstItem="Ifw-5N-ebI" firstAttribute="leading" secondItem="cjQ-kN-iGY" secondAttribute="leading" id="yrd-fZ-Sod"/>
                                 </constraints>
                             </view>
@@ -199,6 +201,7 @@
                     </view>
                     <connections>
                         <outlet property="backgroundImageView" destination="rOy-th-Dzd" id="uOQ-I1-Fr4"/>
+                        <outlet property="debugTrackNameLbl" destination="vds-Zf-D4w" id="jnp-DD-po2"/>
                         <outlet property="exceptionLbl" destination="1uo-sP-hKP" id="BOh-0c-qGK"/>
                         <outlet property="infoView" destination="Ifw-5N-ebI" id="Dcf-Gx-RUV"/>
                         <outlet property="leftPlayBtnConstraint" destination="ZbW-Ke-wpW" id="31t-FB-cLO"/>
