@@ -12,7 +12,7 @@ import AVFoundation
 import UIKit
 import MediaPlayer
 
-class AudioPlayerManager: NSObject {
+class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate {
 	var player: AVPlayer!
 	var playerItem: AVPlayerItem!
 	var playingSong = SongObject()
@@ -24,7 +24,6 @@ class AudioPlayerManager: NSObject {
 	var playbackProgres: CMTime!
 	var currentPlaybackTime: CMTime!
 	var timer = Timer()
-	
 	
 	static let sharedInstance = AudioPlayerManager()
 	override init() {
@@ -64,8 +63,8 @@ class AudioPlayerManager: NSObject {
 		guard let url = trackURL else {
 			return
 		}
-		
 		let asset = AVURLAsset(url: url)
+		
 		playerItem = AVPlayerItem(asset: asset)
 		player = AVPlayer(playerItem: playerItem)
 		player.play()
@@ -124,7 +123,7 @@ class AudioPlayerManager: NSObject {
 	
 	func skipSong(complition: (() -> Void)?) {
 		if (self.playingSongID != nil) {
-			ApiService.shared.saveHistory(trackId: self.playingSong.trackID, isListen: "-1")
+			ApiService.shared.saveHistory(trackId: self.playingSong.trackID, isListen: -1)
 		}
 		nextTrack(complition: complition)
 	}
@@ -135,7 +134,8 @@ class AudioPlayerManager: NSObject {
 			self.playingSong = SongObject()
 			
 			self.playingSong.initWithDict(dict: dictionary)
-			
+
+			self.addDateToCoreDate(dict: dictionary)
 			
 			self.playAudioWith(trackID: self.playingSong.trackID)
 			
@@ -147,4 +147,22 @@ class AudioPlayerManager: NSObject {
 			}
 		}
 	}
+	
+	
+	
+	func addDateToCoreDate(dict:[String:AnyObject]) {
+//		
+//		let creatinDate = Date()
+//		let dateFormetter = DateFormatter()
+//		dateFormetter.dateFormat = "dd/MM/yyyy"
+//		let creationDateString = dateFormetter.string(from: creatinDate)
+//		let trackEntity = TrackEntity()
+//		
+//		trackEntity.recId = dict["id"] as! String?
+//		trackEntity.recCreated = creationDateString
+//		
+//		CoreDataManager.instance.saveContext()
+	}
+	
+	
 }

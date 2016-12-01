@@ -51,7 +51,7 @@ class ApiService {
 	}
 	
 
-	func saveHistory(trackId: String, isListen:String) {
+	func saveHistory(trackId: String, isListen:Int) {
 		
 		let historyUrl = URL(string: "http://api.ownradio.ru/v3/histories/")
 		let trackIDValue = trackId.trimmingCharacters(in: CharacterSet(charactersIn: "\""))
@@ -66,17 +66,20 @@ class ApiService {
 		request.httpMethod = "POST"
 		let nowDate = NSDate()
 		let dateFormatter = DateFormatter()
-		dateFormatter.dateFormat = "dd/MM/yyyy HH:mm:ss"
+		dateFormatter.dateFormat = "yyyy-MM-dd'T'H:m:s"
+		dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
 		let lastListen = dateFormatter.string(from: nowDate as Date)
 		
-		//		let numberListen = NSNumber.init(integerLiteral: isListen)
-		let dict = ["lastListen":lastListen, "isListen":isListen, "methodid":"1"] as [String : Any]
+		request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+		
+		let dict = ["lastListen":lastListen, "isListen":isListen, "methodid":1] as [String : Any]
 		do {
 			
 			
 			let data = try JSONSerialization.data(withJSONObject: dict, options: [])
-//			let dataString = String(data: data, encoding: String.Encoding.utf8)!
+			let dataString = String(data: data, encoding: String.Encoding.utf8)!
 			request.httpBody = data
+			print(dataString)
 			
 		} catch {
 			print("JSON serialization failed:  \(error)")
@@ -94,9 +97,6 @@ class ApiService {
 				print(error?.localizedDescription)
 				return
 			}
-//			if let responseJSON = try! JSONSerialization.jsonObject(with: data!, options: []) as? [String:AnyObject]{
-//				print(responseJSON)
-//			}
 		}
 		
 		task.resume()

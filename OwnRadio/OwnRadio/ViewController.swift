@@ -73,7 +73,7 @@ class ViewController: UIViewController {
 	}
 	
 	func songDidPlay() {
-		ApiService.shared.saveHistory(trackId: player.playingSongID!, isListen: "1")
+		ApiService.shared.saveHistory(trackId: player.playingSongID!, isListen: 1)
 		self.player.nextTrack { [unowned self] in
 			DispatchQueue.main.async {
 				self.updateUI()
