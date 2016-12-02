@@ -16,7 +16,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate {
 	var player: AVPlayer!
 	var playerItem: AVPlayerItem!
 	var playingSong = SongObject()
-	var isPlaying: Bool!
+	var isPlaying: Bool?
 	
 	var playingSongID: String?
 	var titleSong: String!
@@ -57,7 +57,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate {
 	// playing audio by track id
 	func playAudioWith(trackID:String) {
 		
-		let baseURL = URL(string: "http://java.ownradio.ru/api/v2/tracks/")
+		let baseURL = URL(string: "http://api.ownradio.ru/v3/tracks/")
 		let trackURL = baseURL?.appendingPathComponent(trackID)
 		
 		guard let url = trackURL else {
@@ -95,7 +95,9 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate {
 	}
 	
 	func songDidPlay() {
-		
+		self.playerItem = nil
+		self.playingSong.isListen = 1
+		self.addDateToHistoryTable(playingSong: self.playingSong)
 	}
 	
 	///  confirure album cover and other params for playing song
@@ -116,26 +118,32 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate {
 	
 	
 	
-	func resumeSong(complition: (() -> Void)?) {
+	func resumeSong(complition: @escaping (() -> Void)) {
 		
 		if self.playerItem != nil {
 			self.player?.play()
+			isPlaying = true
+			complition()
 		} else {
 			self.nextTrack(complition: complition)
 		}
-		isPlaying = true
+		
 	}
 	
-	func pauseSong() {
+	func pauseSong(complition: (() -> Void)) {
 		
 		self.player?.pause()
 		isPlaying = false
+		complition()
+		
 	}
 	
 	
 	func skipSong(complition: (() -> Void)?) {
+		self.playingSong.isListen = -1
+		self.playerItem = nil 
 		if (self.playingSongID != nil) {
-			ApiService.shared.saveHistory(trackId: self.playingSong.trackID, isListen: -1)
+			self.addDateToHistoryTable(playingSong: self.playingSong)
 		}
 		nextTrack(complition: complition)
 	}
@@ -146,13 +154,17 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate {
 			complition!()
 			return
 		}
+
+		if CoreDataManager.instance.chekCountOfEntitiesFor(entityName: "HIstoryEntity") > 0 {
+			
+		CoreDataManager.instance.sentHistory()
+
+		}
 		ApiService.shared.getTrackIDFromServer {  (dictionary) in
 			
 			self.playingSong = SongObject()
 			
 			self.playingSong.initWithDict(dict: dictionary)
-
-			self.addDateToCoreDate(dict: dictionary)
 			
 			self.playAudioWith(trackID: self.playingSong.trackID)
 			
@@ -173,18 +185,20 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate {
 	
 	
 	
-	func addDateToCoreDate(dict:[String:AnyObject]) {
-//		
-//		let creatinDate = Date()
-//		let dateFormetter = DateFormatter()
-//		dateFormetter.dateFormat = "dd/MM/yyyy"
-//		let creationDateString = dateFormetter.string(from: creatinDate)
-//		let trackEntity = TrackEntity()
-//		
-//		trackEntity.recId = dict["id"] as! String?
-//		trackEntity.recCreated = creationDateString
-//		
-//		CoreDataManager.instance.saveContext()
+	func addDateToHistoryTable(playingSong:SongObject) {
+		
+		let creatinDate = Date()
+		let dateFormetter = DateFormatter()
+		dateFormetter.dateFormat = "yyyy-MM-dd'T'H:m:s"
+		let creationDateString = dateFormetter.string(from: creatinDate)
+		let historyEntity = HIstoryEntity()
+		
+		historyEntity.recId = playingSong.trackID
+		historyEntity.trackId = playingSong.trackID
+		historyEntity.isListen = playingSong.isListen!
+		historyEntity.recCreated = creationDateString
+		
+		CoreDataManager.instance.saveContext()
 	}
 	
 	

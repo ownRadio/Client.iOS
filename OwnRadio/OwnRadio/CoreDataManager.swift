@@ -22,16 +22,27 @@ class CoreDataManager {
 	}
 	
 //	 Fetched Results Controller for Entity Name
-//	func fetchedResultsController(entityName: String, keyForSort: String) -> NSFetchedResultsController<AnyObject> {
+//	func fetchedResultsControllerForHistory( keyForSort: String) -> NSFetchedResultsController<HIstoryEntity> {
 //		
-//		let fetchRequest = NSFetchRequest(entityName: entityName)
+//		let fetchRequest:NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName:"HIstoryEntity")
 //		let sortDescriptor = NSSortDescriptor(key: keyForSort, ascending: true)
 //		fetchRequest.sortDescriptors = [sortDescriptor]
 //		
 //		let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataManager.instance.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
 //		
-//		return fetchedResultsController
+//		return fetchedResultsController as! NSFetchedResultsController<HIstoryEntity>
 //	}
+	
+	func getAllEntitiesFor(entityName:String) -> [Any] {
+		let request:NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName:entityName)
+		var fetchRequest = [Any]()
+		do {
+			fetchRequest = try self.managedObjectContext.fetch(request)
+		} catch {
+			fatalError("Failed to fetch : \(error)")
+		}
+		return fetchRequest
+	}
 	
 	// MARK: - Core Data stack
 	
@@ -70,6 +81,51 @@ class CoreDataManager {
 		managedObjectContext.persistentStoreCoordinator = coordinator
 		return managedObjectContext
 	}()
+	
+	
+	func chekCountOfEntitiesFor(entityName:String) -> Int {
+		let request:NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName:entityName)
+		var count = 0
+		do{
+			 count = try self.managedObjectContext.count(for: request)
+	
+		}catch {
+			print("Error with get count of entities")
+		}
+		
+		return count
+	}
+	
+	func deleteHistoryFor(trackID:String) {
+		let fetchRequest: NSFetchRequest<HIstoryEntity> = HIstoryEntity.fetchRequest()
+		fetchRequest.predicate = NSPredicate(format: "trackId = %@", trackID)
+		if let result = try? self.managedObjectContext.fetch(fetchRequest) {
+			for object in result {
+				self.managedObjectContext.delete(object)
+			}
+		}
+	}
+	
+	func sentHistory (){
+		//create a fetch request, telling it about the entity
+		let fetchRequest: NSFetchRequest<HIstoryEntity> = HIstoryEntity.fetchRequest()
+		
+		do {
+			//go get the results
+			
+			let searchResults = try self.managedObjectContext.fetch(fetchRequest)
+			
+			for track in searchResults {
+				
+				ApiService.shared.saveHistory(trackId: track.trackId!, isListen: Int(track.isListen))
+				
+//				print("\(track.value(forKey: "trackId"))")
+			}
+					} catch {
+			print("Error with request: \(error)")
+		}
+	}
+	
 	
 	// MARK: - Core Data Saving support
 	

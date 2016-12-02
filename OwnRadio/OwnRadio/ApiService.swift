@@ -12,7 +12,7 @@ import Foundation
 
 class ApiService {
 	
-//	var nextTrackIDString: String
+	let tracksUrl = URL(string: "http://api.ownradio.ru/v3/tracks/")
 	static let shared = ApiService()
 	init() {
 
@@ -21,9 +21,8 @@ class ApiService {
 	
 	func getTrackIDFromServer (complition:  @escaping ([String:AnyObject]) -> Void)  {
 		
-		
-		let tracksUrl = URL(string: "http://api.ownradio.ru/v3/tracks/")
-		let trackurl = tracksUrl?.appendingPathComponent((UserDefaults.standard.object(forKey: "UUIDDevice") as! String)).appendingPathComponent("/next")
+		print("oNe")
+		let trackurl = self.tracksUrl?.appendingPathComponent((UserDefaults.standard.object(forKey: "UUIDDevice") as! String)).appendingPathComponent("/next")
 		
 		guard let url = trackurl else {
 			print("Error: cannot create URL")
@@ -61,8 +60,7 @@ class ApiService {
 	func saveHistory(trackId: String, isListen:Int) {
 		
 		let historyUrl = URL(string: "http://api.ownradio.ru/v3/histories/")
-		let trackIDValue = trackId.trimmingCharacters(in: CharacterSet(charactersIn: "\""))
-		let trackHistoryUrl = historyUrl?.appendingPathComponent((UserDefaults.standard.object(forKey: "UUIDDevice") as! String)).appendingPathComponent(trackIDValue)
+		let trackHistoryUrl = historyUrl?.appendingPathComponent((UserDefaults.standard.object(forKey: "UUIDDevice") as! String)).appendingPathComponent(trackId)
 		
 		guard let url = trackHistoryUrl else {
 			print("Error: cannot create URL")
@@ -86,7 +84,7 @@ class ApiService {
 			let data = try JSONSerialization.data(withJSONObject: dict, options: [])
 			let dataString = String(data: data, encoding: String.Encoding.utf8)!
 			request.httpBody = data
-			print(dataString)
+//			print(dataString)
 			
 		} catch {
 			print("JSON serialization failed:  \(error)")
@@ -95,9 +93,11 @@ class ApiService {
 		let task = URLSession.shared.dataTask(with: request as URLRequest){ data,response,error in
 			
 			if data != nil {
+			
+			CoreDataManager.instance.deleteHistoryFor(trackID: trackId)
 				
 			let dataString = String(data: data!, encoding: String.Encoding.utf8)!
-				print(dataString);
+//				print(dataString);
 			}
 
 			if error != nil{
