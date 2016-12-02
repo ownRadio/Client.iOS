@@ -87,6 +87,12 @@ class ViewController: UIViewController {
 	
 	func changePlayBtnState() {
 
+		if currentReachabilityStatus == NSObject.ReachabilityStatus.notReachable {
+			
+			self.exceptionLbl.text = "Have not internet connection"
+			
+		} else {
+		
 		if isPlaying == true {
 
 			isPlaying = false
@@ -108,6 +114,7 @@ class ViewController: UIViewController {
 
 		}
 		self.exceptionLbl.text = ""
+		}
 	}
 	
 	func crashNetwork(_ notification: Notification) {

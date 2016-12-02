@@ -24,20 +24,20 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate {
 	var playbackProgres: CMTime!
 	var currentPlaybackTime: CMTime!
 	var timer = Timer()
+	var pendingRequests: NSMutableArray?
 	
 	static let sharedInstance = AudioPlayerManager()
 	override init() {
 		super.init()
 		
-		
-		//		NotificationCenter.default.addObserver(self, selector: #selector(songDidPlay), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: playerItem)
+		NotificationCenter.default.addObserver(self, selector: #selector(songDidPlay), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: playerItem)
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(crashNetwork(_:)), name: NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: playerItem)
 		setup()
 	}
 	
 	deinit {
-		//		NotificationCenter.default.removeObserver(self, name:  NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: playerItem)
+		NotificationCenter.default.removeObserver(self, name:  NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: playerItem)
 		NotificationCenter.default.removeObserver(self, name:  NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: nil)
 	}
 	
@@ -64,6 +64,8 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate {
 			return
 		}
 		let asset = AVURLAsset(url: url)
+		asset.resourceLoader.setDelegate(self, queue: DispatchQueue.main)
+		self.pendingRequests = NSMutableArray()
 		
 		playerItem = AVPlayerItem(asset: asset)
 		player = AVPlayer(playerItem: playerItem)
@@ -82,8 +84,18 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate {
 		}
 	}
 	
+	// MARK:
 	func crashNetwork(_ notification: Notification) {
 		self.playerItem = nil
+		guard currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable else {
+			return
+		}
+		self.nextTrack(complition: nil)
+		
+	}
+	
+	func songDidPlay() {
+		
 	}
 	
 	///  confirure album cover and other params for playing song
@@ -129,6 +141,11 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate {
 	}
 	
 	func nextTrack(complition: (() -> Void)?) {
+		
+		guard  currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable  else {
+			complition!()
+			return
+		}
 		ApiService.shared.getTrackIDFromServer {  (dictionary) in
 			
 			self.playingSong = SongObject()
@@ -147,6 +164,12 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate {
 			}
 		}
 	}
+
+	//MARK: AVAssetResourceLoaderDelegate
+	
+//	func resourceLoader(_ resourceLoader: AVAssetResourceLoader, shouldWaitForLoadingOfRequestedResource loadingRequest: AVAssetResourceLoadingRequest) -> Bool {
+//		
+//	}
 	
 	
 	

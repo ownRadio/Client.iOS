@@ -19,7 +19,7 @@ class ApiService {
 	}
 	
 	
-	func getTrackIDFromServer (complition: @escaping (Dictionary<String,AnyObject>) -> Void)  {
+	func getTrackIDFromServer (complition:  @escaping ([String:AnyObject]) -> Void)  {
 		
 		
 		let tracksUrl = URL(string: "http://api.ownradio.ru/v3/tracks/")
@@ -39,11 +39,18 @@ class ApiService {
 		let task = session.dataTask(with: urlRequest as URLRequest, completionHandler: { (data, response, error) in
 			// do stuff with response, data & error here
 			
-			guard error == nil else {
+			guard let data = data else {
 				return
 			}
-			if let responseJSON = try! JSONSerialization.jsonObject(with: data!, options: []) as? [String:AnyObject]{
-				complition(responseJSON)
+
+			do {
+				let anyJson = try JSONSerialization.jsonObject(with: data, options: [])
+				
+				if let json = anyJson as? [String:AnyObject] {
+						complition(json)
+				}
+			} catch (let error) {
+				print("Achtung! Eror! \(error)")
 			}
 		
 		})
