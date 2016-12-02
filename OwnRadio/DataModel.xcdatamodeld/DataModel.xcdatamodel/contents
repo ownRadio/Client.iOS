@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11232" systemVersion="16B2555" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="HIstoryEntity" representedClassName=".HIstoryEntity" syncable="YES">
+        <attribute name="isListen" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="recCreated" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="recId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="trackId" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="TrackEntity" representedClassName=".TrackEntity" syncable="YES">
+        <attribute name="countPlay" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="recCreated" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="recId" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="recUpdated" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="TrackEntity" positionX="7" positionY="18" width="128" height="103"/>
+        <element name="HIstoryEntity" positionX="153" positionY="18" width="128" height="103"/>
+    </elements>
+</model>

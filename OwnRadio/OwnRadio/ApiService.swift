@@ -19,7 +19,7 @@ class ApiService {
 	}
 	
 	
-	func getTrackIDFromServer (complition: @escaping (Dictionary<String,AnyObject>) -> Void)  {
+	func getTrackIDFromServer (complition:  @escaping ([String:AnyObject]) -> Void)  {
 		
 		
 		let tracksUrl = URL(string: "http://api.ownradio.ru/v3/tracks/")
@@ -39,11 +39,18 @@ class ApiService {
 		let task = session.dataTask(with: urlRequest as URLRequest, completionHandler: { (data, response, error) in
 			// do stuff with response, data & error here
 			
-			guard error == nil else {
+			guard let data = data else {
 				return
 			}
-			if let responseJSON = try! JSONSerialization.jsonObject(with: data!, options: []) as? [String:AnyObject]{
-				complition(responseJSON)
+
+			do {
+				let anyJson = try JSONSerialization.jsonObject(with: data, options: [])
+				
+				if let json = anyJson as? [String:AnyObject] {
+						complition(json)
+				}
+			} catch (let error) {
+				print("Achtung! Eror! \(error)")
 			}
 		
 		})
@@ -51,7 +58,7 @@ class ApiService {
 	}
 	
 
-	func saveHistory(trackId: String, isListen:String) {
+	func saveHistory(trackId: String, isListen:Int) {
 		
 		let historyUrl = URL(string: "http://api.ownradio.ru/v3/histories/")
 		let trackIDValue = trackId.trimmingCharacters(in: CharacterSet(charactersIn: "\""))
@@ -66,17 +73,20 @@ class ApiService {
 		request.httpMethod = "POST"
 		let nowDate = NSDate()
 		let dateFormatter = DateFormatter()
-		dateFormatter.dateFormat = "dd/MM/yyyy HH:mm:ss"
+		dateFormatter.dateFormat = "yyyy-MM-dd'T'H:m:s"
+		dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
 		let lastListen = dateFormatter.string(from: nowDate as Date)
 		
-		//		let numberListen = NSNumber.init(integerLiteral: isListen)
-		let dict = ["lastListen":lastListen, "isListen":isListen, "methodid":"1"] as [String : Any]
+		request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+		
+		let dict = ["lastListen":lastListen, "isListen":isListen, "methodid":1] as [String : Any]
 		do {
 			
 			
 			let data = try JSONSerialization.data(withJSONObject: dict, options: [])
-//			let dataString = String(data: data, encoding: String.Encoding.utf8)!
+			let dataString = String(data: data, encoding: String.Encoding.utf8)!
 			request.httpBody = data
+			print(dataString)
 			
 		} catch {
 			print("JSON serialization failed:  \(error)")
@@ -94,9 +104,6 @@ class ApiService {
 				print(error?.localizedDescription)
 				return
 			}
-//			if let responseJSON = try! JSONSerialization.jsonObject(with: data!, options: []) as? [String:AnyObject]{
-//				print(responseJSON)
-//			}
 		}
 		
 		task.resume()

@@ -12,7 +12,7 @@ import AVFoundation
 import UIKit
 import MediaPlayer
 
-class AudioPlayerManager: NSObject {
+class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate {
 	var player: AVPlayer!
 	var playerItem: AVPlayerItem!
 	var playingSong = SongObject()
@@ -24,21 +24,20 @@ class AudioPlayerManager: NSObject {
 	var playbackProgres: CMTime!
 	var currentPlaybackTime: CMTime!
 	var timer = Timer()
-	
+	var pendingRequests: NSMutableArray?
 	
 	static let sharedInstance = AudioPlayerManager()
 	override init() {
 		super.init()
 		
-		
-		//		NotificationCenter.default.addObserver(self, selector: #selector(songDidPlay), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: playerItem)
+		NotificationCenter.default.addObserver(self, selector: #selector(songDidPlay), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: playerItem)
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(crashNetwork(_:)), name: NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: playerItem)
 		setup()
 	}
 	
 	deinit {
-		//		NotificationCenter.default.removeObserver(self, name:  NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: playerItem)
+		NotificationCenter.default.removeObserver(self, name:  NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: playerItem)
 		NotificationCenter.default.removeObserver(self, name:  NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: nil)
 	}
 	
@@ -64,8 +63,10 @@ class AudioPlayerManager: NSObject {
 		guard let url = trackURL else {
 			return
 		}
-		
 		let asset = AVURLAsset(url: url)
+		asset.resourceLoader.setDelegate(self, queue: DispatchQueue.main)
+		self.pendingRequests = NSMutableArray()
+		
 		playerItem = AVPlayerItem(asset: asset)
 		player = AVPlayer(playerItem: playerItem)
 		player.play()
@@ -83,8 +84,18 @@ class AudioPlayerManager: NSObject {
 		}
 	}
 	
+	// MARK:
 	func crashNetwork(_ notification: Notification) {
 		self.playerItem = nil
+		guard currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable else {
+			return
+		}
+		self.nextTrack(complition: nil)
+		
+	}
+	
+	func songDidPlay() {
+		
 	}
 	
 	///  confirure album cover and other params for playing song
@@ -124,18 +135,24 @@ class AudioPlayerManager: NSObject {
 	
 	func skipSong(complition: (() -> Void)?) {
 		if (self.playingSongID != nil) {
-			ApiService.shared.saveHistory(trackId: self.playingSong.trackID, isListen: "-1")
+			ApiService.shared.saveHistory(trackId: self.playingSong.trackID, isListen: -1)
 		}
 		nextTrack(complition: complition)
 	}
 	
 	func nextTrack(complition: (() -> Void)?) {
+		
+		guard  currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable  else {
+			complition!()
+			return
+		}
 		ApiService.shared.getTrackIDFromServer {  (dictionary) in
 			
 			self.playingSong = SongObject()
 			
 			self.playingSong.initWithDict(dict: dictionary)
-			
+
+			self.addDateToCoreDate(dict: dictionary)
 			
 			self.playAudioWith(trackID: self.playingSong.trackID)
 			
@@ -147,4 +164,28 @@ class AudioPlayerManager: NSObject {
 			}
 		}
 	}
+
+	//MARK: AVAssetResourceLoaderDelegate
+	
+//	func resourceLoader(_ resourceLoader: AVAssetResourceLoader, shouldWaitForLoadingOfRequestedResource loadingRequest: AVAssetResourceLoadingRequest) -> Bool {
+//		
+//	}
+	
+	
+	
+	func addDateToCoreDate(dict:[String:AnyObject]) {
+//		
+//		let creatinDate = Date()
+//		let dateFormetter = DateFormatter()
+//		dateFormetter.dateFormat = "dd/MM/yyyy"
+//		let creationDateString = dateFormetter.string(from: creatinDate)
+//		let trackEntity = TrackEntity()
+//		
+//		trackEntity.recId = dict["id"] as! String?
+//		trackEntity.recCreated = creationDateString
+//		
+//		CoreDataManager.instance.saveContext()
+	}
+	
+	
 }

@@ -16,6 +16,14 @@
 		091679751DE451CF00619B3F /* OwnRadioUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 091679741DE451CF00619B3F /* OwnRadioUITests.swift */; };
 		091679C71DE47D4400619B3F /* ApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 091679C61DE47D4400619B3F /* ApiService.swift */; };
 		093FBD0C1DEEFEB800038EF0 /* SongObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093FBD0B1DEEFEB800038EF0 /* SongObject.swift */; };
+		0979B1B41DF00FCE003C01C7 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0979B1B31DF00FCE003C01C7 /* CoreData.framework */; };
+		0979B1B71DF01020003C01C7 /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0979B1B51DF01020003C01C7 /* DataModel.xcdatamodeld */; };
+		0979B1B91DF01085003C01C7 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0979B1B81DF01085003C01C7 /* CoreDataManager.swift */; };
+		0979B1BE1DF01E97003C01C7 /* HIstoryEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0979B1BA1DF01E97003C01C7 /* HIstoryEntity+CoreDataClass.swift */; };
+		0979B1BF1DF01E97003C01C7 /* HIstoryEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0979B1BB1DF01E97003C01C7 /* HIstoryEntity+CoreDataProperties.swift */; };
+		0979B1C01DF01E97003C01C7 /* TrackEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0979B1BC1DF01E97003C01C7 /* TrackEntity+CoreDataClass.swift */; };
+		0979B1C11DF01E97003C01C7 /* TrackEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0979B1BD1DF01E97003C01C7 /* TrackEntity+CoreDataProperties.swift */; };
+		09A054151DF168170008ACE7 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09A054141DF168170008ACE7 /* Utilities.swift */; };
 		09EA799B1DE57D040034B8DF /* AudioPlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EA799A1DE57D040034B8DF /* AudioPlayerManager.swift */; };
 		50D8269A1DE74B0800238F96 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50D826981DE74B0800238F96 /* Fabric.framework */; };
 		50D8269B1DE74B0800238F96 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50D826991DE74B0800238F96 /* Crashlytics.framework */; };
@@ -57,6 +65,14 @@
 		091679C61DE47D4400619B3F /* ApiService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiService.swift; sourceTree = "<group>"; };
 		091679C91DE47D9900619B3F /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
 		093FBD0B1DEEFEB800038EF0 /* SongObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SongObject.swift; sourceTree = "<group>"; };
+		0979B1B31DF00FCE003C01C7 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		0979B1B61DF01020003C01C7 /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
+		0979B1B81DF01085003C01C7 /* CoreDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CoreDataManager.swift; path = OwnRadio/CoreDataManager.swift; sourceTree = "<group>"; };
+		0979B1BA1DF01E97003C01C7 /* HIstoryEntity+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HIstoryEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
+		0979B1BB1DF01E97003C01C7 /* HIstoryEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HIstoryEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		0979B1BC1DF01E97003C01C7 /* TrackEntity+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TrackEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
+		0979B1BD1DF01E97003C01C7 /* TrackEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TrackEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		09A054141DF168170008ACE7 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		09EA799A1DE57D040034B8DF /* AudioPlayerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioPlayerManager.swift; sourceTree = "<group>"; };
 		50D826981DE74B0800238F96 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		50D826991DE74B0800238F96 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
@@ -67,6 +83,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0979B1B41DF00FCE003C01C7 /* CoreData.framework in Frameworks */,
 				50D8269B1DE74B0800238F96 /* Crashlytics.framework in Frameworks */,
 				50D8269A1DE74B0800238F96 /* Fabric.framework in Frameworks */,
 			);
@@ -101,6 +118,8 @@
 		091679481DE451CF00619B3F = {
 			isa = PBXGroup;
 			children = (
+				0979B1C21DF01EA4003C01C7 /* CoreData */,
+				0979B1B51DF01020003C01C7 /* DataModel.xcdatamodeld */,
 				091679531DE451CF00619B3F /* OwnRadio */,
 				091679681DE451CF00619B3F /* OwnRadioTests */,
 				091679731DE451CF00619B3F /* OwnRadioUITests */,
@@ -123,6 +142,7 @@
 			isa = PBXGroup;
 			children = (
 				091679541DE451CF00619B3F /* AppDelegate.swift */,
+				09A054141DF168170008ACE7 /* Utilities.swift */,
 				093FBD0B1DEEFEB800038EF0 /* SongObject.swift */,
 				091679C61DE47D4400619B3F /* ApiService.swift */,
 				09EA799A1DE57D040034B8DF /* AudioPlayerManager.swift */,
@@ -157,11 +177,32 @@
 		091679C81DE47D9900619B3F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0979B1B31DF00FCE003C01C7 /* CoreData.framework */,
 				50D826981DE74B0800238F96 /* Fabric.framework */,
 				50D826991DE74B0800238F96 /* Crashlytics.framework */,
 				091679C91DE47D9900619B3F /* Alamofire.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		0979B1C21DF01EA4003C01C7 /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				0979B1C31DF02BA8003C01C7 /* CoreDataManager */,
+				0979B1BA1DF01E97003C01C7 /* HIstoryEntity+CoreDataClass.swift */,
+				0979B1BB1DF01E97003C01C7 /* HIstoryEntity+CoreDataProperties.swift */,
+				0979B1BC1DF01E97003C01C7 /* TrackEntity+CoreDataClass.swift */,
+				0979B1BD1DF01E97003C01C7 /* TrackEntity+CoreDataProperties.swift */,
+			);
+			name = CoreData;
+			sourceTree = "<group>";
+		};
+		0979B1C31DF02BA8003C01C7 /* CoreDataManager */ = {
+			isa = PBXGroup;
+			children = (
+				0979B1B81DF01085003C01C7 /* CoreDataManager.swift */,
+			);
+			name = CoreDataManager;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -175,6 +216,7 @@
 				0916794E1DE451CF00619B3F /* Frameworks */,
 				0916794F1DE451CF00619B3F /* Resources */,
 				50D826971DE747C900238F96 /* Fabric */,
+				0979B1B21DF008A5003C01C7 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -296,6 +338,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		0979B1B21DF008A5003C01C7 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "buildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\")\nbuildNumber=$(($buildNumber + 1))\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\"\n";
+		};
 		50D826971DE747C900238F96 /* Fabric */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -317,9 +372,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0979B1B91DF01085003C01C7 /* CoreDataManager.swift in Sources */,
 				093FBD0C1DEEFEB800038EF0 /* SongObject.swift in Sources */,
+				0979B1BF1DF01E97003C01C7 /* HIstoryEntity+CoreDataProperties.swift in Sources */,
 				091679571DE451CF00619B3F /* ViewController.swift in Sources */,
+				0979B1C01DF01E97003C01C7 /* TrackEntity+CoreDataClass.swift in Sources */,
+				0979B1C11DF01E97003C01C7 /* TrackEntity+CoreDataProperties.swift in Sources */,
+				09A054151DF168170008ACE7 /* Utilities.swift in Sources */,
 				091679C71DE47D4400619B3F /* ApiService.swift in Sources */,
+				0979B1B71DF01020003C01C7 /* DataModel.xcdatamodeld in Sources */,
+				0979B1BE1DF01E97003C01C7 /* HIstoryEntity+CoreDataClass.swift in Sources */,
 				091679551DE451CF00619B3F /* AppDelegate.swift in Sources */,
 				09EA799B1DE57D040034B8DF /* AudioPlayerManager.swift in Sources */,
 			);
@@ -608,6 +670,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		0979B1B51DF01020003C01C7 /* DataModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				0979B1B61DF01020003C01C7 /* DataModel.xcdatamodel */,
+			);
+			currentVersion = 0979B1B61DF01020003C01C7 /* DataModel.xcdatamodel */;
+			path = DataModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 091679491DE451CF00619B3F /* Project object */;
 }
