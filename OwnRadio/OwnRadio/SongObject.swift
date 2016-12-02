@@ -14,6 +14,7 @@ class SongObject {
 	var trackID: String!
 	var trackLength: Float!
 	var methodId: String!
+	var isListen: Int32?
 	
 	
 	func initWithDict(dict:Dictionary<String,AnyObject>) {

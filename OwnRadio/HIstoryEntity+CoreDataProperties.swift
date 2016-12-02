@@ -2,7 +2,7 @@
 //  HIstoryEntity+CoreDataProperties.swift
 //  OwnRadio
 //
-//  Created by Roman Litoshko on 12/1/16.
+//  Created by Roman Litoshko on 12/2/16.
 //  Copyright © 2016 Roll'n'Code. All rights reserved.
 //
 
@@ -16,8 +16,8 @@ extension HIstoryEntity {
         return NSFetchRequest<HIstoryEntity>(entityName: "HIstoryEntity");
     }
 
-    @NSManaged public var recId: String?
     @NSManaged public var recCreated: String?
+    @NSManaged public var recId: String?
     @NSManaged public var trackId: String?
     @NSManaged public var isListen: Int32
 

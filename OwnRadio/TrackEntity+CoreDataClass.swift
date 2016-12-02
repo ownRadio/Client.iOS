@@ -2,7 +2,7 @@
 //  TrackEntity+CoreDataClass.swift
 //  OwnRadio
 //
-//  Created by Roman Litoshko on 12/1/16.
+//  Created by Roman Litoshko on 12/2/16.
 //  Copyright © 2016 Roll'n'Code. All rights reserved.
 //
 

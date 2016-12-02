@@ -22,7 +22,6 @@ class ViewController: UIViewController {
 	@IBOutlet weak var nextButton: UIButton!
 	@IBOutlet weak var infoView: UIView!
 	@IBOutlet weak var exceptionLbl: UILabel!
-	@IBOutlet weak var debugTrackNameLbl: UILabel!
 	
 	@IBOutlet var timerLabel: UILabel!
 	@IBOutlet var versionLabel: UILabel!
@@ -88,32 +87,28 @@ class ViewController: UIViewController {
 	func changePlayBtnState() {
 
 		if currentReachabilityStatus == NSObject.ReachabilityStatus.notReachable {
-			
 			self.exceptionLbl.text = "Have not internet connection"
-			
 		} else {
 		
-		if isPlaying == true {
-
-			isPlaying = false
-			self.playPauseBtn.setImage(UIImage(named: "playImg"), for: UIControlState.normal)
-			self.leftPlayBtnConstraint.constant = playBtnConstraintConstant
-			player.pauseSong()
+		if player.isPlaying == true {
+			
+//			isPlaying = false
+			player.pauseSong(complition: {
+				DispatchQueue.main.async {
+					self.updateUI()
+				}
+			})
 
 		}else {
 
-			isPlaying = true
-			self.playPauseBtn.setImage(UIImage(named: "pauseImg"), for: UIControlState.normal)
-			self.leftPlayBtnConstraint.constant = pauseBtnConstraintConstant
-
+//			isPlaying = true
 			player.resumeSong(complition: { [unowned self] in
 				DispatchQueue.main.async {
 				self.updateUI()
 					}
 			})
-
 		}
-		self.exceptionLbl.text = ""
+		
 		}
 	}
 	
@@ -139,8 +134,10 @@ class ViewController: UIViewController {
 				break
 			//				AudioPlayerManager.sharedInstance.playOrPause()
 			case .remoteControlNextTrack:
-				player.nextTrack(complition: { [unowned self] in
-					self.updateUI()
+				player.skipSong(complition: { 
+					DispatchQueue.main.async {
+						self.updateUI()
+					}
 				})
 			default:
 				break
@@ -151,7 +148,16 @@ class ViewController: UIViewController {
 	func updateUI() {
 		self.trackIDLbl.text = self.player.playingSong.trackID
 		self.trackNameLbl.text = self.player.playingSong.name
-		self.debugTrackNameLbl.text = self.trackNameLbl.text
+		
+		if self.player.isPlaying == false {
+			self.playPauseBtn.setImage(UIImage(named: "playImg"), for: UIControlState.normal)
+			self.leftPlayBtnConstraint.constant = playBtnConstraintConstant
+		} else {
+			self.playPauseBtn.setImage(UIImage(named: "pauseImg"), for: UIControlState.normal)
+			self.leftPlayBtnConstraint.constant = pauseBtnConstraintConstant
+
+		}
+		self.exceptionLbl.text = ""
 	}
 	
 	// Actions
@@ -179,7 +185,7 @@ class ViewController: UIViewController {
 			
 		}
 		isPlaying = false 
-		changePlayBtnState()
+//		changePlayBtnState()
 	}
 	
 	@IBAction func playBtnPressed() {
