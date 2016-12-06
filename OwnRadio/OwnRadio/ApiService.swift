@@ -21,7 +21,7 @@ class ApiService {
 	
 	func getTrackIDFromServer (complition:  @escaping ([String:AnyObject]) -> Void)  {
 		
-		print("oNe")
+		
 		let trackurl = self.tracksUrl?.appendingPathComponent((UserDefaults.standard.object(forKey: "UUIDDevice") as! String)).appendingPathComponent("/next")
 		
 		guard let url = trackurl else {
@@ -55,6 +55,8 @@ class ApiService {
 		})
 		task.resume()
 	}
+	
+	
 	
 
 	func saveHistory(trackId: String, isListen:Int) {

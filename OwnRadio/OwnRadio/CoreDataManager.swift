@@ -106,7 +106,7 @@ class CoreDataManager {
 		}
 	}
 	
-	func sentHistory (){
+	func sentHistory () {
 		//create a fetch request, telling it about the entity
 		let fetchRequest: NSFetchRequest<HIstoryEntity> = HIstoryEntity.fetchRequest()
 		
@@ -119,11 +119,48 @@ class CoreDataManager {
 				
 				ApiService.shared.saveHistory(trackId: track.trackId!, isListen: Int(track.isListen))
 				
-//				print("\(track.value(forKey: "trackId"))")
+				//				print("\(track.value(forKey: "trackId"))")
 			}
-					} catch {
+		} catch {
 			print("Error with request: \(error)")
 		}
+	}
+	
+	func getRandomTrack() -> SongObject {
+		let fetchRequest: NSFetchRequest<TrackEntity> = TrackEntity.fetchRequest()
+		let  song = SongObject()
+		do {
+			//go get the results
+			
+			let searchResults = try self.managedObjectContext.fetch(fetchRequest)
+			let index = arc4random()%UInt32(searchResults.count)
+			let track = searchResults[Int(index)]
+			
+			song.name = track.trackName
+			song.artistName = track.artistName
+			song.trackLength = track.trackLength
+			song.trackID = track.recId
+			song.path = track.path
+			
+		} catch {
+			print("Error with request: \(error)")
+		}
+		return song
+	}
+	
+	func getCountOfTracks() -> Int {
+		
+		let fetchRequest: NSFetchRequest<TrackEntity> = TrackEntity.fetchRequest()
+		var count = 0
+		do {
+			//go get the results
+			
+			let searchResults = try self.managedObjectContext.fetch(fetchRequest)
+			count = searchResults.count
+		} catch {
+			print("Error with request: \(error)")
+		}
+		return count
 	}
 	
 	

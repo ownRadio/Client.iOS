@@ -7,13 +7,15 @@
         <attribute name="trackId" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="TrackEntity" representedClassName=".TrackEntity" syncable="YES">
+        <attribute name="artistName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="countPlay" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="recCreated" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="path" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="recId" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="recUpdated" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="trackLength" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="trackName" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
         <element name="HIstoryEntity" positionX="153" positionY="18" width="128" height="105"/>
-        <element name="TrackEntity" positionX="7" positionY="18" width="128" height="103"/>
+        <element name="TrackEntity" positionX="7" positionY="18" width="128" height="135"/>
     </elements>
 </model>
