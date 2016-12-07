@@ -125,9 +125,9 @@ class ViewController: UIViewController {
 	}
 	
 	func changePlayBtnState() {
-		if currentReachabilityStatus == NSObject.ReachabilityStatus.notReachable {
-			self.exceptionLbl.text = "Have not internet connection"
-		} else {
+//		if currentReachabilityStatus == NSObject.ReachabilityStatus.notReachable {
+//			self.exceptionLbl.text = "Have not internet connection"
+//		} else {
 			if player.isPlaying == true {
 				player.pauseSong(complition: {
 					DispatchQueue.main.async {
@@ -141,7 +141,7 @@ class ViewController: UIViewController {
 					}
 					})
 			}
-		}
+//		}
 	}
 
 	func updateUI() {

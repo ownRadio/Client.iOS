@@ -20,7 +20,7 @@ class Downloader {
 					let documentsDirectoryURL =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
 					
 					let destinationUrl = documentsDirectoryURL.appendingPathComponent(audioUrl.lastPathComponent)
-					print(destinationUrl)
+					
 					
 					if FileManager.default.fileExists(atPath: destinationUrl.path) {
 						print("The file already exists at path")
@@ -32,14 +32,16 @@ class Downloader {
 							do {
 								
 //								try FileManager.default.moveItem(at: location, to: destinationUrl)
+								
 								let file = NSData(contentsOf: location)
 								
-								
 								try file?.write(to: destinationUrl, options:.noFileProtection)
+								let endPath = destinationUrl.appendingPathExtension("mp3")
+								try FileManager.default.moveItem(at: destinationUrl, to: endPath)
 								
 								let trackEntity = TrackEntity()
-//								destinationUrl.lastPathComponent
-								trackEntity.path = String(describing: destinationUrl)
+
+								trackEntity.path = String(describing: endPath.lastPathComponent)
 								trackEntity.countPlay = 0
 								trackEntity.artistName = dict["artist"] as? String
 								trackEntity.trackName = dict["name"] as? String

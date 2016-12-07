@@ -20,6 +20,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	static let sharedInstance = AudioPlayerManager()
 	
 	var isPlaying: Bool?
+	var canPlayFromCache = false
 	
 	var playingSong = SongObject()
 	
@@ -71,14 +72,6 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	                           of object: Any?,
 	                           change: [NSKeyValueChangeKey : Any]?,
 	                           context: UnsafeMutableRawPointer?) {
-		// Only handle observations for the playerItemContext
-//		guard context == &playerItemContext else {
-//			super.observeValue(forKeyPath: keyPath,
-//			                   of: object,
-//			                   change: change,
-//			                   context: context)
-//			return
-//		}
 		
 		if keyPath == #keyPath(AVPlayerItem.status) {
 			let status: AVPlayerItemStatus
@@ -94,6 +87,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 			switch status {
 			case .readyToPlay:
 				player.play()
+				isPlaying = true
 			case .failed:
 				break
 			case .unknown:
@@ -178,24 +172,28 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 
 	func playAudioWith(trackURL:URL) {
 		
-		self.assetUrlStr = String(describing: trackURL)
-		self.asset = AVURLAsset(url: trackURL)
+//		self.assetUrlStr = String(describing: trackURL)
+//		self.asset = AVURLAsset(url: trackURL)
 		if playerItem != nil {
 			playerItem.removeObserver(self, forKeyPath: #keyPath(AVPlayerItem.status))
 		}
-		playerItem = AVPlayerItem(asset:asset!)
-		
+
+		createPlayerItemWith(url: trackURL)
 		playerItem.addObserver(self,
 		                       forKeyPath: #keyPath(AVPlayerItem.status),
 		                       options: [.old, .new],
 		                       context: nil)
 		
 		player = AVPlayer(playerItem: playerItem)
-	
-//		player.play()
 		
-		isPlaying = true
+	}
 	
+	func createPlayerItemWith(url:URL) {
+		if self.canPlayFromCache {
+			playerItem = AVPlayerItem.init(url: URL.init(fileURLWithPath: url.relativePath))
+		} else {
+			playerItem = AVPlayerItem(url: url)
+		}
 	}
 
 	func setWayForPlay(complition: (() -> Void)?) {
@@ -207,13 +205,11 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	}
 	
 	func checkCountFileInCache() -> Bool {
-		
-		var canPlayFromCache = false
-		
-		if CoreDataManager.instance.getCountOfTracks() > 10 {
-			canPlayFromCache = true
+
+		if CoreDataManager.instance.getCountOfTracks() > 2 {
+			self.canPlayFromCache = true
 		}
-		return canPlayFromCache
+		return self.canPlayFromCache
 	}
 	
 	func playOnline(complition: (() -> Void)?) {
@@ -253,10 +249,10 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	
 	func playFromCache(complition: (() -> Void)?) {
 		self.playingSong = CoreDataManager.instance.getRandomTrack()
-//		let docUrl = NSURL(string:FileManager.documentsDir())
-//		let resUrl = docUrl?.absoluteURL?.appendingPathComponent(playingSong.trackID)
-		let pathUrl = NSURL(string: self.playingSong.path!)
-		guard let url = pathUrl else {
+		let docUrl = NSURL(string:FileManager.documentsDir())
+		let resUrl = docUrl?.absoluteURL?.appendingPathComponent(playingSong.path!)
+//		let pathUrl = NSURL(string: self.playingSong.path!)
+		guard let url = resUrl else {
 			return
 		}
 		self.playAudioWith(trackURL: url as URL)
