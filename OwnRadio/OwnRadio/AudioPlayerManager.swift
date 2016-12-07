@@ -32,7 +32,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	var playbackProgres: CMTime!
 	var currentPlaybackTime: CMTime!
 	var timer = Timer()
-
+	
 	// MARK: Overrides
 	override init() {
 		super.init()
@@ -102,12 +102,12 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	func playerItemDidReachEnd(_ notification: Notification) {
 		
 		if notification.object as? AVPlayerItem  == player.currentItem {
-			self.playerItem = nil
+			//			self.playerItem = nil
 			self.playingSong.isListen = 1
 			self.addDateToHistoryTable(playingSong: self.playingSong)
 		}
 	}
-
+	
 	func onAudioSessionEvent(_ notification: Notification) {
 		//Check the type of notification, especially if you are sending multiple AVAudioSession events here
 		if (notification.name == NSNotification.Name.AVAudioSessionInterruption) {
@@ -116,9 +116,10 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 			}
 		}
 	}
-
+	
 	func crashNetwork(_ notification: Notification) {
-		self.playerItem = nil
+		//		self.playerItem = nil
+		self.player.pause()
 		guard currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable else {
 			return
 		}
@@ -140,7 +141,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		
 		MPNowPlayingInfoCenter.default().nowPlayingInfo = songInfo
 	}
-
+	
 	// MARK: Cotrol functions
 	func resumeSong(complition: @escaping (() -> Void)) {
 		
@@ -163,21 +164,36 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	
 	func skipSong(complition: (() -> Void)?) {
 		self.playingSong.isListen = -1
-//		self.playerItem = nil
+		//		self.playerItem = nil
 		if (self.playingSongID != nil) {
 			self.addDateToHistoryTable(playingSong: self.playingSong)
+			if  self.playingSong.path != nil {
+				let path = FileManager.documentsDir().appending("/").appending(self.playingSong.path!)
+				if FileManager.default.fileExists(atPath: path) {
+					
+					do{
+						try FileManager.default.removeItem(atPath: path)
+						
+					}
+					catch {
+						print("Error with remove file ")
+					}
+					CoreDataManager.instance.deleteTrackFor(trackID: self.playingSong.trackID)
+				}
+			}
+			
 		}
 		nextTrack(complition: complition)
 	}
-
+	
 	func playAudioWith(trackURL:URL) {
 		
-//		self.assetUrlStr = String(describing: trackURL)
-//		self.asset = AVURLAsset(url: trackURL)
+		//		self.assetUrlStr = String(describing: trackURL)
+		//		self.asset = AVURLAsset(url: trackURL)
 		if playerItem != nil {
 			playerItem.removeObserver(self, forKeyPath: #keyPath(AVPlayerItem.status))
 		}
-
+		
 		createPlayerItemWith(url: trackURL)
 		playerItem.addObserver(self,
 		                       forKeyPath: #keyPath(AVPlayerItem.status),
@@ -195,7 +211,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 			playerItem = AVPlayerItem(url: url)
 		}
 	}
-
+	
 	func setWayForPlay(complition: (() -> Void)?) {
 		if self.checkCountFileInCache() {
 			self.playFromCache(complition: complition)
@@ -205,8 +221,8 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	}
 	
 	func checkCountFileInCache() -> Bool {
-
-		if CoreDataManager.instance.getCountOfTracks() > 2 {
+		self.canPlayFromCache = false
+		if CoreDataManager.instance.getCountOfTracks() > 10 {
 			self.canPlayFromCache = true
 		}
 		return self.canPlayFromCache
@@ -216,11 +232,11 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		guard  currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable  else {
 			return
 		}
-//		DispatchQueue.global(qos: .background).async {
-//			Downloader.load() {
-//				
-//			}
-//		}
+		//		DispatchQueue.global(qos: .background).async {
+		//			Downloader.load() {
+		//
+		//			}
+		//		}
 		
 		if CoreDataManager.instance.chekCountOfEntitiesFor(entityName: "HIstoryEntity") > 0 {
 			CoreDataManager.instance.sentHistory()
@@ -248,20 +264,25 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	}
 	
 	func playFromCache(complition: (() -> Void)?) {
+		
+		if CoreDataManager.instance.chekCountOfEntitiesFor(entityName: "HIstoryEntity") > 0 && currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable{
+			CoreDataManager.instance.sentHistory()
+		}
+		
 		self.playingSong = CoreDataManager.instance.getRandomTrack()
 		let docUrl = NSURL(string:FileManager.documentsDir())
 		let resUrl = docUrl?.absoluteURL?.appendingPathComponent(playingSong.path!)
-//		let pathUrl = NSURL(string: self.playingSong.path!)
 		guard let url = resUrl else {
 			return
 		}
 		self.playAudioWith(trackURL: url as URL)
+		self.playingSongID = self.playingSong.trackID
 		self.configurePlayingSong(song: self.playingSong)
 		if complition != nil {
 			complition!()
 		}
 	}
-
+	
 	func nextTrack(complition: (() -> Void)?) {
 		self.setWayForPlay(complition: complition)
 	}

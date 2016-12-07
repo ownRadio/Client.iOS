@@ -17,9 +17,9 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2016.12.06</string>
+	<string>2016.12.07</string>
 	<key>CFBundleVersion</key>
-	<string>2269</string>
+	<string>2311</string>
 	<key>Fabric</key>
 	<dict>
 		<key>APIKey</key>

@@ -23,6 +23,7 @@ class ViewController: UIViewController {
 	@IBOutlet weak var exceptionLbl: UILabel!
 	@IBOutlet var timerLabel: UILabel!
 	@IBOutlet var versionLabel: UILabel!
+	@IBOutlet var numberOfFiles: UILabel!
 	
 	@IBOutlet weak var playPauseBtn: UIButton!
 	@IBOutlet weak var nextButton: UIButton!
@@ -54,14 +55,16 @@ class ViewController: UIViewController {
 			}
 		}
 		
+		
 		self.player = AudioPlayerManager.sharedInstance
-
+		
 		self.deviceIdLbl.text = (UserDefaults.standard.object(forKey: "UUIDDevice") as! String)
 		self.visibleInfoView = false
 		
 		DispatchQueue.global(qos: .background).async {
 			self.downloadTracks()
 		}
+		getCountFilesInCache()
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(crashNetwork(_:)), name: NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: self.player.playerItem)
 		NotificationCenter.default.addObserver(self, selector: #selector(songDidPlay), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
@@ -103,9 +106,9 @@ class ViewController: UIViewController {
 		guard currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable else {
 			return
 		}
-			Downloader.load() {
-				
-			}
+		Downloader.load() {
+			
+		}
 	}
 	
 	// MARK: Notification Selectors
@@ -125,25 +128,41 @@ class ViewController: UIViewController {
 	}
 	
 	func changePlayBtnState() {
-//		if currentReachabilityStatus == NSObject.ReachabilityStatus.notReachable {
-//			self.exceptionLbl.text = "Have not internet connection"
-//		} else {
-			if player.isPlaying == true {
-				player.pauseSong(complition: {
-					DispatchQueue.main.async {
-						self.updateUI()
-					}
+		//		if currentReachabilityStatus == NSObject.ReachabilityStatus.notReachable {
+		//			self.exceptionLbl.text = "Have not internet connection"
+		//		} else {
+		if player.isPlaying == true {
+			player.pauseSong(complition: {
+				DispatchQueue.main.async {
+					self.updateUI()
+				}
+			})
+		}else {
+			player.resumeSong(complition: { [unowned self] in
+				DispatchQueue.main.async {
+					self.updateUI()
+				}
 				})
-			}else {
-				player.resumeSong(complition: { [unowned self] in
-					DispatchQueue.main.async {
-						self.updateUI()
-					}
-					})
-			}
-//		}
+		}
+		//		}
 	}
-
+	
+	func getCountFilesInCache () {
+		do {
+			
+			let docUrl = NSURL(string:FileManager.documentsDir()) as! URL
+			let directoryContents = try FileManager.default.contentsOfDirectory(at: docUrl, includingPropertiesForKeys: nil, options: [])
+			//			print(directoryContents)
+			
+			
+			let mp3Files = directoryContents.filter{ $0.pathExtension == "mp3" }
+			self.numberOfFiles.text = String.init(format:"%d", mp3Files.count)
+			
+		} catch let error as NSError {
+			print(error.localizedDescription)
+		}
+	}
+	
 	func updateUI() {
 		self.trackIDLbl.text = self.player.playingSong.trackID
 		self.trackNameLbl.text = self.player.playingSong.name
@@ -161,7 +180,7 @@ class ViewController: UIViewController {
 	}
 	
 	// MARK: Actions
-
+	
 	@IBAction func tripleTapAction(_ sender: AnyObject) {
 		if self.infoView.isHidden == true {
 			
@@ -181,11 +200,13 @@ class ViewController: UIViewController {
 				self.updateUI()
 			}
 		}
-		isPlaying = false
+		self.player.isPlaying = true
+		getCountFilesInCache()
 	}
 	
 	@IBAction func playBtnPressed() {
 		changePlayBtnState()
+		getCountFilesInCache()
 	}
 	
 }

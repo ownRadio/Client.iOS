@@ -11,8 +11,12 @@ class Downloader {
 	class func load(completion: @escaping () -> ()) {
 		
 		let baseURL = URL(string: "http://api.ownradio.ru/v3/tracks/")
-			
+		
+		if DiskStatus.folderSize(folderPath: FileManager.documentsDir()) <= (DiskStatus.freeDiskSpaceInBytes / 2)  {
 			ApiService.shared.getTrackIDFromServer { (dict) in
+				guard dict["id"] != nil else {
+					return
+				}
 				let trackURL = baseURL?.appendingPathComponent(dict["id"] as! String)
 				
 				if let audioUrl = trackURL {
@@ -20,7 +24,6 @@ class Downloader {
 					let documentsDirectoryURL =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
 					
 					let destinationUrl = documentsDirectoryURL.appendingPathComponent(audioUrl.lastPathComponent)
-					
 					
 					if FileManager.default.fileExists(atPath: destinationUrl.path) {
 						print("The file already exists at path")
@@ -31,8 +34,6 @@ class Downloader {
 							guard let location = location, error == nil else { return }
 							do {
 								
-//								try FileManager.default.moveItem(at: location, to: destinationUrl)
-								
 								let file = NSData(contentsOf: location)
 								
 								try file?.write(to: destinationUrl, options:.noFileProtection)
@@ -40,7 +41,7 @@ class Downloader {
 								try FileManager.default.moveItem(at: destinationUrl, to: endPath)
 								
 								let trackEntity = TrackEntity()
-
+								
 								trackEntity.path = String(describing: endPath.lastPathComponent)
 								trackEntity.countPlay = 0
 								trackEntity.artistName = dict["artist"] as? String
@@ -51,17 +52,19 @@ class Downloader {
 								CoreDataManager.instance.saveContext()
 								
 								print("File moved to documents folder")
-									
+								
 							} catch let error as NSError {
 								print(error.localizedDescription)
 							}
 						}).resume()
 					}
 				}
-				self.load(completion: { 
+				self.load(completion: {
 					
 				})
 			}
+		}
+		
 		}
 		
 	

@@ -18,6 +18,7 @@
 		093FBD0C1DEEFEB800038EF0 /* SongObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093FBD0B1DEEFEB800038EF0 /* SongObject.swift */; };
 		09609FEA1DF1A8D700516E9B /* HIstoryEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09609FE81DF1A8D700516E9B /* HIstoryEntity+CoreDataClass.swift */; };
 		09609FEB1DF1A8D700516E9B /* HIstoryEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09609FE91DF1A8D700516E9B /* HIstoryEntity+CoreDataProperties.swift */; };
+		0971662F1DF84A7F005AB0CE /* DiskStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0971662E1DF84A7F005AB0CE /* DiskStatus.swift */; };
 		0979B1B41DF00FCE003C01C7 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0979B1B31DF00FCE003C01C7 /* CoreData.framework */; };
 		0979B1B71DF01020003C01C7 /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0979B1B51DF01020003C01C7 /* DataModel.xcdatamodeld */; };
 		0979B1B91DF01085003C01C7 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0979B1B81DF01085003C01C7 /* CoreDataManager.swift */; };
@@ -68,6 +69,7 @@
 		093FBD0B1DEEFEB800038EF0 /* SongObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SongObject.swift; sourceTree = "<group>"; };
 		09609FE81DF1A8D700516E9B /* HIstoryEntity+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HIstoryEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
 		09609FE91DF1A8D700516E9B /* HIstoryEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HIstoryEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		0971662E1DF84A7F005AB0CE /* DiskStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiskStatus.swift; sourceTree = "<group>"; };
 		0979B1B31DF00FCE003C01C7 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		0979B1B61DF01020003C01C7 /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
 		0979B1B81DF01085003C01C7 /* CoreDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CoreDataManager.swift; path = OwnRadio/CoreDataManager.swift; sourceTree = "<group>"; };
@@ -145,6 +147,7 @@
 			children = (
 				091679541DE451CF00619B3F /* AppDelegate.swift */,
 				09A054141DF168170008ACE7 /* Utilities.swift */,
+				0971662E1DF84A7F005AB0CE /* DiskStatus.swift */,
 				093FBD0B1DEEFEB800038EF0 /* SongObject.swift */,
 				0989BD761DF5B01C005FE001 /* Downloader.swift */,
 				091679C61DE47D4400619B3F /* ApiService.swift */,
@@ -381,6 +384,7 @@
 				093FBD0C1DEEFEB800038EF0 /* SongObject.swift in Sources */,
 				091679571DE451CF00619B3F /* ViewController.swift in Sources */,
 				09A054151DF168170008ACE7 /* Utilities.swift in Sources */,
+				0971662F1DF84A7F005AB0CE /* DiskStatus.swift in Sources */,
 				091679C71DE47D4400619B3F /* ApiService.swift in Sources */,
 				0989BD771DF5B01C005FE001 /* Downloader.swift in Sources */,
 				0979B1B71DF01020003C01C7 /* DataModel.xcdatamodeld in Sources */,
