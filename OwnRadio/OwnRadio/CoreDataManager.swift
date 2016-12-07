@@ -98,15 +98,25 @@ class CoreDataManager {
 	
 	func deleteHistoryFor(trackID:String) {
 		let fetchRequest: NSFetchRequest<HIstoryEntity> = HIstoryEntity.fetchRequest()
-		fetchRequest.predicate = NSPredicate(format: "trackId = %@", trackID)
+//		fetchRequest.predicate = NSPredicate(format: "trackId = %@", trackID)
 		if let result = try? self.managedObjectContext.fetch(fetchRequest) {
 			for object in result {
 				self.managedObjectContext.delete(object)
 			}
 		}
 	}
+	func deleteTrackFor(trackID:String) {
+		let fetchRequest: NSFetchRequest<TrackEntity> = TrackEntity.fetchRequest()
+		fetchRequest.predicate = NSPredicate(format: "recId = %@", trackID)
+		if let result = try? self.managedObjectContext.fetch(fetchRequest) {
+			for object in result {
+				self.managedObjectContext.delete(object)
+			}
+		}
+	}
+
 	
-	func sentHistory (){
+	func sentHistory () {
 		//create a fetch request, telling it about the entity
 		let fetchRequest: NSFetchRequest<HIstoryEntity> = HIstoryEntity.fetchRequest()
 		
@@ -119,11 +129,51 @@ class CoreDataManager {
 				
 				ApiService.shared.saveHistory(trackId: track.trackId!, isListen: Int(track.isListen))
 				
-//				print("\(track.value(forKey: "trackId"))")
+					print("\(track.value(forKey: "trackId"))")
 			}
-					} catch {
+		} catch {
 			print("Error with request: \(error)")
 		}
+	}
+	
+	func getRandomTrack() -> SongObject {
+		let fetchRequest: NSFetchRequest<TrackEntity> = TrackEntity.fetchRequest()
+		let  song = SongObject()
+		do {
+			//go get the results
+			
+			let searchResults = try self.managedObjectContext.fetch(fetchRequest)
+			guard searchResults.count != 0 else {
+				return song
+			}
+			let index = arc4random()%UInt32(searchResults.count)
+			let track = searchResults[Int(index)]
+			
+			song.name = track.trackName
+			song.artistName = track.artistName
+			song.trackLength = track.trackLength
+			song.trackID = track.recId
+			song.path = track.path
+			
+		} catch {
+			print("Error with request: \(error)")
+		}
+		return song
+	}
+	
+	func getCountOfTracks() -> Int {
+		
+		let fetchRequest: NSFetchRequest<TrackEntity> = TrackEntity.fetchRequest()
+		var count = 0
+		do {
+			//go get the results
+			
+			let searchResults = try self.managedObjectContext.fetch(fetchRequest)
+			count = searchResults.count
+		} catch {
+			print("Error with request: \(error)")
+		}
+		return count
 	}
 	
 	
