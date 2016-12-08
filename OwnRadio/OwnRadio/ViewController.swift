@@ -46,7 +46,8 @@ class ViewController: UIViewController {
 	// MARK: Override
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		
+		self.authorNameLbl.text = "ownRadio"
+		self.trackNameLbl.text = "" 
 		//get version of app
 		if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
 			
