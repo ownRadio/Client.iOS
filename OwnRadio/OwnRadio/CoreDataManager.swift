@@ -21,18 +21,6 @@ class CoreDataManager {
 		return NSEntityDescription.entity(forEntityName: entityName, in: self.managedObjectContext)!
 	}
 	
-//	 Fetched Results Controller for Entity Name
-//	func fetchedResultsControllerForHistory( keyForSort: String) -> NSFetchedResultsController<HIstoryEntity> {
-//		
-//		let fetchRequest:NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName:"HIstoryEntity")
-//		let sortDescriptor = NSSortDescriptor(key: keyForSort, ascending: true)
-//		fetchRequest.sortDescriptors = [sortDescriptor]
-//		
-//		let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataManager.instance.managedObjectContext, sectionNameKeyPath: nil, cacheName: nil)
-//		
-//		return fetchedResultsController as! NSFetchedResultsController<HIstoryEntity>
-//	}
-	
 	func getAllEntitiesFor(entityName:String) -> [Any] {
 		let request:NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName:entityName)
 		var fetchRequest = [Any]()
@@ -61,7 +49,8 @@ class CoreDataManager {
 		let url = self.applicationDocumentsDirectory.appendingPathComponent("SingleViewCoreData.sqlite")
 		var failureReason = "There was an error creating or loading the application's saved data."
 		do {
-			try coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: url, options: nil)
+			let options = [NSMigratePersistentStoresAutomaticallyOption:true, NSInferMappingModelAutomaticallyOption:true]
+			try coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: url, options: options)
 		} catch {
 			var dict = [String: AnyObject]()
 			dict[NSLocalizedDescriptionKey] = "Failed to initialize the application's saved data" as AnyObject?
@@ -97,7 +86,7 @@ class CoreDataManager {
 	}
 	
 	func deleteHistoryFor(trackID:String) {
-		let fetchRequest: NSFetchRequest<HIstoryEntity> = HIstoryEntity.fetchRequest()
+		let fetchRequest: NSFetchRequest<HistoryEntity> = HistoryEntity.fetchRequest()
 //		fetchRequest.predicate = NSPredicate(format: "trackId = %@", trackID)
 		if let result = try? self.managedObjectContext.fetch(fetchRequest) {
 			for object in result {
@@ -118,7 +107,7 @@ class CoreDataManager {
 	
 	func sentHistory () {
 		//create a fetch request, telling it about the entity
-		let fetchRequest: NSFetchRequest<HIstoryEntity> = HIstoryEntity.fetchRequest()
+		let fetchRequest: NSFetchRequest<HistoryEntity> = HistoryEntity.fetchRequest()
 		
 		do {
 			//go get the results
