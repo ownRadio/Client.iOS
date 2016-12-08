@@ -76,7 +76,7 @@
                                         <color key="textColor" red="0.30588235294117649" green="0.67843137254901964" blue="0.88627450980392153" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ifw-5N-ebI">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ifw-5N-ebI">
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TrackID:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QfG-Ow-1wG">
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
@@ -149,6 +149,7 @@
                                             <constraint firstItem="O47-RO-uEC" firstAttribute="top" secondItem="Ifw-5N-ebI" secondAttribute="top" constant="10" id="JPf-Vg-JPK"/>
                                             <constraint firstItem="fIJ-N1-pAG" firstAttribute="leading" secondItem="O47-RO-uEC" secondAttribute="trailing" constant="10" id="Ls9-A2-v1d"/>
                                             <constraint firstItem="IY3-Yy-ttG" firstAttribute="top" secondItem="QfG-Ow-1wG" secondAttribute="bottom" constant="8" id="Lvd-UO-t8n"/>
+                                            <constraint firstItem="gbX-RN-wCN" firstAttribute="top" secondItem="rld-oo-DpN" secondAttribute="bottom" constant="8" id="Ppd-sd-iNh"/>
                                             <constraint firstItem="wCB-G2-6rJ" firstAttribute="leading" secondItem="QfG-Ow-1wG" secondAttribute="trailing" constant="10" id="QFC-VS-aib"/>
                                             <constraint firstItem="OwP-Dt-Wqz" firstAttribute="centerY" secondItem="IY3-Yy-ttG" secondAttribute="centerY" id="Qhn-iR-mWv"/>
                                             <constraint firstItem="JoS-0Y-gcY" firstAttribute="leading" secondItem="fhw-wa-lP1" secondAttribute="trailing" constant="11" id="R27-Lo-1z5"/>
@@ -161,7 +162,6 @@
                                             <constraint firstItem="RTW-Mz-mCz" firstAttribute="centerY" secondItem="gbX-RN-wCN" secondAttribute="centerY" id="i4t-qy-c1W"/>
                                             <constraint firstItem="OwP-Dt-Wqz" firstAttribute="leading" secondItem="IY3-Yy-ttG" secondAttribute="trailing" constant="10" id="icv-Hn-9eV"/>
                                             <constraint firstItem="rld-oo-DpN" firstAttribute="leading" secondItem="Ifw-5N-ebI" secondAttribute="leading" constant="8" id="jt6-AO-UGm"/>
-                                            <constraint firstItem="gbX-RN-wCN" firstAttribute="top" secondItem="1uo-sP-hKP" secondAttribute="bottom" constant="8" id="oCM-mh-cbJ"/>
                                             <constraint firstItem="O47-RO-uEC" firstAttribute="leading" secondItem="Ifw-5N-ebI" secondAttribute="leading" constant="8" id="qth-AJ-72A"/>
                                             <constraint firstItem="1uo-sP-hKP" firstAttribute="centerY" secondItem="rld-oo-DpN" secondAttribute="centerY" id="sqJ-Xa-zmc"/>
                                             <constraint firstItem="RTW-Mz-mCz" firstAttribute="leading" secondItem="gbX-RN-wCN" secondAttribute="trailing" constant="10" id="x3Q-JF-iN3"/>
@@ -172,7 +172,7 @@
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstItem="QXq-lk-UPI" firstAttribute="centerY" secondItem="cjQ-kN-iGY" secondAttribute="centerY" constant="-10" id="5Sf-Gk-3yU"/>
+                                    <constraint firstItem="QXq-lk-UPI" firstAttribute="centerY" secondItem="cjQ-kN-iGY" secondAttribute="centerY" id="5Sf-Gk-3yU"/>
                                     <constraint firstItem="Ifw-5N-ebI" firstAttribute="top" secondItem="cjQ-kN-iGY" secondAttribute="top" constant="20" id="6yX-3o-7SI"/>
                                     <constraint firstItem="QXq-lk-UPI" firstAttribute="centerX" secondItem="cjQ-kN-iGY" secondAttribute="centerX" id="CE1-Mw-ulf"/>
                                     <constraint firstAttribute="trailing" secondItem="Ifw-5N-ebI" secondAttribute="trailing" id="FCh-q7-Wkw"/>
@@ -229,7 +229,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="116.01562499999999" y="103.22108345534406"/>
+            <point key="canvasLocation" x="114.375" y="102.46478873239437"/>
         </scene>
     </scenes>
     <resources>

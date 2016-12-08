@@ -62,7 +62,7 @@ class ViewController: UIViewController {
 		self.visibleInfoView = false
 		
 		DispatchQueue.global(qos: .background).async {
-			self.downloadTracks()
+				self.downloadTracks()
 		}
 		getCountFilesInCache()
 		
@@ -202,6 +202,11 @@ class ViewController: UIViewController {
 		}
 		self.player.isPlaying = true
 		getCountFilesInCache()
+//		if currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable {
+//			DispatchQueue.global(qos: .background).async {
+//				self.downloadTracks()
+//			}
+//		}
 	}
 	
 	@IBAction func playBtnPressed() {

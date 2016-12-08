@@ -88,6 +88,11 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 			case .readyToPlay:
 				player.play()
 				isPlaying = true
+				DispatchQueue.global(qos: .background).async {
+					Downloader.load {
+						
+					}
+				}
 			case .failed:
 				break
 			case .unknown:
@@ -232,13 +237,8 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		guard  currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable  else {
 			return
 		}
-		//		DispatchQueue.global(qos: .background).async {
-		//			Downloader.load() {
-		//
-		//			}
-		//		}
 		
-		if CoreDataManager.instance.chekCountOfEntitiesFor(entityName: "HIstoryEntity") > 0 {
+		if CoreDataManager.instance.chekCountOfEntitiesFor(entityName: "HistoryEntity") > 0 {
 			CoreDataManager.instance.sentHistory()
 		}
 		ApiService.shared.getTrackIDFromServer {  (dictionary) in
@@ -265,7 +265,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	
 	func playFromCache(complition: (() -> Void)?) {
 		
-		if CoreDataManager.instance.chekCountOfEntitiesFor(entityName: "HIstoryEntity") > 0 && currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable{
+		if CoreDataManager.instance.chekCountOfEntitiesFor(entityName: "HistoryEntity") > 0 && currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable{
 			CoreDataManager.instance.sentHistory()
 		}
 		
@@ -293,7 +293,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		let dateFormetter = DateFormatter()
 		dateFormetter.dateFormat = "yyyy-MM-dd'T'H:m:s"
 		let creationDateString = dateFormetter.string(from: creatinDate)
-		let historyEntity = HIstoryEntity()
+		let historyEntity = HistoryEntity()
 		
 		historyEntity.recId = playingSong.trackID
 		historyEntity.trackId = playingSong.trackID
