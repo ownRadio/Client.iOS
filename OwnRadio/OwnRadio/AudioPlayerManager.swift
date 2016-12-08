@@ -56,10 +56,21 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	}
 	
 	func setup() {
-		let audioSession = AVAudioSession.sharedInstance()
+//		let audioSession = AVAudioSession.sharedInstance()
+//		
+//		try! audioSession.setCategory(AVAudioSessionCategoryPlayback)
+//		try! audioSession.setActive(true)
 		
-		try! audioSession.setCategory(AVAudioSessionCategoryPlayback)
-		try! audioSession.setActive(true)
+		
+		print("unducking")
+		let sess = AVAudioSession.sharedInstance()
+		try? sess.setActive(false)
+		let opts = sess.categoryOptions.symmetricDifference(.duckOthers)
+		try? sess.setCategory(sess.category, with: opts)
+//		try? sess.setCategory(sess.category, mode: sess.mode, options:opts)
+		try? sess.setActive(true)
+		
+		
 		
 		UIApplication.shared.beginReceivingRemoteControlEvents()
 		
