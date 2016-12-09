@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MediaPlayer
 
 class ViewController: UIViewController {
 	
@@ -24,6 +25,7 @@ class ViewController: UIViewController {
 	@IBOutlet var timerLabel: UILabel!
 	@IBOutlet var versionLabel: UILabel!
 	@IBOutlet var numberOfFiles: UILabel!
+	@IBOutlet var playFrom: UILabel!
 	
 	@IBOutlet weak var playPauseBtn: UIButton!
 	@IBOutlet weak var nextButton: UIButton!
@@ -47,7 +49,7 @@ class ViewController: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		self.authorNameLbl.text = "ownRadio"
-		self.trackNameLbl.text = "" 
+		self.trackNameLbl.text = ""
 		//get version of app
 		if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
 			
@@ -62,9 +64,6 @@ class ViewController: UIViewController {
 		self.deviceIdLbl.text = (UserDefaults.standard.object(forKey: "UUIDDevice") as! String)
 		self.visibleInfoView = false
 		
-		DispatchQueue.global(qos: .background).async {
-				self.downloadTracks()
-		}
 		getCountFilesInCache()
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(crashNetwork(_:)), name: NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: self.player.playerItem)
@@ -83,13 +82,17 @@ class ViewController: UIViewController {
 			switch event!.subtype {
 			case UIEventSubtype.remoteControlPause:
 				changePlayBtnState()
-			case .remoteControlPlay:
+				MPNowPlayingInfoCenter.default().nowPlayingInfo![MPNowPlayingInfoPropertyElapsedPlaybackTime] = CMTimeGetSeconds(self.player.player.currentTime())
+				MPNowPlayingInfoCenter.default().nowPlayingInfo![MPNowPlayingInfoPropertyPlaybackRate] = 0
 				
+			case .remoteControlPlay:
 				changePlayBtnState()
+				MPNowPlayingInfoCenter.default().nowPlayingInfo![MPNowPlayingInfoPropertyElapsedPlaybackTime] = CMTimeGetSeconds(self.player.player.currentTime())
+				MPNowPlayingInfoCenter.default().nowPlayingInfo![MPNowPlayingInfoPropertyPlaybackRate] = 1
 				
 			case .remoteControlTogglePlayPause:
 				break
-			//				AudioPlayerManager.sharedInstance.playOrPause()
+				
 			case .remoteControlNextTrack:
 				player.skipSong(complition: {
 					DispatchQueue.main.async {
@@ -129,9 +132,7 @@ class ViewController: UIViewController {
 	}
 	
 	func changePlayBtnState() {
-		//		if currentReachabilityStatus == NSObject.ReachabilityStatus.notReachable {
-		//			self.exceptionLbl.text = "Have not internet connection"
-		//		} else {
+		
 		if player.isPlaying == true {
 			player.pauseSong(complition: {
 				DispatchQueue.main.async {
@@ -203,16 +204,21 @@ class ViewController: UIViewController {
 		}
 		self.player.isPlaying = true
 		getCountFilesInCache()
-//		if currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable {
-//			DispatchQueue.global(qos: .background).async {
-//				self.downloadTracks()
-//			}
-//		}
+		if CoreDataManager.instance.getCountOfTracks() > 10 {
+			self.playFrom.text = "Cache"
+		} else {
+			self.playFrom.text = "Server"
+		}
 	}
 	
 	@IBAction func playBtnPressed() {
 		changePlayBtnState()
 		getCountFilesInCache()
+		if CoreDataManager.instance.getCountOfTracks() > 10 {
+			self.playFrom.text = "Cache"
+		} else {
+			self.playFrom.text = "Server"
+		}
 	}
 	
 }
