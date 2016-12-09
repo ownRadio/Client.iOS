@@ -103,7 +103,17 @@ class CoreDataManager {
 			}
 		}
 	}
+	
+	func setDateForTrackBy(trackId:String) {
+		let fetchRequest: NSFetchRequest<TrackEntity> = TrackEntity.fetchRequest()
+		fetchRequest.predicate = NSPredicate(format: "recId = %@", trackId)
+		if let result = try? self.managedObjectContext.fetch(fetchRequest) {
+			for object in result {
+				object.playingDate = NSDate()
+			}
+		}
 
+	}
 	
 	func sentHistory () {
 		//create a fetch request, telling it about the entity
@@ -135,14 +145,18 @@ class CoreDataManager {
 			guard searchResults.count != 0 else {
 				return song
 			}
-			let index = arc4random()%UInt32(searchResults.count)
-			let track = searchResults[Int(index)]
+			let array = searchResults as [TrackEntity]
+			let resArray = array.sorted(by: { (($0.playingDate?.earlierDate($1.playingDate as! Date)) != nil) })
 			
-			song.name = track.trackName
-			song.artistName = track.artistName
-			song.trackLength = track.trackLength
-			song.trackID = track.recId
-			song.path = track.path
+//			let index = arc4random()%UInt32(searchResults.count)
+		
+			let track = resArray.first
+			
+			song.name = track?.trackName
+			song.artistName = track?.artistName
+			song.trackLength = track?.trackLength
+			song.trackID = track?.recId
+			song.path = track?.path
 			
 		} catch {
 			print("Error with request: \(error)")

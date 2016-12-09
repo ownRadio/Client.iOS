@@ -20,9 +20,9 @@
 		0979B1B41DF00FCE003C01C7 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0979B1B31DF00FCE003C01C7 /* CoreData.framework */; };
 		0979B1B71DF01020003C01C7 /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0979B1B51DF01020003C01C7 /* DataModel.xcdatamodeld */; };
 		0979B1B91DF01085003C01C7 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0979B1B81DF01085003C01C7 /* CoreDataManager.swift */; };
+		098886861DFB069700E401B9 /* TrackEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 098886851DFB069700E401B9 /* TrackEntity+CoreDataProperties.swift */; };
 		0989BD771DF5B01C005FE001 /* Downloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0989BD761DF5B01C005FE001 /* Downloader.swift */; };
 		0989BD801DF6F33C005FE001 /* TrackEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0989BD7E1DF6F33C005FE001 /* TrackEntity+CoreDataClass.swift */; };
-		0989BD811DF6F33C005FE001 /* TrackEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0989BD7F1DF6F33C005FE001 /* TrackEntity+CoreDataProperties.swift */; };
 		098B51561DF95E5000293DE5 /* HistoryEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 098B51541DF95E5000293DE5 /* HistoryEntity+CoreDataClass.swift */; };
 		098B515C1DF9623A00293DE5 /* HistoryEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 098B515B1DF9623A00293DE5 /* HistoryEntity+CoreDataProperties.swift */; };
 		09A054151DF168170008ACE7 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09A054141DF168170008ACE7 /* Utilities.swift */; };
@@ -71,9 +71,9 @@
 		0979B1B31DF00FCE003C01C7 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		0979B1B61DF01020003C01C7 /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
 		0979B1B81DF01085003C01C7 /* CoreDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CoreDataManager.swift; path = OwnRadio/CoreDataManager.swift; sourceTree = "<group>"; };
+		098886851DFB069700E401B9 /* TrackEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TrackEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		0989BD761DF5B01C005FE001 /* Downloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Downloader.swift; sourceTree = "<group>"; };
 		0989BD7E1DF6F33C005FE001 /* TrackEntity+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TrackEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
-		0989BD7F1DF6F33C005FE001 /* TrackEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TrackEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		098B51541DF95E5000293DE5 /* HistoryEntity+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HistoryEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
 		098B51581DF95FC100293DE5 /* DataModel 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "DataModel 2.xcdatamodel"; sourceTree = "<group>"; };
 		098B515B1DF9623A00293DE5 /* HistoryEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HistoryEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -197,7 +197,7 @@
 			children = (
 				0979B1C31DF02BA8003C01C7 /* CoreDataManager */,
 				0989BD7E1DF6F33C005FE001 /* TrackEntity+CoreDataClass.swift */,
-				0989BD7F1DF6F33C005FE001 /* TrackEntity+CoreDataProperties.swift */,
+				098886851DFB069700E401B9 /* TrackEntity+CoreDataProperties.swift */,
 				098B51541DF95E5000293DE5 /* HistoryEntity+CoreDataClass.swift */,
 				098B515B1DF9623A00293DE5 /* HistoryEntity+CoreDataProperties.swift */,
 			);
@@ -388,8 +388,8 @@
 				091679C71DE47D4400619B3F /* ApiService.swift in Sources */,
 				0989BD771DF5B01C005FE001 /* Downloader.swift in Sources */,
 				0979B1B71DF01020003C01C7 /* DataModel.xcdatamodeld in Sources */,
-				0989BD811DF6F33C005FE001 /* TrackEntity+CoreDataProperties.swift in Sources */,
 				091679551DE451CF00619B3F /* AppDelegate.swift in Sources */,
+				098886861DFB069700E401B9 /* TrackEntity+CoreDataProperties.swift in Sources */,
 				098B515C1DF9623A00293DE5 /* HistoryEntity+CoreDataProperties.swift in Sources */,
 				098B51561DF95E5000293DE5 /* HistoryEntity+CoreDataClass.swift in Sources */,
 				09EA799B1DE57D040034B8DF /* AudioPlayerManager.swift in Sources */,

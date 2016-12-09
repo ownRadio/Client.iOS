@@ -64,6 +64,10 @@ class ViewController: UIViewController {
 		self.deviceIdLbl.text = (UserDefaults.standard.object(forKey: "UUIDDevice") as! String)
 		self.visibleInfoView = false
 		
+		DispatchQueue.global(qos: .background).async {
+			self.downloadTracks()
+		}
+
 		getCountFilesInCache()
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(crashNetwork(_:)), name: NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: self.player.playerItem)
@@ -178,6 +182,11 @@ class ViewController: UIViewController {
 			self.leftPlayBtnConstraint.constant = pauseBtnConstraintConstant
 			
 		}
+		if CoreDataManager.instance.getCountOfTracks() > 0 {
+			self.playFrom.text = "Cache"
+		} else {
+			self.playFrom.text = "Server"
+		}
 		self.exceptionLbl.text = ""
 	}
 	
@@ -204,21 +213,12 @@ class ViewController: UIViewController {
 		}
 		self.player.isPlaying = true
 		getCountFilesInCache()
-		if CoreDataManager.instance.getCountOfTracks() > 10 {
-			self.playFrom.text = "Cache"
-		} else {
-			self.playFrom.text = "Server"
-		}
+	
 	}
 	
 	@IBAction func playBtnPressed() {
 		changePlayBtnState()
 		getCountFilesInCache()
-		if CoreDataManager.instance.getCountOfTracks() > 10 {
-			self.playFrom.text = "Cache"
-		} else {
-			self.playFrom.text = "Server"
-		}
 	}
 	
 }

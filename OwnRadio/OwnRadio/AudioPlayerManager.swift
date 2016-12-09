@@ -29,9 +29,11 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	var assetUrlStr: String?
 	let baseURL = URL(string: "http://api.ownradio.ru/v3/tracks/")
 	
-	var playbackProgres: CMTime!
+	var playbackProgres: Double!
 	var currentPlaybackTime: CMTime!
 	var timer = Timer()
+	
+//	var playbackProgress:Double?
 	
 	// MARK: Overrides
 	override init() {
@@ -39,9 +41,10 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		
 		
 		
-		NotificationCenter.default.addObserver(self, selector: #selector(playerItemDidReachEnd(_:)), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(playerItemDidReachEnd(_:)), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player.currentItem)
 		
-		NotificationCenter.default.addObserver(self, selector: #selector(crashNetwork(_:)), name: NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: playerItem)
+		NotificationCenter.default.addObserver(self, selector: #selector(crashNetwork(_:)), name: NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: self.player.currentItem)
+		
 		setup()
 	}
 	
@@ -50,8 +53,8 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		playerItem.removeObserver(self, forKeyPath: #keyPath(AVPlayerItem.status))
 		
 		
-		NotificationCenter.default.removeObserver(self, name:  NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: playerItem)
-		NotificationCenter.default.removeObserver(self, name:  NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: self.playerItem)
+		NotificationCenter.default.removeObserver(self, name:  NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player.currentItem)
+		NotificationCenter.default.removeObserver(self, name:  NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: self.player.currentItem)
 		NotificationCenter.default.removeObserver(self, name: Notification.Name.AVAudioSessionInterruption, object: AVAudioSession.sharedInstance())
 	}
 	
@@ -110,6 +113,10 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 			//			self.playerItem = nil
 			self.playingSong.isListen = 1
 			self.addDateToHistoryTable(playingSong: self.playingSong)
+			if self.playingSong.trackID != nil  {
+				CoreDataManager.instance.setDateForTrackBy(trackId: self.playingSong.trackID)
+			}
+			
 		}
 	}
 	
@@ -142,7 +149,9 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		songInfo[MPMediaItemPropertyAlbumTitle] = "ownRadio"
 		songInfo[MPMediaItemPropertyArtist] = song.artistName
 		songInfo[MPMediaItemPropertyArtwork] = albumArt
-		songInfo[MPMediaItemPropertyPlaybackDuration] = song.trackLength
+		print(song.trackLength)
+		songInfo[MPMediaItemPropertyPlaybackDuration] = NSNumber.init(value: song.trackLength)
+//		songInfo[MPNowPlayingInfoPropertyPlaybackRate] = 1.0
 		
 		MPNowPlayingInfoCenter.default().nowPlayingInfo = songInfo
 	}
@@ -183,10 +192,10 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 					catch {
 						print("Error with remove file ")
 					}
+//					CoreDataManager.instance.setDateForTrackBy(trackId: self.playingSong.trackID)
 					CoreDataManager.instance.deleteTrackFor(trackID: self.playingSong.trackID)
 				}
 			}
-			
 		}
 		nextTrack(complition: complition)
 	}
@@ -221,13 +230,13 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		if self.checkCountFileInCache() {
 			self.playFromCache(complition: complition)
 		} else {
-			self.playOnline(complition: complition)
+//			self.playOnline(complition: complition)
 		}
 	}
 	
 	func checkCountFileInCache() -> Bool {
 		self.canPlayFromCache = false
-		if CoreDataManager.instance.getCountOfTracks() > 10 {
+		if CoreDataManager.instance.getCountOfTracks() > 0 {
 			self.canPlayFromCache = true
 		}
 		return self.canPlayFromCache
