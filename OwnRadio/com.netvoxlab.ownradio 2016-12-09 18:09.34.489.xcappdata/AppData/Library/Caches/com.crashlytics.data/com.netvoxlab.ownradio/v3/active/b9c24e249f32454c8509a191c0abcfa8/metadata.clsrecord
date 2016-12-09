@@ -1,0 +1,4 @@
+{"identity":{"generator":"Crashlytics iOS SDK/3.8.3","build_version":"120","display_version":"3.8.3","api_key":"4f387d4a5ac1a6e637ca2612469b2b3e73907300","started_at":1481299705,"session_id":"b9c24e249f32454c8509a191c0abcfa8","install_id":"B3BA9E99-AECD-447F-A080-75799DECD275","beta_token":null,"absolute_log_timestamps":true}}
+{"host":{"model":"iPad2,1","machine":"K93AP","os_build_version":"13G36","os_display_version":"9.3.5","platform":"ios","locale":"en_RU"}}
+{"application":{"bundle_id":"com.netvoxlab.ownradio","custom_bundle_id":null,"build_version":"2391","display_version":"2016.12.09","extension_id":null}}
+{"executable":{"architecture":"armv7","uuid":"ea4c93fe654e3f9786a2157e072d0c5b","base":241664,"size":557056,"encrypted":false,"minimum_sdk_version":"9.0.0","built_sdk_version":"10.0.0"}}
