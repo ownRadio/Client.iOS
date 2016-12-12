@@ -115,6 +115,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 			self.addDateToHistoryTable(playingSong: self.playingSong)
 			if self.playingSong.trackID != nil  {
 				CoreDataManager.instance.setDateForTrackBy(trackId: self.playingSong.trackID)
+				CoreDataManager.instance.saveContext()
 			}
 			
 		}
@@ -194,6 +195,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 					}
 //					CoreDataManager.instance.setDateForTrackBy(trackId: self.playingSong.trackID)
 					CoreDataManager.instance.deleteTrackFor(trackID: self.playingSong.trackID)
+					CoreDataManager.instance.saveContext()
 				}
 			}
 		}
