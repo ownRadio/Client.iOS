@@ -26,6 +26,7 @@
 		098B51561DF95E5000293DE5 /* HistoryEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 098B51541DF95E5000293DE5 /* HistoryEntity+CoreDataClass.swift */; };
 		098B515C1DF9623A00293DE5 /* HistoryEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 098B515B1DF9623A00293DE5 /* HistoryEntity+CoreDataProperties.swift */; };
 		09A054151DF168170008ACE7 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09A054141DF168170008ACE7 /* Utilities.swift */; };
+		09B953A11DFEBED70098417C /* CircularView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09B953A01DFEBED70098417C /* CircularView.swift */; };
 		09EA799B1DE57D040034B8DF /* AudioPlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EA799A1DE57D040034B8DF /* AudioPlayerManager.swift */; };
 		50D8269A1DE74B0800238F96 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50D826981DE74B0800238F96 /* Fabric.framework */; };
 		50D8269B1DE74B0800238F96 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50D826991DE74B0800238F96 /* Crashlytics.framework */; };
@@ -78,6 +79,7 @@
 		098B51581DF95FC100293DE5 /* DataModel 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "DataModel 2.xcdatamodel"; sourceTree = "<group>"; };
 		098B515B1DF9623A00293DE5 /* HistoryEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HistoryEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		09A054141DF168170008ACE7 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		09B953A01DFEBED70098417C /* CircularView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircularView.swift; sourceTree = "<group>"; };
 		09EA799A1DE57D040034B8DF /* AudioPlayerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioPlayerManager.swift; sourceTree = "<group>"; };
 		50D826981DE74B0800238F96 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		50D826991DE74B0800238F96 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
@@ -147,6 +149,7 @@
 			isa = PBXGroup;
 			children = (
 				091679541DE451CF00619B3F /* AppDelegate.swift */,
+				09B953A01DFEBED70098417C /* CircularView.swift */,
 				09A054141DF168170008ACE7 /* Utilities.swift */,
 				0971662E1DF84A7F005AB0CE /* DiskStatus.swift */,
 				093FBD0B1DEEFEB800038EF0 /* SongObject.swift */,
@@ -379,6 +382,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				09B953A11DFEBED70098417C /* CircularView.swift in Sources */,
 				0979B1B91DF01085003C01C7 /* CoreDataManager.swift in Sources */,
 				0989BD801DF6F33C005FE001 /* TrackEntity+CoreDataClass.swift in Sources */,
 				093FBD0C1DEEFEB800038EF0 /* SongObject.swift in Sources */,

@@ -16,6 +16,7 @@ class ViewController: UIViewController {
 	@IBOutlet weak var backgroundImageView: UIImageView!
 	
 	@IBOutlet weak var infoView: UIView!
+	@IBOutlet weak var circleViewConteiner: UIView!
 	
 	@IBOutlet weak var trackNameLbl: UILabel!
 	@IBOutlet weak var authorNameLbl: UILabel!
@@ -42,6 +43,9 @@ class ViewController: UIViewController {
 	
 	var timer = Timer()
 	
+	let progressView = CircularView(frame: CGRect.zero)
+	var circleProgress:CGFloat = 0.0
+	
 	let playBtnConstraintConstant = CGFloat(15.0)
 	let pauseBtnConstraintConstant = CGFloat(10.0)
 	
@@ -58,6 +62,9 @@ class ViewController: UIViewController {
 			}
 		}
 		
+		self.circleViewConteiner.addSubview(self.progressView)
+		self.progressView.frame = self.circleViewConteiner.bounds
+		self.progressView.autoresizingMask = [.flexibleWidth,.flexibleHeight]
 		
 		self.player = AudioPlayerManager.sharedInstance
 		
@@ -174,13 +181,14 @@ class ViewController: UIViewController {
 		self.trackNameLbl.text = self.player.playingSong.name
 		self.authorNameLbl.text = self.player.playingSong.artistName
 		
+		
 		if self.player.isPlaying == false {
 			self.playPauseBtn.setImage(UIImage(named: "playImg"), for: UIControlState.normal)
 			self.leftPlayBtnConstraint.constant = playBtnConstraintConstant
 		} else {
 			self.playPauseBtn.setImage(UIImage(named: "pauseImg"), for: UIControlState.normal)
 			self.leftPlayBtnConstraint.constant = pauseBtnConstraintConstant
-			
+			self.animProgress(i: CFloat(self.circleProgress) * CFloat(self.player.playingSong.trackLength), length: self.player.playingSong.trackLength)
 		}
 		if CoreDataManager.instance.getCountOfTracks() > 0 {
 			self.playFrom.text = "Cache"
@@ -188,6 +196,22 @@ class ViewController: UIViewController {
 			self.playFrom.text = "Server"
 		}
 		self.exceptionLbl.text = ""
+	}
+	
+	func animProgress(i:CFloat, length:Double) {
+		self.progressView.progress = CGFloat(i)/CGFloat(length)
+		guard Double(i) < length else {
+			return
+		}
+		
+		if self.player.isPlaying == false {
+			self.circleProgress = self.progressView.progress
+			return
+		}
+		
+		DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+			self.animProgress(i: i + CFloat(length)/100, length: length)		}
+		
 	}
 	
 	// MARK: Actions
