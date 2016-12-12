@@ -25,6 +25,13 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="iPad Pro Landscape" translatesAutoresizingMaskIntoConstraints="NO" id="rOy-th-Dzd">
                                 <gestureRecognizers/>
                             </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2yL-rq-KcF">
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="180" id="0im-QH-Ue1"/>
+                                    <constraint firstAttribute="width" constant="180" id="ypb-U2-CFL"/>
+                                </constraints>
+                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xSr-6c-3j9">
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kuP-oH-VBW">
@@ -36,16 +43,16 @@
                                 </subviews>
                                 <color key="backgroundColor" red="0.30588235294117649" green="0.67843137254901964" blue="0.88627450980392153" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="150" id="2bA-HS-lrw"/>
+                                    <constraint firstAttribute="height" constant="130" id="2bA-HS-lrw"/>
                                     <constraint firstItem="kuP-oH-VBW" firstAttribute="top" secondItem="xSr-6c-3j9" secondAttribute="top" constant="10" id="4TA-K1-tfO"/>
                                     <constraint firstAttribute="bottom" secondItem="kuP-oH-VBW" secondAttribute="bottom" constant="10" id="4mQ-tv-7Wh"/>
                                     <constraint firstAttribute="trailing" secondItem="kuP-oH-VBW" secondAttribute="trailing" constant="10" id="Wiw-JO-yZP"/>
                                     <constraint firstItem="kuP-oH-VBW" firstAttribute="leading" secondItem="xSr-6c-3j9" secondAttribute="leading" constant="15" id="ZbW-Ke-wpW"/>
-                                    <constraint firstAttribute="width" constant="150" id="cxP-K2-fj8"/>
+                                    <constraint firstAttribute="width" constant="130" id="cxP-K2-fj8"/>
                                 </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="75"/>
+                                        <integer key="value" value="65"/>
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </view>
@@ -211,7 +218,9 @@
                             <constraint firstItem="xSr-6c-3j9" firstAttribute="top" secondItem="cjQ-kN-iGY" secondAttribute="bottom" id="gqk-tD-3Y0"/>
                             <constraint firstItem="BLr-xa-DLt" firstAttribute="trailing" secondItem="xSr-6c-3j9" secondAttribute="trailing" id="gva-FE-J1Q"/>
                             <constraint firstAttribute="trailing" secondItem="cjQ-kN-iGY" secondAttribute="trailing" id="hNi-1x-IgG"/>
+                            <constraint firstItem="2yL-rq-KcF" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="hsh-aL-iev"/>
                             <constraint firstItem="xSr-6c-3j9" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="kkO-n2-OnI"/>
+                            <constraint firstItem="2yL-rq-KcF" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="lDz-vr-N9c"/>
                             <constraint firstAttribute="trailing" secondItem="rOy-th-Dzd" secondAttribute="trailing" id="nV0-4k-6wH"/>
                             <constraint firstItem="cjQ-kN-iGY" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="ngK-WB-tyz"/>
                             <constraint firstItem="BLr-xa-DLt" firstAttribute="leading" secondItem="xSr-6c-3j9" secondAttribute="leading" id="sFi-pB-FNz"/>
@@ -223,6 +232,7 @@
                     <connections>
                         <outlet property="authorNameLbl" destination="Va0-Ci-1zg" id="gH5-d3-JGD"/>
                         <outlet property="backgroundImageView" destination="rOy-th-Dzd" id="uOQ-I1-Fr4"/>
+                        <outlet property="circleViewConteiner" destination="2yL-rq-KcF" id="ruC-fw-qJ9"/>
                         <outlet property="deviceIdLbl" destination="OwP-Dt-Wqz" id="fM9-zo-qo6"/>
                         <outlet property="exceptionLbl" destination="1uo-sP-hKP" id="BOh-0c-qGK"/>
                         <outlet property="infoView" destination="Ifw-5N-ebI" id="Dcf-Gx-RUV"/>
