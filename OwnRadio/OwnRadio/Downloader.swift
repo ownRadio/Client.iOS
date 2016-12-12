@@ -50,6 +50,7 @@ class Downloader {
 									trackEntity.trackName = dict["name"] as? String
 									trackEntity.trackLength = NSString(string: dict["length"] as! String).doubleValue
 									trackEntity.recId = dict["id"] as! String?
+									trackEntity.playingDate = NSDate.init(timeIntervalSince1970: 0)
 									
 									CoreDataManager.instance.saveContext()
 									

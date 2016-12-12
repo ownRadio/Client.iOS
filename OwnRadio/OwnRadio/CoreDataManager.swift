@@ -147,9 +147,7 @@ class CoreDataManager {
 			}
 			let array = searchResults as [TrackEntity]
 			let resArray = array.sorted(by: { (($0.playingDate?.earlierDate($1.playingDate as! Date)) != nil) })
-			
-//			let index = arc4random()%UInt32(searchResults.count)
-		
+				
 			let track = resArray.first
 			
 			song.name = track?.trackName
