@@ -136,19 +136,25 @@ class CoreDataManager {
 	}
 	
 	func getRandomTrack() -> SongObject {
+		
+		let sectionSortDescriptor = NSSortDescriptor(key: "playingDate", ascending: true)
+		let sortDescriptors = [sectionSortDescriptor]
+		
 		let fetchRequest: NSFetchRequest<TrackEntity> = TrackEntity.fetchRequest()
+		fetchRequest.sortDescriptors = sortDescriptors
 		let  song = SongObject()
 		do {
 			//go get the results
 			
 			let searchResults = try self.managedObjectContext.fetch(fetchRequest)
+			
 			guard searchResults.count != 0 else {
 				return song
 			}
-			let array = searchResults as [TrackEntity]
-			let resArray = array.sorted(by: { (($0.playingDate?.earlierDate($1.playingDate as! Date)) != nil) })
-				
-			let track = resArray.first
+//			let array = searchResults as [TrackEntity]
+//			let resArray = array.sorted(by: { (($0.playingDate?.earlierDate($1.playingDate as! Date)) != nil) })
+			
+			let track = searchResults.first
 			
 			song.name = track?.trackName
 			song.artistName = track?.artistName
