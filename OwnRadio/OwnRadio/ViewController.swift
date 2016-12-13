@@ -146,12 +146,16 @@ class ViewController: UIViewController {
 		
 		if player.isPlaying == true {
 			player.pauseSong(complition: { [unowned self] in
+				MPNowPlayingInfoCenter.default().nowPlayingInfo![MPNowPlayingInfoPropertyElapsedPlaybackTime] = CMTimeGetSeconds(self.player.player.currentTime())
+				MPNowPlayingInfoCenter.default().nowPlayingInfo![MPNowPlayingInfoPropertyPlaybackRate] = 0
 				DispatchQueue.main.async {
 					self.updateUI()
 				}
 			})
 		}else {
 			player.resumeSong(complition: { [unowned self] in
+				MPNowPlayingInfoCenter.default().nowPlayingInfo![MPNowPlayingInfoPropertyElapsedPlaybackTime] = CMTimeGetSeconds(self.player.player.currentTime())
+				MPNowPlayingInfoCenter.default().nowPlayingInfo![MPNowPlayingInfoPropertyPlaybackRate] = 1
 				DispatchQueue.main.async {
 					self.updateUI()
 				}

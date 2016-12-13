@@ -15,6 +15,11 @@ class Downloader {
 		var index = 0
 		while index < 3 {
 			if DiskStatus.folderSize(folderPath: FileManager.documentsDir()) <= (DiskStatus.freeDiskSpaceInBytes / 2)  {
+				
+				if DiskStatus.folderSize(folderPath: FileManager.documentsDir()) == 32800000000 {
+					print("MEMORY MAX ")
+				}
+				
 				ApiService.shared.getTrackIDFromServer { (dict) in
 					guard dict["id"] != nil else {
 						return
@@ -66,5 +71,12 @@ class Downloader {
 				index += 1
 			}
 		}
+		//
+		DispatchQueue.global(qos: .background).async {
+			self.load {
+				
+			}
+		}
+		//
 	}
 }
