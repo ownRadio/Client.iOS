@@ -42,9 +42,9 @@ class ViewController: UIViewController {
 	var visibleInfoView: Bool!
 	
 	var timer = Timer()
+	var timeObserver:AnyObject?
 	
 	let progressView = CircularView(frame: CGRect.zero)
-	var circleProgress:CGFloat = 0.0
 	
 	let playBtnConstraintConstant = CGFloat(15.0)
 	let pauseBtnConstraintConstant = CGFloat(10.0)
@@ -71,7 +71,7 @@ class ViewController: UIViewController {
 		self.deviceIdLbl.text = (UserDefaults.standard.object(forKey: "UUIDDevice") as! String)
 		self.visibleInfoView = false
 		
-		DispatchQueue.global(qos: .background).async {
+		DispatchQueue.global(qos: .background).async { [unowned self] in
 			self.downloadTracks()
 		}
 
@@ -106,7 +106,7 @@ class ViewController: UIViewController {
 				
 			case .remoteControlNextTrack:
 				player.skipSong(complition: {
-					DispatchQueue.main.async {
+					DispatchQueue.main.async { [unowned self] in
 						self.updateUI()
 					}
 				})
@@ -145,7 +145,7 @@ class ViewController: UIViewController {
 	func changePlayBtnState() {
 		
 		if player.isPlaying == true {
-			player.pauseSong(complition: {
+			player.pauseSong(complition: { [unowned self] in
 				DispatchQueue.main.async {
 					self.updateUI()
 				}
@@ -182,13 +182,19 @@ class ViewController: UIViewController {
 		self.authorNameLbl.text = self.player.playingSong.artistName
 		
 		
+		self.timeObserver = self.player.player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(1.0, 1) , queue: DispatchQueue.main) { [unowned self] (time) in
+			if self.player.isPlaying == true {
+				self.progressView.progress = CGFloat(time.seconds) / CGFloat((self.player.playingSong.trackLength)!)
+				//			self.animProgress(i: CFloat(time.seconds), length: self.player.playingSong.trackLength)
+			}
+		} as AnyObject?
+		
 		if self.player.isPlaying == false {
 			self.playPauseBtn.setImage(UIImage(named: "playImg"), for: UIControlState.normal)
 			self.leftPlayBtnConstraint.constant = playBtnConstraintConstant
 		} else {
 			self.playPauseBtn.setImage(UIImage(named: "pauseImg"), for: UIControlState.normal)
 			self.leftPlayBtnConstraint.constant = pauseBtnConstraintConstant
-			self.animProgress(i: CFloat(self.circleProgress) * CFloat(self.player.playingSong.trackLength), length: self.player.playingSong.trackLength)
 		}
 		if CoreDataManager.instance.getCountOfTracks() > 0 {
 			self.playFrom.text = "Cache"
@@ -196,22 +202,6 @@ class ViewController: UIViewController {
 			self.playFrom.text = "Server"
 		}
 		self.exceptionLbl.text = ""
-	}
-	
-	func animProgress(i:CFloat, length:Double) {
-		self.progressView.progress = CGFloat(i)/CGFloat(length)
-		guard Double(i) < length else {
-			return
-		}
-		
-		if self.player.isPlaying == false {
-			self.circleProgress = self.progressView.progress
-			return
-		}
-		
-		DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-			self.animProgress(i: i + CFloat(length)/100, length: length)		}
-		
 	}
 	
 	// MARK: Actions
@@ -235,6 +225,10 @@ class ViewController: UIViewController {
 				self.updateUI()
 			}
 		}
+		self.progressView.configure()
+		
+		self.timeObserver?.removeTimeObserver
+//		self.player.player.removeTimeObserver(self.timeObserver)
 		self.player.isPlaying = true
 		getCountFilesInCache()
 	

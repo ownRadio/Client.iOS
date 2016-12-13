@@ -203,9 +203,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	}
 	
 	func playAudioWith(trackURL:URL) {
-		
-		//		self.assetUrlStr = String(describing: trackURL)
-		//		self.asset = AVURLAsset(url: trackURL)
+
 		if playerItem != nil {
 			playerItem.removeObserver(self, forKeyPath: #keyPath(AVPlayerItem.status))
 		}
@@ -217,7 +215,6 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		                       context: nil)
 		
 		player = AVPlayer(playerItem: playerItem)
-		
 	}
 	
 	func createPlayerItemWith(url:URL) {
@@ -286,6 +283,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		guard let url = resUrl else {
 			return
 		}
+		self.player.pause()
 		self.playAudioWith(trackURL: url as URL)
 		self.playingSongID = self.playingSong.trackID
 		self.configurePlayingSong(song: self.playingSong)
