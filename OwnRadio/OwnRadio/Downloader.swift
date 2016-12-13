@@ -71,12 +71,5 @@ class Downloader {
 				index += 1
 			}
 		}
-		//
-		DispatchQueue.global(qos: .background).async {
-			self.load {
-				
-			}
-		}
-		//
 	}
 }
