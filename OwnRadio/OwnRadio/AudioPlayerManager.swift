@@ -229,7 +229,12 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		if self.checkCountFileInCache() {
 			self.playFromCache(complition: complition)
 		} else {
-//			self.playOnline(complition: complition)
+			guard currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable else {
+				return
+			}
+			Downloader.load {
+				
+			}
 		}
 	}
 	

@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		Fabric.with([Crashlytics.self, Answers.self])
 
 		if userDefaults.object(forKey: "UUIDDevice") == nil {
-			let UUID = NSUUID().uuidString //"17096171-1C39-4290-AE50-907D7E62F36A" //
+			let UUID = "17096171-1C39-4290-AE50-907D7E62F36A" //NSUUID().uuidString //
 			userDefaults.set(UUID, forKey: "UUIDDevice")
 			userDefaults.synchronize()
 		}

@@ -13,9 +13,8 @@ class Downloader {
 		let baseURL = URL(string: "http://api.ownradio.ru/v3/tracks/")
 		
 		var index = 0
+		if DiskStatus.folderSize(folderPath: FileManager.documentsDir()) <= (DiskStatus.freeDiskSpaceInBytes / 2)  {
 		while index < 3 {
-			if DiskStatus.folderSize(folderPath: FileManager.documentsDir()) <= (DiskStatus.freeDiskSpaceInBytes / 2)  {
-				
 				if DiskStatus.folderSize(folderPath: FileManager.documentsDir()) == 32800000000 {
 					print("MEMORY MAX ")
 				}
@@ -42,7 +41,11 @@ class Downloader {
 								do {
 									
 									let file = NSData(contentsOf: location)
-									
+									let mp3Path = destinationUrl.appendingPathExtension("mp3")
+									guard FileManager.default.fileExists(atPath: mp3Path.absoluteString ) == false else {
+										print("MP3 file exist")
+										return
+									}
 									try file?.write(to: destinationUrl, options:.noFileProtection)
 									let endPath = destinationUrl.appendingPathExtension("mp3")
 									try FileManager.default.moveItem(at: destinationUrl, to: endPath)
