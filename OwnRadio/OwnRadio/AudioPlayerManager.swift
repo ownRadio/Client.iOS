@@ -33,6 +33,8 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	var currentPlaybackTime: CMTime!
 	var timer = Timer()
 	
+	var wasInterreption = false
+	
 //	var playbackProgress:Double?
 	
 	// MARK: Overrides
@@ -62,12 +64,17 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		let audioSession = AVAudioSession.sharedInstance()
 		
 		try! audioSession.setCategory(AVAudioSessionCategoryPlayback)
+		try! audioSession.setMode(AVAudioSessionModeDefault)
 		try! audioSession.setActive(true)
 		
 		UIApplication.shared.beginReceivingRemoteControlEvents()
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(onAudioSessionEvent(_:)), name: Notification.Name.AVAudioSessionInterruption, object: AVAudioSession.sharedInstance())
+		NotificationCenter.default.addObserver(self, selector: #selector(handleMediaServicesReset(_:)), name: Notification.Name.AVAudioSessionMediaServicesWereReset, object: AVAudioSession.sharedInstance())
+		NotificationCenter.default.addObserver(self, selector: #selector(handleStall), name: NSNotification.Name.AVPlayerItemPlaybackStalled, object: nil)
 	}
+	
+	
 	
 	// MARK: KVO
 	
@@ -89,13 +96,18 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 			// Switch over the status
 			switch status {
 			case .readyToPlay:
-				player.play()
-				isPlaying = true
-				DispatchQueue.global(qos: .background).async {
-					Downloader.load {
-						
+				if wasInterreption {
+					wasInterreption = false
+				} else {
+					player.play()
+					isPlaying = true
+					DispatchQueue.global(qos: .background).async {
+						Downloader.load {
+							
+						}
 					}
 				}
+				
 			case .failed:
 				break
 			case .unknown:
@@ -121,13 +133,97 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		}
 	}
 	
+	
+	func handleStall() {
+		player.pause()
+		player.play()
+	}
+	
 	func onAudioSessionEvent(_ notification: Notification) {
-		//Check the type of notification, especially if you are sending multiple AVAudioSession events here
-		if (notification.name == NSNotification.Name.AVAudioSessionInterruption) {
-			if (self.isPlaying != nil) {
-				return
-			}
+		
+		
+		guard notification.name == Notification.Name.AVAudioSessionInterruption else {
+			return
 		}
+		
+		guard let userInfo = notification.userInfo as? [String: AnyObject] else { return }
+		guard let rawInterruptionType = userInfo[AVAudioSessionInterruptionTypeKey] as? NSNumber else { return }
+		guard let interruptionType = AVAudioSessionInterruptionType.init(rawValue: rawInterruptionType.uintValue) else {
+			return
+		}
+		
+		print("WTF")
+		
+		switch interruptionType {
+			
+			
+		case .ended: //interruption ended
+			print("ENDED")
+			if let rawInterruptionOption = userInfo[AVAudioSessionInterruptionOptionKey] as? NSNumber {
+				let interruptionOption = AVAudioSessionInterruptionOptions(rawValue: rawInterruptionOption.uintValue)
+				if interruptionOption == AVAudioSessionInterruptionOptions.shouldResume {
+					self.pauseSong {
+						
+					}
+				}
+			}
+
+		case .began: //interruption started
+			
+			if self.isPlaying == true {
+				print("Began Playing - TRUE")
+			} else {
+				print("Began Playing - FALSE")
+				wasInterreption = true
+			}
+
+		
+		}
+		
+		
+		
+		
+//		let why : AnyObject? = notification.userInfo?[AVAudioSessionInterruptionTypeKey] as AnyObject?
+//		if let why = why as? UInt {
+//			if let why = AVAudioSessionInterruptionType(rawValue: why) {
+//				if why == .began {
+//					try! AVAudioSession.sharedInstance().setActive(false)
+//					
+//				} else if why == .ended {
+//					try! AVAudioSession.sharedInstance().setActive(true)
+//					
+//				}
+//			
+//			}
+//		}
+		
+		
+		
+		
+		
+		
+//		guard notification.name == NSNotification.Name.AVAudioSessionInterruption && notification.userInfo != nil else {
+//			return
+//		}
+//		
+//		if let typenumber = (notification.userInfo?[AVAudioSessionInterruptionTypeKey] as AnyObject).uintValue{
+//			switch typenumber {
+//			case AVAudioSessionInterruptionType.began.rawValue:
+//				print("interrupted: began")
+//				
+//			case AVAudioSessionInterruptionType.ended.rawValue:
+//				print("interrupted: end")
+//				
+//			default:
+//				break
+//			}
+//		}
+	}
+	
+	func handleMediaServicesReset(_ notification: Notification) {
+		// • No userInfo dictionary for this notification
+		// • Audio streaming objects are invalidated (zombies)
+		// • Handle this notification by fully reconfiguring audio
 	}
 	
 	func crashNetwork(_ notification: Notification) {
