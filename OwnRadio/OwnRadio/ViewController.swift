@@ -188,8 +188,7 @@ class ViewController: UIViewController {
 		
 		self.timeObserver = self.player.player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(1.0, 1) , queue: DispatchQueue.main) { [unowned self] (time) in
 			if self.player.isPlaying == true {
-				self.progressView.progress = CGFloat(time.seconds) / CGFloat((self.player.playingSong.trackLength)!)
-				//			self.animProgress(i: CFloat(time.seconds), length: self.player.playingSong.trackLength)
+				self.progressView.progress = (CGFloat(time.seconds) / CGFloat((self.player.playingSong.trackLength)!)) 
 			}
 		} as AnyObject?
 		
