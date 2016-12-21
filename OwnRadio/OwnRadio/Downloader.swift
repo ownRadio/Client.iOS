@@ -5,6 +5,7 @@
 //  Created by Roman Litoshko on 12/5/16.
 //  Copyright © 2016 Roll'n'Code. All rights reserved.
 //
+//	Download track in cache 
 
 import Foundation
 class Downloader {

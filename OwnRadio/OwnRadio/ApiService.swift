@@ -5,7 +5,7 @@
 //  Created by Roman Litoshko on 11/22/16.
 //  Copyright © 2016 Roll'n'Code. All rights reserved.
 //
-// Managed
+// Managing with api requests
 
 import Foundation
 
@@ -17,8 +17,7 @@ class ApiService {
 	init() {
 
 	}
-	
-	
+
 	func getTrackIDFromServer (complition:  @escaping ([String:AnyObject]) -> Void)  {
 		
 		
@@ -56,9 +55,6 @@ class ApiService {
 		task.resume()
 	}
 	
-	
-	
-
 	func saveHistory(trackId: String, isListen:Int) {
 		
 		let historyUrl = URL(string: "http://api.ownradio.ru/v3/histories/")
@@ -82,11 +78,9 @@ class ApiService {
 		let dict = ["lastListen":lastListen, "isListen":isListen, "methodid":1] as [String : Any]
 		do {
 			
-			
 			let data = try JSONSerialization.data(withJSONObject: dict, options: [])
-			let dataString = String(data: data, encoding: String.Encoding.utf8)!
+//			let dataString = String(data: data, encoding: String.Encoding.utf8)!
 			request.httpBody = data
-//			print(dataString)
 			
 		} catch {
 			print("JSON serialization failed:  \(error)")
@@ -98,8 +92,7 @@ class ApiService {
 			
 			CoreDataManager.instance.deleteHistoryFor(trackID: trackId)
 				
-			let dataString = String(data: data!, encoding: String.Encoding.utf8)!
-//				print(dataString);
+//			let dataString = String(data: data!, encoding: String.Encoding.utf8)!
 			}
 
 			if error != nil{
@@ -107,9 +100,6 @@ class ApiService {
 				return
 			}
 		}
-		
 		task.resume()
-
 	}
-	
 }

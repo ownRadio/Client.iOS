@@ -5,6 +5,7 @@
 //  Created by Roman Litoshko on 12/2/16.
 //  Copyright © 2016 Roll'n'Code. All rights reserved.
 //
+//	Support methods
 
 import Foundation
 import SystemConfiguration

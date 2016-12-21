@@ -5,6 +5,7 @@
 //  Created by Roman Litoshko on 12/7/16.
 //  Copyright © 2016 Roll'n'Code. All rights reserved.
 //
+//	Methods for check memmory 
 
 import Foundation
 
