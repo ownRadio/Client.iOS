@@ -5,6 +5,7 @@
 //  Created by Roman Litoshko on 12/1/16.
 //  Copyright © 2016 Roll'n'Code. All rights reserved.
 //
+//	Data Manager, creation and managing with data
 
 import CoreData
 import Foundation
@@ -60,7 +61,6 @@ class CoreDataManager {
 			NSLog("Unresolved error \(wrappedError), \(wrappedError.userInfo)")
 			abort()
 		}
-		
 		return coordinator
 	}()
 	
@@ -70,7 +70,6 @@ class CoreDataManager {
 		managedObjectContext.persistentStoreCoordinator = coordinator
 		return managedObjectContext
 	}()
-	
 	
 	func chekCountOfEntitiesFor(entityName:String) -> Int {
 		let request:NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName:entityName)
@@ -112,7 +111,6 @@ class CoreDataManager {
 				object.playingDate = NSDate()
 			}
 		}
-
 	}
 	
 	func sentHistory () {
@@ -120,10 +118,8 @@ class CoreDataManager {
 		let fetchRequest: NSFetchRequest<HistoryEntity> = HistoryEntity.fetchRequest()
 		
 		do {
-			//go get the results
 			
 			let searchResults = try self.managedObjectContext.fetch(fetchRequest)
-			
 			for track in searchResults {
 				
 				ApiService.shared.saveHistory(trackId: track.trackId!, isListen: Int(track.isListen))
@@ -144,15 +140,11 @@ class CoreDataManager {
 		fetchRequest.sortDescriptors = sortDescriptors
 		let  song = SongObject()
 		do {
-			//go get the results
 			
 			let searchResults = try self.managedObjectContext.fetch(fetchRequest)
-			
 			guard searchResults.count != 0 else {
 				return song
 			}
-//			let array = searchResults as [TrackEntity]
-//			let resArray = array.sorted(by: { (($0.playingDate?.earlierDate($1.playingDate as! Date)) != nil) })
 			
 			let track = searchResults.first
 			
@@ -183,9 +175,7 @@ class CoreDataManager {
 		return count
 	}
 	
-	
 	// MARK: - Core Data Saving support
-	
 	func saveContext () {
 		if managedObjectContext.hasChanges {
 			do {

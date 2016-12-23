@@ -5,6 +5,7 @@
 //  Created by Roman Litoshko on 11/22/16.
 //  Copyright © 2016 Roll'n'Code. All rights reserved.
 //
+// Creation and update UI
 
 import UIKit
 import MediaPlayer
@@ -116,7 +117,6 @@ class ViewController: UIViewController {
 		}
 	}
 	
-	
 	func downloadTracks() {
 		guard currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable else {
 			return
@@ -161,7 +161,6 @@ class ViewController: UIViewController {
 				}
 				})
 		}
-		//		}
 	}
 	
 	func getCountFilesInCache () {
@@ -169,8 +168,6 @@ class ViewController: UIViewController {
 			
 			let docUrl = NSURL(string:FileManager.documentsDir()) as! URL
 			let directoryContents = try FileManager.default.contentsOfDirectory(at: docUrl, includingPropertiesForKeys: nil, options: [])
-			//			print(directoryContents)
-			
 			
 			let mp3Files = directoryContents.filter{ $0.pathExtension == "mp3" }
 			self.numberOfFiles.text = String.init(format:"%d", mp3Files.count)
@@ -184,7 +181,6 @@ class ViewController: UIViewController {
 		self.trackIDLbl.text = self.player.playingSong.trackID
 		self.trackNameLbl.text = self.player.playingSong.name
 		self.authorNameLbl.text = self.player.playingSong.artistName
-		
 		
 		self.timeObserver = self.player.player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(1.0, 1) , queue: DispatchQueue.main) { [unowned self] (time) in
 			if self.player.isPlaying == true {
@@ -208,7 +204,6 @@ class ViewController: UIViewController {
 	}
 	
 	// MARK: Actions
-	
 	@IBAction func tripleTapAction(_ sender: AnyObject) {
 		if self.infoView.isHidden == true {
 			
@@ -218,7 +213,6 @@ class ViewController: UIViewController {
 			self.infoView.isHidden = true
 			self.visibleInfoView = true
 		}
-		
 	}
 	
 	@IBAction func nextTrackButtonPressed() {
@@ -231,10 +225,8 @@ class ViewController: UIViewController {
 		self.progressView.configure()
 		
 		self.timeObserver?.removeTimeObserver
-//		self.player.player.removeTimeObserver(self.timeObserver)
 		self.player.isPlaying = true
 		getCountFilesInCache()
-	
 	}
 	
 	@IBAction func playBtnPressed() {

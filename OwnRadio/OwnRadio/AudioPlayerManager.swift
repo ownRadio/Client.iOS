@@ -5,7 +5,7 @@
 //  Created by Roman Litoshko on 11/23/16.
 //  Copyright © 2016 Roll'n'Code. All rights reserved.
 
-//
+//	Audio manager, set audio session and managing with player
 
 import Foundation
 import AVFoundation
@@ -35,25 +35,19 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	
 	var wasInterreption = false
 	
-//	var playbackProgress:Double?
-	
 	// MARK: Overrides
 	override init() {
 		super.init()
-		
-		
-		
+
 		NotificationCenter.default.addObserver(self, selector: #selector(playerItemDidReachEnd(_:)), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player.currentItem)
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(crashNetwork(_:)), name: NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: self.player.currentItem)
-		
 		setup()
 	}
 	
 	deinit {
 		
 		playerItem.removeObserver(self, forKeyPath: #keyPath(AVPlayerItem.status))
-		
 		
 		NotificationCenter.default.removeObserver(self, name:  NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player.currentItem)
 		NotificationCenter.default.removeObserver(self, name:  NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: self.player.currentItem)
@@ -70,14 +64,9 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		UIApplication.shared.beginReceivingRemoteControlEvents()
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(onAudioSessionEvent(_:)), name: Notification.Name.AVAudioSessionInterruption, object: AVAudioSession.sharedInstance())
-		NotificationCenter.default.addObserver(self, selector: #selector(handleMediaServicesReset(_:)), name: Notification.Name.AVAudioSessionMediaServicesWereReset, object: AVAudioSession.sharedInstance())
-		NotificationCenter.default.addObserver(self, selector: #selector(handleStall), name: NSNotification.Name.AVPlayerItemPlaybackStalled, object: nil)
 	}
-	
-	
-	
+
 	// MARK: KVO
-	
 	override func observeValue(forKeyPath keyPath: String?,
 	                           of object: Any?,
 	                           change: [NSKeyValueChangeKey : Any]?,
@@ -112,35 +101,25 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 				break
 			case .unknown:
 				break
-				// Player item is not yet ready.
+				
 			}
 		}
 	}
 	
 	// MARK: Notification selectors
-	
 	func playerItemDidReachEnd(_ notification: Notification) {
 		
 		if notification.object as? AVPlayerItem  == player.currentItem {
-			//			self.playerItem = nil
 			self.playingSong.isListen = 1
 			self.addDateToHistoryTable(playingSong: self.playingSong)
 			if self.playingSong.trackID != nil  {
 				CoreDataManager.instance.setDateForTrackBy(trackId: self.playingSong.trackID)
 				CoreDataManager.instance.saveContext()
 			}
-			
 		}
 	}
 	
-	
-	func handleStall() {
-		player.pause()
-		player.play()
-	}
-	
 	func onAudioSessionEvent(_ notification: Notification) {
-		
 		
 		guard notification.name == Notification.Name.AVAudioSessionInterruption else {
 			return
@@ -152,11 +131,8 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 			return
 		}
 		
-		print("WTF")
-		
 		switch interruptionType {
-			
-			
+	
 		case .ended: //interruption ended
 			print("ENDED")
 			if let rawInterruptionOption = userInfo[AVAudioSessionInterruptionOptionKey] as? NSNumber {
@@ -176,54 +152,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 				print("Began Playing - FALSE")
 				wasInterreption = true
 			}
-
-		
 		}
-		
-		
-		
-		
-//		let why : AnyObject? = notification.userInfo?[AVAudioSessionInterruptionTypeKey] as AnyObject?
-//		if let why = why as? UInt {
-//			if let why = AVAudioSessionInterruptionType(rawValue: why) {
-//				if why == .began {
-//					try! AVAudioSession.sharedInstance().setActive(false)
-//					
-//				} else if why == .ended {
-//					try! AVAudioSession.sharedInstance().setActive(true)
-//					
-//				}
-//			
-//			}
-//		}
-		
-		
-		
-		
-		
-		
-//		guard notification.name == NSNotification.Name.AVAudioSessionInterruption && notification.userInfo != nil else {
-//			return
-//		}
-//		
-//		if let typenumber = (notification.userInfo?[AVAudioSessionInterruptionTypeKey] as AnyObject).uintValue{
-//			switch typenumber {
-//			case AVAudioSessionInterruptionType.began.rawValue:
-//				print("interrupted: began")
-//				
-//			case AVAudioSessionInterruptionType.ended.rawValue:
-//				print("interrupted: end")
-//				
-//			default:
-//				break
-//			}
-//		}
-	}
-	
-	func handleMediaServicesReset(_ notification: Notification) {
-		// • No userInfo dictionary for this notification
-		// • Audio streaming objects are invalidated (zombies)
-		// • Handle this notification by fully reconfiguring audio
 	}
 	
 	func crashNetwork(_ notification: Notification) {
@@ -233,7 +162,6 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 			return
 		}
 		self.nextTrack(complition: nil)
-		
 	}
 	
 	///  confirure album cover and other params for playing song
@@ -248,7 +176,6 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		songInfo[MPMediaItemPropertyArtwork] = albumArt
 		print(song.trackLength)
 		songInfo[MPMediaItemPropertyPlaybackDuration] = NSNumber.init(value: song.trackLength)
-//		songInfo[MPNowPlayingInfoPropertyPlaybackRate] = 1.0
 		
 		MPNowPlayingInfoCenter.default().nowPlayingInfo = songInfo
 	}
@@ -289,7 +216,6 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 					catch {
 						print("Error with remove file ")
 					}
-//					CoreDataManager.instance.setDateForTrackBy(trackId: self.playingSong.trackID)
 					CoreDataManager.instance.deleteTrackFor(trackID: self.playingSong.trackID)
 					CoreDataManager.instance.saveContext()
 				}
@@ -321,6 +247,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		}
 	}
 	
+	// selection way to playing (Online or Cache)
 	func setWayForPlay(complition: (() -> Void)?) {
 		if self.checkCountFileInCache() {
 			self.playFromCache(complition: complition)
@@ -369,7 +296,6 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 				complition!()
 			}
 		}
-		
 	}
 	
 	func playFromCache(complition: (() -> Void)?) {
@@ -396,6 +322,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	func nextTrack(complition: (() -> Void)?) {
 		self.setWayForPlay(complition: complition)
 	}
+	
 	
 	func addDateToHistoryTable(playingSong:SongObject) {
 		

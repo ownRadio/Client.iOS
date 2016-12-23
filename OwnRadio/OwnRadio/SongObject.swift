@@ -5,6 +5,7 @@
 //  Created by Roman Litoshko on 11/30/16.
 //  Copyright © 2016 Roll'n'Code. All rights reserved.
 //
+//	Description of song object
 
 import Foundation
 

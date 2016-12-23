@@ -5,6 +5,7 @@
 //  Created by Roman Litoshko on 12/8/16.
 //  Copyright © 2016 Roll'n'Code. All rights reserved.
 //
+//	Circle View, creation and configuration circle view
 
 import Foundation
 import UIKit
@@ -76,5 +77,4 @@ class CircularView: UIView {
 		circlePathLayer.frame = bounds
 		circlePathLayer.path = circlePath().cgPath
 	}
-
 }
