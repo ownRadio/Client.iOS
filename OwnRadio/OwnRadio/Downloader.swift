@@ -14,12 +14,14 @@ class Downloader {
 		let baseURL = URL(string: "http://api.ownradio.ru/v3/tracks/")
 		
 		var index = 0
+        //проверяем свободное место, если его достаточно - загружаем треки
 		if DiskStatus.folderSize(folderPath: FileManager.documentsDir()) <= (DiskStatus.freeDiskSpaceInBytes / 2)  {
 		while index < 3 {
+            //отладочная проверка
 				if DiskStatus.folderSize(folderPath: FileManager.documentsDir()) == 32800000000 {
 					print("MEMORY MAX ")
 				}
-				
+				//получаем trackId следующего трека и информацию о нем
 				ApiService.shared.getTrackIDFromServer { (dict) in
 					guard dict["id"] != nil else {
 						return
@@ -27,16 +29,17 @@ class Downloader {
 					let trackURL = baseURL?.appendingPathComponent(dict["id"] as! String)
 					
 					if let audioUrl = trackURL {
-						
+						//задаем директорию для сохранения трека
 						let documentsDirectoryURL =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
 						
 						let destinationUrl = documentsDirectoryURL.appendingPathComponent(audioUrl.lastPathComponent)
-						
+						//проверяем, существует ли в директории файл с таким GUID'ом
 						if FileManager.default.fileExists(atPath: destinationUrl.path) {
 							print("The file already exists at path")
 							
 						} else {
-							
+							//если этот трек не еще не загружен - загружаем трек
+                            //используется замыкание для сохранения загруженного трека в файл и информации о треке в бд
 							URLSession.shared.downloadTask(with: audioUrl, completionHandler: { (location, response, error) -> Void in
 								guard let location = location, error == nil else { return }
 								do {
@@ -47,10 +50,13 @@ class Downloader {
 										print("MP3 file exist")
 										return
 									}
+                                    //сохраняем трек
 									try file?.write(to: destinationUrl, options:.noFileProtection)
+                                    //задаем конечных путь хранения файла (добавляем расширение)
 									let endPath = destinationUrl.appendingPathExtension("mp3")
+                                    //перемещаем файл по заданному пути
 									try FileManager.default.moveItem(at: destinationUrl, to: endPath)
-									
+									//сохраняем информацию о файле в базу данных
 									let trackEntity = TrackEntity()
 									
 									trackEntity.path = String(describing: endPath.lastPathComponent)
@@ -68,7 +74,7 @@ class Downloader {
 								} catch let error as NSError {
 									print(error.localizedDescription)
 								}
-							}).resume()
+                            }).resume()
 						}
 					}
 				}

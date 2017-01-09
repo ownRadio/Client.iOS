@@ -42,6 +42,7 @@ class DiskStatus {
 	
 	
 	//MARK: Get raw value
+    //возвращает общее количество памяти
 	class var totalDiskSpaceInBytes:Int64 {
 		get {
 			do {
@@ -54,8 +55,9 @@ class DiskStatus {
 		}
 	}
 	
+    //возвращает количество памяти, занимаемое треками
 	class func folderSize(folderPath:String) -> Int64{
-
+        
 		let filesArray:[String]? = try? FileManager.default.subpathsOfDirectory(atPath: folderPath) as [String]
 		var fileSize:UInt = 0
 		
@@ -74,6 +76,7 @@ class DiskStatus {
 		return Int64(fileSize)
 	}
 	
+    //возвращает количество свободной памяти
 	class var freeDiskSpaceInBytes:Int64 {
 		get {
 			do {
@@ -86,6 +89,7 @@ class DiskStatus {
 		}
 	}
 	
+    //возвращает общее количество занятой памяти
 	class var usedDiskSpaceInBytes:Int64 {
 		get {
 			let usedSpace = totalDiskSpaceInBytes - freeDiskSpaceInBytes

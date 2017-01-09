@@ -20,8 +20,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 		// Override point for customization after application launch.
 		let userDefaults = UserDefaults.standard
+        //для получения отчетов об ошибках на фабрик
 		Fabric.with([Crashlytics.self, Answers.self])
 
+        //если устройству не назначен deviceId - генерируем новый
 		if userDefaults.object(forKey: "UUIDDevice") == nil {
 			let UUID = NSUUID().uuidString //"17096171-1C39-4290-AE50-907D7E62F36A" //
 			userDefaults.set(UUID, forKey: "UUIDDevice")

@@ -39,6 +39,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	override init() {
 		super.init()
 
+        //подписываемся на уведомления
 		NotificationCenter.default.addObserver(self, selector: #selector(playerItemDidReachEnd(_:)), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player.currentItem)
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(crashNetwork(_:)), name: NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: self.player.currentItem)
@@ -67,6 +68,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	}
 
 	// MARK: KVO
+    // подключение/отключение гарнитуры
 	override func observeValue(forKeyPath keyPath: String?,
 	                           of object: Any?,
 	                           change: [NSKeyValueChangeKey : Any]?,
@@ -107,6 +109,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	}
 	
 	// MARK: Notification selectors
+    // трек дослушан до конца
 	func playerItemDidReachEnd(_ notification: Notification) {
 		
 		if notification.object as? AVPlayerItem  == player.currentItem {
@@ -119,6 +122,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		}
 	}
 	
+    //обработка прерывания аудиосессии
 	func onAudioSessionEvent(_ notification: Notification) {
 		
 		guard notification.name == Notification.Name.AVAudioSessionInterruption else {
@@ -127,6 +131,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		
 		guard let userInfo = notification.userInfo as? [String: AnyObject] else { return }
 		guard let rawInterruptionType = userInfo[AVAudioSessionInterruptionTypeKey] as? NSNumber else { return }
+        //получаем информацию о прерывании
 		guard let interruptionType = AVAudioSessionInterruptionType.init(rawValue: rawInterruptionType.uintValue) else {
 			return
 		}
@@ -181,6 +186,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	}
 	
 	// MARK: Cotrol functions
+    //возобновление воспроизведения
 	func resumeSong(complition: @escaping (() -> Void)) {
 		
 		if self.playerItem != nil {
@@ -192,6 +198,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		}
 	}
 	
+    //пауза
 	func pauseSong(complition: (() -> Void)) {
 		
 		self.player.pause()
@@ -200,6 +207,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		
 	}
 	
+    //пропуск трека
 	func skipSong(complition: (() -> Void)?) {
 		self.playingSong.isListen = -1
 		//		self.playerItem = nil
@@ -208,7 +216,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 			if  self.playingSong.path != nil {
 				let path = FileManager.documentsDir().appending("/").appending(self.playingSong.path!)
 				if FileManager.default.fileExists(atPath: path) {
-					
+					//удаляем пропущенный трек
 					do{
 						try FileManager.default.removeItem(atPath: path)
 						
@@ -216,14 +224,17 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 					catch {
 						print("Error with remove file ")
 					}
+                    //удаляем информацию о треке из БД
 					CoreDataManager.instance.deleteTrackFor(trackID: self.playingSong.trackID)
 					CoreDataManager.instance.saveContext()
 				}
 			}
 		}
+        //запускаем следующий трек
 		nextTrack(complition: complition)
 	}
 	
+    // проигрываем трек по URL
 	func playAudioWith(trackURL:URL) {
 
 		if playerItem != nil {
@@ -252,6 +263,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		if self.checkCountFileInCache() {
 			self.playFromCache(complition: complition)
 		} else {
+            //проверка подключения к интернету
 			guard currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable else {
 				return
 			}
@@ -261,6 +273,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		}
 	}
 	
+    //проверяем есть ли кешированные треки
 	func checkCountFileInCache() -> Bool {
 		self.canPlayFromCache = false
 		if CoreDataManager.instance.getCountOfTracks() > 0 {
@@ -269,20 +282,26 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		return self.canPlayFromCache
 	}
 	
+    // проигрываем трек онлайн
 	func playOnline(complition: (() -> Void)?) {
+        //проверка подключения к интернету
 		guard  currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable  else {
 			return
 		}
 		
+        // если есть неотправленная история прослушивания - отправляем
 		if CoreDataManager.instance.chekCountOfEntitiesFor(entityName: "HistoryEntity") > 0 {
 			CoreDataManager.instance.sentHistory()
 		}
+        
+        //получаем информацию о следующем треке
 		ApiService.shared.getTrackIDFromServer {  (dictionary) in
 			
 			self.playingSong = SongObject()
 			
 			self.playingSong.initWithDict(dict: dictionary)
 			
+            //формируем URL трека для проигрывания
 			let trackURL = self.baseURL?.appendingPathComponent(self.playingSong.trackID)
 			guard let url = trackURL else {
 				return
@@ -298,12 +317,14 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		}
 	}
 	
+    // проигрываем трек из кеша
 	func playFromCache(complition: (() -> Void)?) {
-		
+		// если есть неотправленная история прослушивания - отправляем
 		if CoreDataManager.instance.chekCountOfEntitiesFor(entityName: "HistoryEntity") > 0 && currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable{
 			CoreDataManager.instance.sentHistory()
 		}
 		
+        //получаем из БД трек для проигрывания
 		self.playingSong = CoreDataManager.instance.getRandomTrack()
 		let docUrl = NSURL(string:FileManager.documentsDir())
 		let resUrl = docUrl?.absoluteURL?.appendingPathComponent(playingSong.path!)
@@ -323,7 +344,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		self.setWayForPlay(complition: complition)
 	}
 	
-	
+	//сохраняем историю прослушивания
 	func addDateToHistoryTable(playingSong:SongObject) {
 		
 		let creatinDate = Date()

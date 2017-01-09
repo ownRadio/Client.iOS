@@ -18,9 +18,10 @@ class ApiService {
 
 	}
 
+    //возвращает информацию о следующем треке
 	func getTrackIDFromServer (complition:  @escaping ([String:AnyObject]) -> Void)  {
 		
-		
+		//формируем URL
 		let trackurl = self.tracksUrl?.appendingPathComponent((UserDefaults.standard.object(forKey: "UUIDDevice") as! String)).appendingPathComponent("/next")
 		
 		guard let url = trackurl else {
@@ -33,7 +34,7 @@ class ApiService {
 		let config = URLSessionConfiguration.default
 		let session = URLSession(configuration: config)
 		
-		
+		//выполняем запрос к серверу
 		let task = session.dataTask(with: urlRequest as URLRequest, completionHandler: { (data, response, error) in
 			// do stuff with response, data & error here
 			
@@ -42,6 +43,7 @@ class ApiService {
 			}
 
 			do {
+                //преобразовываем полученные данные в JSON-объект
 				let anyJson = try JSONSerialization.jsonObject(with: data, options: [])
 				
 				if let json = anyJson as? [String:AnyObject] {
@@ -55,9 +57,11 @@ class ApiService {
 		task.resume()
 	}
 	
+    //функция сохранения истории прослушивания треков
 	func saveHistory(trackId: String, isListen:Int) {
 		
 		let historyUrl = URL(string: "http://api.ownradio.ru/v3/histories/")
+        //формируем URL
 		let trackHistoryUrl = historyUrl?.appendingPathComponent((UserDefaults.standard.object(forKey: "UUIDDevice") as! String)).appendingPathComponent(trackId)
 		
 		guard let url = trackHistoryUrl else {
@@ -65,7 +69,7 @@ class ApiService {
 			return
 		}
 		
-		let request = NSMutableURLRequest(url: url as URL)
+        let request = NSMutableURLRequest(url: url as URL)
 		request.httpMethod = "POST"
 		let nowDate = NSDate()
 		let dateFormatter = DateFormatter()
@@ -75,6 +79,7 @@ class ApiService {
 		
 		request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
 		
+        //формируем тело запроса
 		let dict = ["lastListen":lastListen, "isListen":isListen, "methodid":1] as [String : Any]
 		do {
 			
@@ -86,6 +91,7 @@ class ApiService {
 			print("JSON serialization failed:  \(error)")
 		}
 		
+        //выполняем запрос к серверу
 		let task = URLSession.shared.dataTask(with: request as URLRequest){ data,response,error in
 			
 			if data != nil {
