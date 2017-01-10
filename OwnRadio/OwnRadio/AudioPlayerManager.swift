@@ -38,10 +38,11 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	// MARK: Overrides
 	override init() {
 		super.init()
-
-        //подписываемся на уведомления
-		NotificationCenter.default.addObserver(self, selector: #selector(playerItemDidReachEnd(_:)), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player.currentItem)
 		
+		//подписываемся на уведомления плеера
+		//трек проигран до конца
+		NotificationCenter.default.addObserver(self, selector: #selector(playerItemDidReachEnd(_:)), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player.currentItem)
+		//проигрывание было прервано
 		NotificationCenter.default.addObserver(self, selector: #selector(crashNetwork(_:)), name: NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: self.player.currentItem)
 		setup()
 	}
@@ -66,9 +67,9 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(onAudioSessionEvent(_:)), name: Notification.Name.AVAudioSessionInterruption, object: AVAudioSession.sharedInstance())
 	}
-
+	
 	// MARK: KVO
-    // подключение/отключение гарнитуры
+	// подключение/отключение гарнитуры
 	override func observeValue(forKeyPath keyPath: String?,
 	                           of object: Any?,
 	                           change: [NSKeyValueChangeKey : Any]?,
@@ -109,7 +110,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	}
 	
 	// MARK: Notification selectors
-    // трек дослушан до конца
+	// трек дослушан до конца
 	func playerItemDidReachEnd(_ notification: Notification) {
 		
 		if notification.object as? AVPlayerItem  == player.currentItem {
@@ -122,7 +123,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		}
 	}
 	
-    //обработка прерывания аудиосессии
+	//обработка прерывания аудиосессии
 	func onAudioSessionEvent(_ notification: Notification) {
 		
 		guard notification.name == Notification.Name.AVAudioSessionInterruption else {
@@ -131,13 +132,13 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		
 		guard let userInfo = notification.userInfo as? [String: AnyObject] else { return }
 		guard let rawInterruptionType = userInfo[AVAudioSessionInterruptionTypeKey] as? NSNumber else { return }
-        //получаем информацию о прерывании
+		//получаем информацию о прерывании
 		guard let interruptionType = AVAudioSessionInterruptionType.init(rawValue: rawInterruptionType.uintValue) else {
 			return
 		}
 		
 		switch interruptionType {
-	
+			
 		case .ended: //interruption ended
 			print("ENDED")
 			if let rawInterruptionOption = userInfo[AVAudioSessionInterruptionOptionKey] as? NSNumber {
@@ -148,7 +149,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 					}
 				}
 			}
-
+			
 		case .began: //interruption started
 			
 			if self.isPlaying == true {
@@ -186,7 +187,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	}
 	
 	// MARK: Cotrol functions
-    //возобновление воспроизведения
+	//возобновление воспроизведения
 	func resumeSong(complition: @escaping (() -> Void)) {
 		
 		if self.playerItem != nil {
@@ -198,7 +199,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		}
 	}
 	
-    //пауза
+	//пауза
 	func pauseSong(complition: (() -> Void)) {
 		
 		self.player.pause()
@@ -207,7 +208,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		
 	}
 	
-    //пропуск трека
+	//пропуск трека
 	func skipSong(complition: (() -> Void)?) {
 		self.playingSong.isListen = -1
 		//		self.playerItem = nil
@@ -220,23 +221,25 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 					do{
 						try FileManager.default.removeItem(atPath: path)
 						
+						NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"Skipped file is removed"])
 					}
 					catch {
+						NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"Error with remove file"])
 						print("Error with remove file ")
 					}
-                    //удаляем информацию о треке из БД
+					//удаляем информацию о треке из БД
 					CoreDataManager.instance.deleteTrackFor(trackID: self.playingSong.trackID)
 					CoreDataManager.instance.saveContext()
 				}
 			}
 		}
-        //запускаем следующий трек
+		//запускаем следующий трек
 		nextTrack(complition: complition)
 	}
 	
-    // проигрываем трек по URL
+	// проигрываем трек по URL
 	func playAudioWith(trackURL:URL) {
-
+		
 		if playerItem != nil {
 			playerItem.removeObserver(self, forKeyPath: #keyPath(AVPlayerItem.status))
 		}
@@ -260,10 +263,12 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	
 	// selection way to playing (Online or Cache)
 	func setWayForPlay(complition: (() -> Void)?) {
+		//если есть кешированные треки - играем из кеша
 		if self.checkCountFileInCache() {
 			self.playFromCache(complition: complition)
 		} else {
-            //проверка подключения к интернету
+			//иначе пытаемся загрузить треки
+			//проверка подключения к интернету
 			guard currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable else {
 				return
 			}
@@ -273,7 +278,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		}
 	}
 	
-    //проверяем есть ли кешированные треки
+	//проверяем есть ли кешированные треки
 	func checkCountFileInCache() -> Bool {
 		self.canPlayFromCache = false
 		if CoreDataManager.instance.getCountOfTracks() > 0 {
@@ -282,26 +287,26 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		return self.canPlayFromCache
 	}
 	
-    // проигрываем трек онлайн
+/*	// проигрываем трек онлайн
 	func playOnline(complition: (() -> Void)?) {
-        //проверка подключения к интернету
+		//проверка подключения к интернету
 		guard  currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable  else {
 			return
 		}
 		
-        // если есть неотправленная история прослушивания - отправляем
-		if CoreDataManager.instance.chekCountOfEntitiesFor(entityName: "HistoryEntity") > 0 {
+		// если есть неотправленная история прослушивания - отправляем
+//		if CoreDataManager.instance.chekCountOfEntitiesFor(entityName: "HistoryEntity") > 0 {
 			CoreDataManager.instance.sentHistory()
-		}
-        
-        //получаем информацию о следующем треке
+//		}
+		
+		//получаем информацию о следующем треке
 		ApiService.shared.getTrackIDFromServer {  (dictionary) in
 			
 			self.playingSong = SongObject()
 			
 			self.playingSong.initWithDict(dict: dictionary)
 			
-            //формируем URL трека для проигрывания
+			//формируем URL трека для проигрывания
 			let trackURL = self.baseURL?.appendingPathComponent(self.playingSong.trackID)
 			guard let url = trackURL else {
 				return
@@ -316,15 +321,16 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 			}
 		}
 	}
+*/
 	
-    // проигрываем трек из кеша
+	// проигрываем трек из кеша
 	func playFromCache(complition: (() -> Void)?) {
-		// если есть неотправленная история прослушивания - отправляем
-		if CoreDataManager.instance.chekCountOfEntitiesFor(entityName: "HistoryEntity") > 0 && currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable{
+
+		if currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable{
 			CoreDataManager.instance.sentHistory()
 		}
 		
-        //получаем из БД трек для проигрывания
+		//получаем из БД трек для проигрывания
 		self.playingSong = CoreDataManager.instance.getRandomTrack()
 		let docUrl = NSURL(string:FileManager.documentsDir())
 		let resUrl = docUrl?.absoluteURL?.appendingPathComponent(playingSong.path!)

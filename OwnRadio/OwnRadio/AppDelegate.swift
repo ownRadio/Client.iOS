@@ -16,23 +16,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	var window: UIWindow?
 	
-	
+	//с этой функции начинается загрузка приложения
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 		// Override point for customization after application launch.
 		let userDefaults = UserDefaults.standard
-        //для получения отчетов об ошибках на фабрик
+		//для получения отчетов об ошибках на фабрик
 		Fabric.with([Crashlytics.self, Answers.self])
-
-        //если устройству не назначен deviceId - генерируем новый
+		
+		//если устройству не назначен deviceId - генерируем новый
 		if userDefaults.object(forKey: "UUIDDevice") == nil {
-			let UUID = NSUUID().uuidString //"17096171-1C39-4290-AE50-907D7E62F36A" //
+			let UUID = NSUUID().uuidString.lowercased() //"17096171-1C39-4290-AE50-907D7E62F36A" //
 			userDefaults.set(UUID, forKey: "UUIDDevice")
 			userDefaults.synchronize()
 		}
 		
 		return true
 	}
-
+	
 	
 	func applicationWillResignActive(_ application: UIApplication) {
 		// Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

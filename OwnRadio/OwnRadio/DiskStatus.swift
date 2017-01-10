@@ -5,7 +5,7 @@
 //  Created by Roman Litoshko on 12/7/16.
 //  Copyright © 2016 Roll'n'Code. All rights reserved.
 //
-//	Methods for check memmory 
+//	Methods for check memmory
 
 import Foundation
 
@@ -42,7 +42,7 @@ class DiskStatus {
 	
 	
 	//MARK: Get raw value
-    //возвращает общее количество памяти
+	//возвращает общее количество памяти
 	class var totalDiskSpaceInBytes:Int64 {
 		get {
 			do {
@@ -55,9 +55,9 @@ class DiskStatus {
 		}
 	}
 	
-    //возвращает количество памяти, занимаемое треками
+	//возвращает количество памяти, занимаемое треками
 	class func folderSize(folderPath:String) -> Int64{
-        
+		
 		let filesArray:[String]? = try? FileManager.default.subpathsOfDirectory(atPath: folderPath) as [String]
 		var fileSize:UInt = 0
 		
@@ -76,7 +76,7 @@ class DiskStatus {
 		return Int64(fileSize)
 	}
 	
-    //возвращает количество свободной памяти
+	//возвращает количество свободной памяти
 	class var freeDiskSpaceInBytes:Int64 {
 		get {
 			do {
@@ -89,7 +89,7 @@ class DiskStatus {
 		}
 	}
 	
-    //возвращает общее количество занятой памяти
+	//возвращает общее количество занятой памяти
 	class var usedDiskSpaceInBytes:Int64 {
 		get {
 			let usedSpace = totalDiskSpaceInBytes - freeDiskSpaceInBytes
