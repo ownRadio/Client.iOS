@@ -51,6 +51,7 @@ class ViewController: UIViewController {
 	let pauseBtnConstraintConstant = CGFloat(10.0)
 	
 	// MARK: Override
+	//выполняется при загрузке окна
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		self.authorNameLbl.text = "ownRadio"
@@ -69,7 +70,7 @@ class ViewController: UIViewController {
 		
 		self.player = AudioPlayerManager.sharedInstance
 		
-		self.deviceIdLbl.text = (UserDefaults.standard.object(forKey: "UUIDDevice") as! String)
+		self.deviceIdLbl.text = (UserDefaults.standard.object(forKey: "UUIDDevice") as! String).lowercased()
 		self.visibleInfoView = false
 		
 		DispatchQueue.global(qos: .background).async { [unowned self] in
@@ -78,18 +79,27 @@ class ViewController: UIViewController {
 
 		getCountFilesInCache()
 		
+		//подписываемся на уведомления
+		//обрыв воспроизведения трека
 		NotificationCenter.default.addObserver(self, selector: #selector(crashNetwork(_:)), name: NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: self.player.playerItem)
+		//трек доигран до конца
 		NotificationCenter.default.addObserver(self, selector: #selector(songDidPlay), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
+		//обновление системной информации
+		NotificationCenter.default.addObserver(self, selector: #selector(updateSysInfo(_:)), name: NSNotification.Name(rawValue:"updateSysInfo"), object: nil)
 	}
 	
+	//когда приложение скрыто - отписываемся от уведомлений
 	override func viewDidDisappear(_ animated: Bool) {
 		super.viewDidDisappear(animated)
 		NotificationCenter.default.removeObserver(self, name:  NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: nil)
 		NotificationCenter.default.removeObserver(self, name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player.playerItem)
+		NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil)
 	}
 	
+	//управление проигрыванием со шторки / экрана блокировки
 	override func remoteControlReceived(with event: UIEvent?) {
-		
+		//по событию нажития на кнопку управления медиаплеером
+		//проверяем какая именно кнопка была нажата и обрабатываем нажатие
 		if event?.type == UIEventType.remoteControl {
 			switch event!.subtype {
 			case UIEventSubtype.remoteControlPause:
@@ -135,6 +145,16 @@ class ViewController: UIViewController {
 		}
 	}
 	
+	//функция обновления поля Info системной информации
+	func updateSysInfo(_ notification: Notification){
+		guard let userInfo = notification.userInfo,
+			let message = userInfo["message"] as? String else {
+				self.exceptionLbl.text = "No userInfo found in notification"
+				return
+		}
+		self.exceptionLbl.text = message
+	}
+	
 	func crashNetwork(_ notification: Notification) {
 		self.playPauseBtn.setImage(UIImage(named: "playImg"), for: UIControlState.normal)
 		self.leftPlayBtnConstraint.constant = pauseBtnConstraintConstant
@@ -142,8 +162,9 @@ class ViewController: UIViewController {
 		self.exceptionLbl.text = notification.description
 	}
 	
+	//меняет состояние проигрывания и кнопку playPause
 	func changePlayBtnState() {
-		
+		//если трек проигрывается - ставим на паузу
 		if player.isPlaying == true {
 			player.pauseSong(complition: { [unowned self] in
 				MPNowPlayingInfoCenter.default().nowPlayingInfo![MPNowPlayingInfoPropertyElapsedPlaybackTime] = CMTimeGetSeconds(self.player.player.currentTime())
@@ -153,16 +174,18 @@ class ViewController: UIViewController {
 				}
 			})
 		}else {
+			//иначе - возобновляем проигрывание если возможно или начинаем проигрывать новый трек
 			player.resumeSong(complition: { [unowned self] in
 				MPNowPlayingInfoCenter.default().nowPlayingInfo![MPNowPlayingInfoPropertyElapsedPlaybackTime] = CMTimeGetSeconds(self.player.player.currentTime())
 				MPNowPlayingInfoCenter.default().nowPlayingInfo![MPNowPlayingInfoPropertyPlaybackRate] = 1
 				DispatchQueue.main.async {
 					self.updateUI()
 				}
-				})
+			})
 		}
 	}
 	
+	//функция отображения количества файлов в кеше
 	func getCountFilesInCache () {
 		do {
 			
@@ -177,17 +200,20 @@ class ViewController: UIViewController {
 		}
 	}
 	
+	//обновление UI
 	func updateUI() {
 		self.trackIDLbl.text = self.player.playingSong.trackID
 		self.trackNameLbl.text = self.player.playingSong.name
 		self.authorNameLbl.text = self.player.playingSong.artistName
 		
+		//обновляение прогресс бара
 		self.timeObserver = self.player.player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(1.0, 1) , queue: DispatchQueue.main) { [unowned self] (time) in
 			if self.player.isPlaying == true {
-				self.progressView.progress = (CGFloat(time.seconds) / CGFloat((self.player.playingSong.trackLength)!)) 
+				self.progressView.progress = (CGFloat(time.seconds) / CGFloat((self.player.playingSong.trackLength)!))
 			}
 		} as AnyObject?
 		
+		//обновление кнопки playPause
 		if self.player.isPlaying == false {
 			self.playPauseBtn.setImage(UIImage(named: "playImg"), for: UIControlState.normal)
 			self.leftPlayBtnConstraint.constant = playBtnConstraintConstant
@@ -195,12 +221,13 @@ class ViewController: UIViewController {
 			self.playPauseBtn.setImage(UIImage(named: "pauseImg"), for: UIControlState.normal)
 			self.leftPlayBtnConstraint.constant = pauseBtnConstraintConstant
 		}
+		//обновление источника проигрывания
 		if CoreDataManager.instance.getCountOfTracks() > 0 {
 			self.playFrom.text = "Cache"
 		} else {
-			self.playFrom.text = "Server"
+			self.playFrom.text = "Cache is empty, please wait for the tracks is load"
 		}
-		self.exceptionLbl.text = ""
+		//self.exceptionLbl.text = ""
 	}
 	
 	// MARK: Actions
@@ -229,6 +256,7 @@ class ViewController: UIViewController {
 		getCountFilesInCache()
 	}
 	
+	//обработчик нажатий на кнопку play/pause
 	@IBAction func playBtnPressed() {
 		changePlayBtnState()
 		getCountFilesInCache()
