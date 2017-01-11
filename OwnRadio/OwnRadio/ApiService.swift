@@ -18,12 +18,14 @@ class ApiService {
 
 	}
 
+	//возвращает информацию о следующем треке
 	func getTrackIDFromServer (complition:  @escaping ([String:AnyObject]) -> Void)  {
 		
-		
+		//формируем URL для получения информации о следующем треке (trackId, name, artist, methodId, length)
 		let trackurl = self.tracksUrl?.appendingPathComponent((UserDefaults.standard.object(forKey: "UUIDDevice") as! String)).appendingPathComponent("/next")
 		
 		guard let url = trackurl else {
+			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"Error: cannot create URL"])
 			print("Error: cannot create URL")
 			return
 		}
@@ -47,20 +49,24 @@ class ApiService {
 				if let json = anyJson as? [String:AnyObject] {
 						complition(json)
 				}
+				NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"Получена информация о следующем треке"])
+				print("Получена информация о следующем треке")
 			} catch (let error) {
 				print("Achtung! Eror! \(error)")
 			}
-		
 		})
 		task.resume()
 	}
 	
+	//функция сохранения истории прослушивания треков
 	func saveHistory(trackId: String, isListen:Int) {
 		
 		let historyUrl = URL(string: "http://api.ownradio.ru/v3/histories/")
+		//формируем URL для отправки истории прослушивания на сервер
 		let trackHistoryUrl = historyUrl?.appendingPathComponent((UserDefaults.standard.object(forKey: "UUIDDevice") as! String)).appendingPathComponent(trackId)
 		
 		guard let url = trackHistoryUrl else {
+			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"Error: cannot create URL"])
 			print("Error: cannot create URL")
 			return
 		}
@@ -75,6 +81,8 @@ class ApiService {
 		
 		request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
 		
+		//добавляем параметры в тело запроса: lastListen - дата и время последнего прослушивания трека,
+		//isListen - флаг прослушан или пропущен трек, methodid - метод выдачи трека пользователю
 		let dict = ["lastListen":lastListen, "isListen":isListen, "methodid":1] as [String : Any]
 		do {
 			
@@ -83,14 +91,18 @@ class ApiService {
 			request.httpBody = data
 			
 		} catch {
+			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"JSON serialization failed: \(error)"])
 			print("JSON serialization failed:  \(error)")
 		}
 		
+		//отправляем историю на сервер
 		let task = URLSession.shared.dataTask(with: request as URLRequest){ data,response,error in
 			
 			if data != nil {
-			
-			CoreDataManager.instance.deleteHistoryFor(trackID: trackId)
+				//если история передана успешна - удаляем из таблицы история запись об этом треке
+				CoreDataManager.instance.deleteHistoryFor(trackID: trackId)
+				NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"История передана на сервер"])
+				print("История передана на сервер")
 				
 //			let dataString = String(data: data!, encoding: String.Encoding.utf8)!
 			}
