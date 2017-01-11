@@ -17,10 +17,7 @@ class Downloader {
 		//проверяем свободное место, если его достаточно - загружаем треки
 		if DiskStatus.folderSize(folderPath: FileManager.documentsDir()) <= (DiskStatus.freeDiskSpaceInBytes / 2)  {
 			while index < 3 {
-				//отладочная проверка
-				if DiskStatus.folderSize(folderPath: FileManager.documentsDir()) == 32800000000 {
-					print("MEMORY MAX ")
-				}
+
 				//получаем trackId следующего трека и информацию о нем
 				ApiService.shared.getTrackIDFromServer { (dict) in
 					guard dict["id"] != nil else {
