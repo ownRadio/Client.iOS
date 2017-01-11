@@ -19,7 +19,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	var asset: AVURLAsset?
 	static let sharedInstance = AudioPlayerManager()
 	
-	var isPlaying: Bool?
+	var isPlaying: Bool = false
 	var canPlayFromCache = false
 	
 	var playingSong = SongObject()
@@ -34,7 +34,6 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	var timer = Timer()
 	
 	var wasInterreption = false
-	
 	// MARK: Overrides
 	override init() {
 		super.init()
@@ -66,7 +65,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(onAudioSessionEvent(_:)), name: Notification.Name.AVAudioSessionInterruption, object: AVAudioSession.sharedInstance())
 	}
-
+	
 	// MARK: KVO
 	// подключение/отключение гарнитуры
 	override func observeValue(forKeyPath keyPath: String?,
@@ -90,11 +89,8 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 				if wasInterreption {
 					wasInterreption = false
 				} else {
-					player.play()
-					isPlaying = true
-					DispatchQueue.global(qos: .background).async {
-						Downloader.load {
-							
+					if isPlaying == true {
+						self.resumeSong {
 						}
 					}
 				}
@@ -137,7 +133,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		}
 		
 		switch interruptionType {
-	
+			
 		case .ended: //interruption ended
 			print("ENDED")
 			if let rawInterruptionOption = userInfo[AVAudioSessionInterruptionOptionKey] as? NSNumber {
@@ -148,7 +144,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 					}
 				}
 			}
-
+			
 		case .began: //interruption started
 			
 			if self.isPlaying == true {
@@ -188,10 +184,10 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	// MARK: Cotrol functions
 	//возобновление воспроизведения
 	func resumeSong(complition: @escaping (() -> Void)) {
-		
+		isPlaying = true
 		if self.playerItem != nil {
 			self.player.play()
-			isPlaying = true
+			
 			complition()
 		} else {
 			self.nextTrack(complition: complition)
@@ -200,9 +196,9 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	
 	//пауза
 	func pauseSong(complition: (() -> Void)) {
-		
-		self.player.pause()
 		isPlaying = false
+		self.player.pause()
+		
 		complition()
 		
 	}
@@ -238,7 +234,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	
 	// проигрываем трек по URL
 	func playAudioWith(trackURL:URL) {
-
+		
 		if playerItem != nil {
 			playerItem.removeObserver(self, forKeyPath: #keyPath(AVPlayerItem.status))
 		}
@@ -286,36 +282,36 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		return self.canPlayFromCache
 	}
 	
-/*	// проигрываем трек онлайн
+	/*	// проигрываем трек онлайн
 	func playOnline(complition: (() -> Void)?) {
-		//проверка подключения к интернету
-		guard  currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable  else {
-			return
-		}
-			CoreDataManager.instance.sentHistory()
-		//получаем информацию о следующем треке
-		ApiService.shared.getTrackIDFromServer {  (dictionary) in
-			
-			self.playingSong = SongObject()
-			
-			self.playingSong.initWithDict(dict: dictionary)
-			
-			//формируем URL трека для проигрывания
-			let trackURL = self.baseURL?.appendingPathComponent(self.playingSong.trackID)
-			guard let url = trackURL else {
-				return
-			}
-			self.playAudioWith(trackURL: url)
-			
-			self.playingSongID = self.playingSong.trackID
-			self.titleSong = self.playingSong.name
-			self.configurePlayingSong(song: self.playingSong)
-			if complition != nil {
-				complition!()
-			}
-		}
+	//проверка подключения к интернету
+	guard  currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable  else {
+	return
 	}
-*/
+	CoreDataManager.instance.sentHistory()
+	//получаем информацию о следующем треке
+	ApiService.shared.getTrackIDFromServer {  (dictionary) in
+	
+	self.playingSong = SongObject()
+	
+	self.playingSong.initWithDict(dict: dictionary)
+	
+	//формируем URL трека для проигрывания
+	let trackURL = self.baseURL?.appendingPathComponent(self.playingSong.trackID)
+	guard let url = trackURL else {
+	return
+	}
+	self.playAudioWith(trackURL: url)
+	
+	self.playingSongID = self.playingSong.trackID
+	self.titleSong = self.playingSong.name
+	self.configurePlayingSong(song: self.playingSong)
+	if complition != nil {
+	complition!()
+	}
+	}
+	}
+	*/
 	
 	// проигрываем трек из кеша
 	func playFromCache(complition: (() -> Void)?) {

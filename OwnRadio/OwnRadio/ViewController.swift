@@ -252,7 +252,7 @@ class ViewController: UIViewController {
 		self.progressView.configure()
 		
 		self.timeObserver?.removeTimeObserver
-		self.player.isPlaying = true
+//		self.player.isPlaying = true
 		getCountFilesInCache()
 	}
 	
