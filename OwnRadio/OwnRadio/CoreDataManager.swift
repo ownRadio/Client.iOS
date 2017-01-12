@@ -146,6 +146,7 @@ class CoreDataManager {
 		
 		let fetchRequest: NSFetchRequest<TrackEntity> = TrackEntity.fetchRequest()
 		fetchRequest.sortDescriptors = sortDescriptors
+		fetchRequest.fetchLimit = 1
 		let  song = SongObject()
 		do {
 			//выполняем запрос к БД

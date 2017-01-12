@@ -10,7 +10,7 @@
 import UIKit
 import MediaPlayer
 
-class ViewController: UIViewController {
+class RadioViewController: UIViewController {
 	
 	// MARK:  Outlets
 	
@@ -27,6 +27,7 @@ class ViewController: UIViewController {
 	@IBOutlet var timerLabel: UILabel!
 	@IBOutlet var versionLabel: UILabel!
 	@IBOutlet var numberOfFiles: UILabel!
+	@IBOutlet var numberOfFilesInDB: UILabel!
 	@IBOutlet var playFrom: UILabel!
 	
 	@IBOutlet weak var playPauseBtn: UIButton!
@@ -69,6 +70,7 @@ class ViewController: UIViewController {
 		self.progressView.autoresizingMask = [.flexibleWidth,.flexibleHeight]
 		
 		self.player = AudioPlayerManager.sharedInstance
+		self.detectedHeadphones()
 		
 		self.deviceIdLbl.text = (UserDefaults.standard.object(forKey: "UUIDDevice") as! String).lowercased()
 		self.visibleInfoView = false
@@ -86,6 +88,25 @@ class ViewController: UIViewController {
 		NotificationCenter.default.addObserver(self, selector: #selector(songDidPlay), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
 		//обновление системной информации
 		NotificationCenter.default.addObserver(self, selector: #selector(updateSysInfo(_:)), name: NSNotification.Name(rawValue:"updateSysInfo"), object: nil)
+	}
+	
+	func detectedHeadphones () {
+
+		let currentRoute = AVAudioSession.sharedInstance().currentRoute
+		if currentRoute.outputs.count != 0 {
+			for description in currentRoute.outputs {
+				if description.portType == AVAudioSessionPortHeadphones {
+					print("headphone plugged in")
+				} else {
+					print("headphone pulled out")
+				}
+			}
+		} else {
+			print("requires connection to device")
+		}
+		
+		NotificationCenter.default.addObserver(self, selector:  #selector(RadioViewController.audioRouteChangeListener(notification:)), name: NSNotification.Name.AVAudioSessionRouteChange, object: nil)
+
 	}
 	
 	//когда приложение скрыто - отписываемся от уведомлений
@@ -162,6 +183,21 @@ class ViewController: UIViewController {
 		self.exceptionLbl.text = notification.description
 	}
 	
+	func audioRouteChangeListener(notification:NSNotification) {
+		let audioRouteChangeReason = notification.userInfo![AVAudioSessionRouteChangeReasonKey] as! UInt
+		
+		switch audioRouteChangeReason {
+		case AVAudioSessionRouteChangeReason.newDeviceAvailable.rawValue:
+			print("headphone plugged in")
+		case AVAudioSessionRouteChangeReason.oldDeviceUnavailable.rawValue:
+			print("headphone pulled out")
+			self.player.isPlaying = false
+			updateUI()
+		default:
+			break
+		}
+	}
+	
 	//меняет состояние проигрывания и кнопку playPause
 	func changePlayBtnState() {
 		//если трек проигрывается - ставим на паузу
@@ -227,7 +263,8 @@ class ViewController: UIViewController {
 		} else {
 			self.playFrom.text = "Cache is empty, please wait for the tracks is load"
 		}
-		//self.exceptionLbl.text = ""
+		// обновление количевства записей в базе данных 
+		self.numberOfFilesInDB.text = String(CoreDataManager.instance.chekCountOfEntitiesFor(entityName: "TrackEntity"))
 	}
 	
 	// MARK: Actions
@@ -261,6 +298,9 @@ class ViewController: UIViewController {
 		changePlayBtnState()
 		getCountFilesInCache()
 	}
+
+	
+
 	
 }
 

@@ -61,10 +61,19 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		try! audioSession.setMode(AVAudioSessionModeDefault)
 		try! audioSession.setActive(true)
 		
+				
+		
+		
+		
+		
 		UIApplication.shared.beginReceivingRemoteControlEvents()
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(onAudioSessionEvent(_:)), name: Notification.Name.AVAudioSessionInterruption, object: AVAudioSession.sharedInstance())
 	}
+	
+	
+
+	
 	
 	// MARK: KVO
 	// подключение/отключение гарнитуры
@@ -338,6 +347,14 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	
 	func nextTrack(complition: (() -> Void)?) {
 		self.setWayForPlay(complition: complition)
+		guard currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable else {
+			return
+		}
+		DispatchQueue.global(qos: .background).async {
+			Downloader.load {
+				
+			}
+		}
 	}
 	
 	//сохраняем историю прослушивания
