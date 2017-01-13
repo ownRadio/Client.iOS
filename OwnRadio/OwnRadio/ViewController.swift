@@ -24,11 +24,12 @@ class RadioViewController: UIViewController {
 	@IBOutlet weak var trackIDLbl: UILabel!
 	@IBOutlet weak var deviceIdLbl: UILabel!
 	@IBOutlet weak var exceptionLbl: UILabel!
-	@IBOutlet var timerLabel: UILabel!
 	@IBOutlet var versionLabel: UILabel!
 	@IBOutlet var numberOfFiles: UILabel!
 	@IBOutlet var numberOfFilesInDB: UILabel!
 	@IBOutlet var playFrom: UILabel!
+	@IBOutlet var isNowPlaying: UILabel!
+	@IBOutlet var portType: UILabel!
 	
 	@IBOutlet weak var playPauseBtn: UIButton!
 	@IBOutlet weak var nextButton: UIButton!
@@ -78,7 +79,7 @@ class RadioViewController: UIViewController {
 		DispatchQueue.global(qos: .background).async { [unowned self] in
 			self.downloadTracks()
 		}
-
+		
 		getCountFilesInCache()
 		
 		//подписываемся на уведомления
@@ -91,7 +92,7 @@ class RadioViewController: UIViewController {
 	}
 	
 	func detectedHeadphones () {
-
+		
 		let currentRoute = AVAudioSession.sharedInstance().currentRoute
 		if currentRoute.outputs.count != 0 {
 			for description in currentRoute.outputs {
@@ -106,7 +107,7 @@ class RadioViewController: UIViewController {
 		}
 		
 		NotificationCenter.default.addObserver(self, selector:  #selector(RadioViewController.audioRouteChangeListener(notification:)), name: NSNotification.Name.AVAudioSessionRouteChange, object: nil)
-
+		
 	}
 	
 	//когда приложение скрыто - отписываемся от уведомлений
@@ -185,14 +186,52 @@ class RadioViewController: UIViewController {
 	
 	func audioRouteChangeListener(notification:NSNotification) {
 		let audioRouteChangeReason = notification.userInfo![AVAudioSessionRouteChangeReasonKey] as! UInt
-		
+		//		 AVAudioSessionPortHeadphones
 		switch audioRouteChangeReason {
 		case AVAudioSessionRouteChangeReason.newDeviceAvailable.rawValue:
 			print("headphone plugged in")
+			let currentRoute = AVAudioSession.sharedInstance().currentRoute
+			for description in currentRoute.outputs {
+				
+				self.portType.text = description.portType
+				
+				if description.portType == AVAudioSessionPortHeadphones {
+					print(description.portType)
+					print(self.player.isPlaying)
+				}else {
+					print(description.portType)
+				}
+			}
 		case AVAudioSessionRouteChangeReason.oldDeviceUnavailable.rawValue:
 			print("headphone pulled out")
+			print(self.player.isPlaying)
 			self.player.isPlaying = false
+			print(self.player.isPlaying)
 			updateUI()
+			
+		case AVAudioSessionRouteChangeReason.categoryChange.rawValue:
+			
+			//
+			for description in AVAudioSession.sharedInstance().currentRoute.outputs {
+				
+				self.portType.text = description.portType
+				
+				switch description.portType {
+					
+				case AVAudioSessionPortBluetoothA2DP:
+					break
+				case AVAudioSessionPortBluetoothLE:
+					if self.player.isPlaying == false {
+						self.player.pauseSong {
+							
+						}
+					}
+					
+				default: break
+				}
+			}
+			//
+			
 		default:
 			break
 		}
@@ -208,7 +247,7 @@ class RadioViewController: UIViewController {
 				DispatchQueue.main.async {
 					self.updateUI()
 				}
-			})
+				})
 		}else {
 			//иначе - возобновляем проигрывание если возможно или начинаем проигрывать новый трек
 			player.resumeSong(complition: { [unowned self] in
@@ -217,7 +256,7 @@ class RadioViewController: UIViewController {
 				DispatchQueue.main.async {
 					self.updateUI()
 				}
-			})
+				})
 		}
 	}
 	
@@ -241,13 +280,14 @@ class RadioViewController: UIViewController {
 		self.trackIDLbl.text = self.player.playingSong.trackID
 		self.trackNameLbl.text = self.player.playingSong.name
 		self.authorNameLbl.text = self.player.playingSong.artistName
+		self.isNowPlaying.text = String(self.player.isPlaying)
 		
 		//обновляение прогресс бара
 		self.timeObserver = self.player.player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(1.0, 1) , queue: DispatchQueue.main) { [unowned self] (time) in
 			if self.player.isPlaying == true {
 				self.progressView.progress = (CGFloat(time.seconds) / CGFloat((self.player.playingSong.trackLength)!))
 			}
-		} as AnyObject?
+			} as AnyObject?
 		
 		//обновление кнопки playPause
 		if self.player.isPlaying == false {
@@ -263,7 +303,7 @@ class RadioViewController: UIViewController {
 		} else {
 			self.playFrom.text = "Cache is empty, please wait for the tracks is load"
 		}
-		// обновление количевства записей в базе данных 
+		// обновление количевства записей в базе данных
 		self.numberOfFilesInDB.text = String(CoreDataManager.instance.chekCountOfEntitiesFor(entityName: "TrackEntity"))
 	}
 	
@@ -289,7 +329,7 @@ class RadioViewController: UIViewController {
 		self.progressView.configure()
 		
 		self.timeObserver?.removeTimeObserver
-//		self.player.isPlaying = true
+		//		self.player.isPlaying = true
 		getCountFilesInCache()
 	}
 	
@@ -297,10 +337,11 @@ class RadioViewController: UIViewController {
 	@IBAction func playBtnPressed() {
 		changePlayBtnState()
 		getCountFilesInCache()
+//		CoreDataManager.instance.getGroupedTracks()
 	}
-
 	
-
+	
+	
 	
 }
 

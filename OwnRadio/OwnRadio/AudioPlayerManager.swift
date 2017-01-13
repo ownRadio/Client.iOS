@@ -330,7 +330,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		}
 		
 		//получаем из БД трек для проигрывания
-		self.playingSong = CoreDataManager.instance.getRandomTrack()
+		self.playingSong = CoreDataManager.instance.getTrackToPlaing()
 		let docUrl = NSURL(string:FileManager.documentsDir())
 		let resUrl = docUrl?.absoluteURL?.appendingPathComponent(playingSong.path!)
 		guard let url = resUrl else {
