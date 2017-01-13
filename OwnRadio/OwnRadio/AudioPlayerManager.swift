@@ -61,10 +61,19 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		try! audioSession.setMode(AVAudioSessionModeDefault)
 		try! audioSession.setActive(true)
 		
+				
+		
+		
+		
+		
 		UIApplication.shared.beginReceivingRemoteControlEvents()
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(onAudioSessionEvent(_:)), name: Notification.Name.AVAudioSessionInterruption, object: AVAudioSession.sharedInstance())
 	}
+	
+	
+
+	
 	
 	// MARK: KVO
 	// подключение/отключение гарнитуры
@@ -321,7 +330,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		}
 		
 		//получаем из БД трек для проигрывания
-		self.playingSong = CoreDataManager.instance.getRandomTrack()
+		self.playingSong = CoreDataManager.instance.getTrackToPlaing()
 		let docUrl = NSURL(string:FileManager.documentsDir())
 		let resUrl = docUrl?.absoluteURL?.appendingPathComponent(playingSong.path!)
 		guard let url = resUrl else {
@@ -338,6 +347,14 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	
 	func nextTrack(complition: (() -> Void)?) {
 		self.setWayForPlay(complition: complition)
+		guard currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable else {
+			return
+		}
+		DispatchQueue.global(qos: .background).async {
+			Downloader.load {
+				
+			}
+		}
 	}
 	
 	//сохраняем историю прослушивания

@@ -139,13 +139,14 @@ class CoreDataManager {
 	}
 	
 	//выбираем из трек для проигрывания
-	func getRandomTrack() -> SongObject {
+	func getTrackToPlaing() -> SongObject {
 		//задаем сортировку по возрастанию даты проигрывания
 		let sectionSortDescriptor = NSSortDescriptor(key: "playingDate", ascending: true)
 		let sortDescriptors = [sectionSortDescriptor]
 		
 		let fetchRequest: NSFetchRequest<TrackEntity> = TrackEntity.fetchRequest()
 		fetchRequest.sortDescriptors = sortDescriptors
+		fetchRequest.fetchLimit = 1
 		let  song = SongObject()
 		do {
 			//выполняем запрос к БД
@@ -167,6 +168,44 @@ class CoreDataManager {
 			print("Error with request: \(error)")
 		}
 		return song
+	}
+	
+	
+	func getGroupedTracks () {
+		let fetchRequest: NSFetchRequest<TrackEntity> = TrackEntity.fetchRequest()
+//		fetchRequest.resultType = .dictionaryResultType
+//		fetchRequest.returnsObjectsAsFaults = false
+//
+//		let entity = NSEntityDescription.entity(forEntityName: "TrackEntity", in: self.managedObjectContext)
+//		let countDesc = entity?.attributesByName.index(forKey: "countPlay")
+//		let keyPathExpression = NSExpression(forKeyPath: "countPlay")
+//		let countExpression = NSExpression(format: "count:(countPlay)")
+//		let expressionDescription = NSExpressionDescription()
+//		expressionDescription.name = "count"
+//		expressionDescription.expression = countExpression
+//		expressionDescription.expressionResultType = .integer32AttributeType
+		
+		fetchRequest.sortDescriptors = [NSSortDescriptor(key: "countPlay", ascending: false)]
+//		fetchRequest.propertiesToFetch = ["countPlay", expressionDescription]
+//		fetchRequest.propertiesToGroupBy = ["countPlay", expressionDescription]
+
+//		fetchRequest.propertiesToFetch = ["countPlay", "countPlay"]
+//		fetchRequest.propertiesToGroupBy = ["countPlay", "countPlay"]
+		
+//		let countExpression = NSExpression(format: "count:(countPlay)")
+//		let countED = NSExpressionDescription()
+//		countED.expression = countExpression
+//		countED.name = "countPlay"
+////		countED.expressionResultType = .integer32AttributeType
+		
+		do{
+			
+			let res = try self.managedObjectContext.fetch(fetchRequest)
+			let results = res as NSArray
+			print(results)
+		} catch {
+			
+		}
 	}
 	
 	func getCountOfTracks() -> Int {
