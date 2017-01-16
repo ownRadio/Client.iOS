@@ -116,6 +116,17 @@ class CoreDataManager {
 		}
 	}
 	
+	func setCountOfPlayForTrackBy(trackId:String) {
+		let fetchRequest: NSFetchRequest<TrackEntity> = TrackEntity.fetchRequest()
+		fetchRequest.predicate = NSPredicate(format: "recId = %@", trackId)
+		if let result = try? self.managedObjectContext.fetch(fetchRequest) {
+			for object in result {
+				object.countPlay += 1
+			}
+		}
+		
+	}
+	
 	func sentHistory () {
 		// если нет неотправленной истории прослушивания - выходим из функции
 		guard CoreDataManager.instance.chekCountOfEntitiesFor(entityName: "HistoryEntity") > 0 else {
@@ -171,41 +182,37 @@ class CoreDataManager {
 	}
 	
 	
-	func getGroupedTracks () {
-		let fetchRequest: NSFetchRequest<TrackEntity> = TrackEntity.fetchRequest()
-//		fetchRequest.resultType = .dictionaryResultType
-//		fetchRequest.returnsObjectsAsFaults = false
-//
-//		let entity = NSEntityDescription.entity(forEntityName: "TrackEntity", in: self.managedObjectContext)
-//		let countDesc = entity?.attributesByName.index(forKey: "countPlay")
-//		let keyPathExpression = NSExpression(forKeyPath: "countPlay")
-//		let countExpression = NSExpression(format: "count:(countPlay)")
-//		let expressionDescription = NSExpressionDescription()
-//		expressionDescription.name = "count"
-//		expressionDescription.expression = countExpression
-//		expressionDescription.expressionResultType = .integer32AttributeType
+	func getGroupedTracks () -> NSArray {
 		
-		fetchRequest.sortDescriptors = [NSSortDescriptor(key: "countPlay", ascending: false)]
-//		fetchRequest.propertiesToFetch = ["countPlay", expressionDescription]
-//		fetchRequest.propertiesToGroupBy = ["countPlay", expressionDescription]
+		let fetchRequest:NSFetchRequest<NSFetchRequestResult> = NSFetchRequest()
+		let entityDescription = NSEntityDescription.entity(forEntityName: "TrackEntity", in: self.managedObjectContext)
+		fetchRequest.resultType = .dictionaryResultType
+		fetchRequest.entity = entityDescription
 
-//		fetchRequest.propertiesToFetch = ["countPlay", "countPlay"]
-//		fetchRequest.propertiesToGroupBy = ["countPlay", "countPlay"]
+		let keyPathExpression = NSExpression.init(forKeyPath: "countPlay")
+		let countExpression = NSExpression(forFunction: "count:", arguments: [keyPathExpression])
 		
-//		let countExpression = NSExpression(format: "count:(countPlay)")
-//		let countED = NSExpressionDescription()
-//		countED.expression = countExpression
-//		countED.name = "countPlay"
-////		countED.expressionResultType = .integer32AttributeType
+		let expressionDescription = NSExpressionDescription()
+		expressionDescription.name = "count"
+		
+		expressionDescription.expression = countExpression
+		expressionDescription.expressionResultType = .integer32AttributeType
+		
+		
+		fetchRequest.propertiesToFetch = ["countPlay", expressionDescription]
+		fetchRequest.propertiesToGroupBy = ["countPlay"]
+		
+		var resultsArray = NSArray()
 		
 		do{
 			
 			let res = try self.managedObjectContext.fetch(fetchRequest)
-			let results = res as NSArray
-			print(results)
+			resultsArray = res as NSArray
+			
 		} catch {
 			
 		}
+		return resultsArray
 	}
 	
 	func getCountOfTracks() -> Int {

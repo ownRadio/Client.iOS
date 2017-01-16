@@ -57,23 +57,18 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	func setup() {
 		let audioSession = AVAudioSession.sharedInstance()
 		
-		try! audioSession.setCategory(AVAudioSessionCategoryPlayback)
-		try! audioSession.setMode(AVAudioSessionModeDefault)
-		try! audioSession.setActive(true)
-		
-				
-		
-		
-		
-		
+		if #available(iOS 10.0, *) {
+			try! audioSession.setCategory(AVAudioSessionCategoryPlayback, mode: AVAudioSessionModeDefault, options: .allowBluetooth)
+		} else {
+			try! audioSession.setCategory(AVAudioSessionCategoryPlayback)
+			try! audioSession.setMode(AVAudioSessionModeDefault)
+			try! audioSession.setActive(true)
+		}
+
 		UIApplication.shared.beginReceivingRemoteControlEvents()
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(onAudioSessionEvent(_:)), name: Notification.Name.AVAudioSessionInterruption, object: AVAudioSession.sharedInstance())
 	}
-	
-	
-
-	
 	
 	// MARK: KVO
 	// подключение/отключение гарнитуры
@@ -122,6 +117,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 			self.addDateToHistoryTable(playingSong: self.playingSong)
 			if self.playingSong.trackID != nil  {
 				CoreDataManager.instance.setDateForTrackBy(trackId: self.playingSong.trackID)
+				CoreDataManager.instance.setCountOfPlayForTrackBy(trackId: self.playingSong.trackID)
 				CoreDataManager.instance.saveContext()
 			}
 		}
@@ -214,9 +210,10 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	
 	//пропуск трека
 	func skipSong(complition: (() -> Void)?) {
-		self.playingSong.isListen = -1
+		
 		//		self.playerItem = nil
 		if (self.playingSongID != nil) {
+			self.playingSong.isListen = -1
 			self.addDateToHistoryTable(playingSong: self.playingSong)
 			if  self.playingSong.path != nil {
 				let path = FileManager.documentsDir().appending("/").appending(self.playingSong.path!)
