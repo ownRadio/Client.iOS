@@ -327,19 +327,17 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		return self.playedTracks.count
 	}
-	
-	
-	
+
 	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
 		
 		let dict = playedTracks[indexPath.row] as! [String: Any]
 		let countOfPlay = dict["countPlay"] as? Int
 		let countOfTracks = dict["count"] as? Int
-		let str = NSString(format: "Count of play : %d  - Count of tracks : %d", countOfPlay! , countOfTracks! )
-		
-		cell.textLabel?.text = str as String
-		
+		if countOfPlay != nil && countOfTracks != nil {
+			let str = NSString(format: "Count of play : %d  - Count of tracks : %d", countOfPlay! , countOfTracks! )
+			cell.textLabel?.text = str as String
+		}
 		return cell
 	}
 
@@ -369,18 +367,20 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 		self.timeObserver?.removeTimeObserver
 		//		self.player.isPlaying = true
 		getCountFilesInCache()
+		
 	}
 	
 	//обработчик нажатий на кнопку play/pause
 	@IBAction func playBtnPressed() {
-		
+		guard self.player.playerItem != nil else {
+			
+			nextTrackButtonPressed()
+			return
+		}
 		changePlayBtnState()
 		getCountFilesInCache()
-		
 	}
-	
-	
-	
+
 	
 }
 

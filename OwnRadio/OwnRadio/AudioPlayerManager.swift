@@ -57,14 +57,10 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	func setup() {
 		let audioSession = AVAudioSession.sharedInstance()
 		
-		if #available(iOS 10.0, *) {
-			try! audioSession.setCategory(AVAudioSessionCategoryPlayback, mode: AVAudioSessionModeDefault, options: .allowBluetooth)
-		} else {
-			try! audioSession.setCategory(AVAudioSessionCategoryPlayback)
-			try! audioSession.setMode(AVAudioSessionModeDefault)
-			try! audioSession.setActive(true)
-		}
-
+		try! audioSession.setCategory(AVAudioSessionCategoryPlayback)
+		try! audioSession.setMode(AVAudioSessionModeDefault)
+		try! audioSession.setActive(true)
+		
 		UIApplication.shared.beginReceivingRemoteControlEvents()
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(onAudioSessionEvent(_:)), name: Notification.Name.AVAudioSessionInterruption, object: AVAudioSession.sharedInstance())
