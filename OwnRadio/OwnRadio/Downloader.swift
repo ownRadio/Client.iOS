@@ -17,7 +17,7 @@ class Downloader {
 		//проверяем свободное место, если его достаточно - загружаем треки
 		if DiskStatus.folderSize(folderPath: FileManager.documentsDir()) <= (DiskStatus.freeDiskSpaceInBytes / 2)  {
 			while index < 3 {
-
+				
 				//получаем trackId следующего трека и информацию о нем
 				ApiService.shared.getTrackIDFromServer { (dict) in
 					guard dict["id"] != nil else {
@@ -27,9 +27,19 @@ class Downloader {
 					
 					if let audioUrl = trackURL {
 						//задаем директорию для сохранения трека
-						let documentsDirectoryURL =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+						//						let documentsDirectoryURL =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+	//MARK: Start create new folder
 						
-						let destinationUrl = documentsDirectoryURL.appendingPathComponent(audioUrl.lastPathComponent)
+						let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+						let tracksPath = documentsPath.appendingPathComponent("Tracks")
+						do {
+							try FileManager.default.createDirectory(at: tracksPath, withIntermediateDirectories: true, attributes: nil)
+						} catch let error as NSError {
+							NSLog("Unable to create directory \(error.debugDescription)")
+						}
+						
+	//MARK:end creating folder
+						let destinationUrl = tracksPath.appendingPathComponent(audioUrl.lastPathComponent)
 						//проверяем, существует ли в директории файл с таким GUID'ом
 						if FileManager.default.fileExists(atPath: destinationUrl.path) {
 							NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"The file already exists at path"])
@@ -45,7 +55,7 @@ class Downloader {
 									let file = NSData(contentsOf: location)
 									let mp3Path = destinationUrl.appendingPathExtension("mp3")
 									guard FileManager.default.fileExists(atPath: mp3Path.absoluteString ) == false else {
-									NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"MP3 file exist"])
+										NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"MP3 file exist"])
 										print("MP3 file exist")
 										return
 									}
@@ -69,6 +79,10 @@ class Downloader {
 									CoreDataManager.instance.saveContext()
 									NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"File moved to documents folder"])
 									print("File moved to documents folder")
+									
+									load {
+										
+									}
 									
 								} catch let error as NSError {
 									print(error.localizedDescription)
