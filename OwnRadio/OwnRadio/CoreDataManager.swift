@@ -71,6 +71,10 @@ class CoreDataManager {
 		return managedObjectContext
 	}()
 	
+	// End of data stack
+	
+	//MARK: Support Functions
+	
 	// возвращает количество записей в таблице
 	func chekCountOfEntitiesFor(entityName:String) -> Int {
 		let request:NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName:entityName)
@@ -205,10 +209,8 @@ class CoreDataManager {
 		var resultsArray = NSArray()
 		
 		do{
-			
 			let res = try self.managedObjectContext.fetch(fetchRequest)
 			resultsArray = res as NSArray
-			
 		} catch {
 			
 		}

@@ -174,12 +174,14 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 	
 	//функция обновления поля Info системной информации
 	func updateSysInfo(_ notification: Notification){
-		guard let userInfo = notification.userInfo,
-			let message = userInfo["message"] as? String else {
-				self.exceptionLbl.text = "No userInfo found in notification"
-				return
+		DispatchQueue.main.async {
+			guard let userInfo = notification.userInfo,
+				let message = userInfo["message"] as? String else {
+					self.exceptionLbl.text = "No userInfo found in notification"
+					return
+			}
+			self.exceptionLbl.text = message
 		}
-		self.exceptionLbl.text = message
 	}
 	
 	func crashNetwork(_ notification: Notification) {
@@ -276,8 +278,8 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 	func getCountFilesInCache () {
 		do {
 			
-			let docUrl = NSURL(string:FileManager.documentsDir()) as! URL
-			let directoryContents = try FileManager.default.contentsOfDirectory(at: docUrl, includingPropertiesForKeys: nil, options: [])
+			let docUrl = NSURL(string:FileManager.documentsDir())?.appendingPathComponent("Tracks")
+			let directoryContents = try FileManager.default.contentsOfDirectory(at: docUrl!, includingPropertiesForKeys: nil, options: [])
 			
 			let mp3Files = directoryContents.filter{ $0.pathExtension == "mp3" }
 			self.numberOfFiles.text = String.init(format:"%d", mp3Files.count)
@@ -335,7 +337,7 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 		let countOfPlay = dict["countPlay"] as? Int
 		let countOfTracks = dict["count"] as? Int
 		if countOfPlay != nil && countOfTracks != nil {
-			let str = NSString(format: "Count of play : %d  - Count of tracks : %d", countOfPlay! , countOfTracks! )
+			let str = NSString(format: "Count play: %d - Count tracks: %d", countOfPlay! , countOfTracks! )
 			cell.textLabel?.text = str as String
 		}
 		return cell

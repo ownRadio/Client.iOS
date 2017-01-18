@@ -212,7 +212,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 			self.playingSong.isListen = -1
 			self.addDateToHistoryTable(playingSong: self.playingSong)
 			if  self.playingSong.path != nil {
-				let path = FileManager.documentsDir().appending("/").appending(self.playingSong.path!)
+				let path = FileManager.documentsDir().appending("/").appending("Tracks").appending("/").appending(self.playingSong.path!)
 				if FileManager.default.fileExists(atPath: path) {
 					//удаляем пропущенный трек
 					do{
@@ -324,8 +324,8 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		
 		//получаем из БД трек для проигрывания
 		self.playingSong = CoreDataManager.instance.getTrackToPlaing()
-		let docUrl = NSURL(string:FileManager.documentsDir())
-		let resUrl = docUrl?.absoluteURL?.appendingPathComponent(playingSong.path!)
+		let docUrl = NSURL(string:FileManager.documentsDir())?.appendingPathComponent("Tracks")
+		let resUrl = docUrl?.absoluteURL.appendingPathComponent(playingSong.path!)
 		guard let url = resUrl else {
 			return
 		}
