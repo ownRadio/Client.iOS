@@ -32,12 +32,12 @@ class Downloader {
 	//MARK: Start create new folder
 						let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
 						
-						let tracksPath = documentsPath.appendingPathComponent("Tracks")
-						do {
-							try FileManager.default.createDirectory(at: tracksPath, withIntermediateDirectories: true, attributes: nil)
-						} catch let error as NSError {
-							NSLog("Unable to create directory \(error.debugDescription)")
-						}
+						let tracksPath = documentsPath.appendingPathComponent("Tracks/")
+//						do {
+//							try FileManager.default.createDirectory(at: tracksPath, withIntermediateDirectories: true, attributes: nil)
+//						} catch let error as NSError {
+//							NSLog("Unable to create directory \(error.debugDescription)")
+//						}
 	//MARK:end creating folder
 						
 						let destinationUrl = tracksPath.appendingPathComponent(audioUrl.lastPathComponent)
@@ -104,5 +104,4 @@ class Downloader {
 		}
 	}
 
-	
 }

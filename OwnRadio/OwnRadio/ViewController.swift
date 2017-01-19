@@ -9,6 +9,7 @@
 
 import UIKit
 import MediaPlayer
+import Alamofire
 
 class RadioViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 	
@@ -55,6 +56,7 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 	let pauseBtnConstraintConstant = CGFloat(10.0)
 	
 	var playedTracks: NSArray = CoreDataManager.instance.getGroupedTracks()
+	var reachability = NetworkReachabilityManager(host: "http://api.ownradio.ru/v3")
 	
 	// MARK: Override
 	//выполняется при загрузке окна
@@ -80,15 +82,18 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 		self.deviceIdLbl.text = (UserDefaults.standard.object(forKey: "UUIDDevice") as! String).lowercased()
 		self.visibleInfoView = false
 		
-		DispatchQueue.global(qos: .background).async { [unowned self] in
-			self.downloadTracks()
-		}
-		
 		getCountFilesInCache()
 		
 		//подписываемся на уведомлени
-
-		NotificationCenter.default.addObserver(self, selector: #selector(downloadTracksBecomeActive(_:)), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+		
+		reachability?.listener = { [unowned self] status in
+			guard CoreDataManager.instance.getCountOfTracks() < 3 else {
+				return
+			}
+			self.downloadTracks()
+	
+		}
+		reachability?.startListening()
 		
 		//обрыв воспроизведения трека
 		NotificationCenter.default.addObserver(self, selector: #selector(crashNetwork(_:)), name: NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: self.player.playerItem)
@@ -121,10 +126,11 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 	//когда приложение скрыто - отписываемся от уведомлений
 	override func viewDidDisappear(_ animated: Bool) {
 		super.viewDidDisappear(animated)
+		reachability?.stopListening()
+		
 		NotificationCenter.default.removeObserver(self, name:  NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: nil)
 		NotificationCenter.default.removeObserver(self, name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player.playerItem)
 		NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil)
-		NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
 	}
 	
 	//управление проигрыванием со шторки / экрана блокировки
@@ -168,12 +174,6 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 	}
 	
 	// MARK: Notification Selectors
-	
-	func downloadTracksBecomeActive(_ notification: Notification) {
-		if CoreDataManager.instance.getCountOfTracks() < 3 {
-			downloadTracks()
-		}
-	}
 	
 	func songDidPlay() {
 		self.player.nextTrack { [unowned self] in

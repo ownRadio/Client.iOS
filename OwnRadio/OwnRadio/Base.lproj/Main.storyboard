@@ -199,7 +199,7 @@
                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.25524400684931509" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstItem="UHU-C0-wkI" firstAttribute="top" secondItem="012-1F-nKb" secondAttribute="bottom" constant="8" id="3cs-V5-KSB"/>
-                                            <constraint firstAttribute="height" constant="350" id="6V4-GO-QLI"/>
+                                            <constraint firstAttribute="height" constant="470" id="6V4-GO-QLI"/>
                                             <constraint firstItem="gbX-RN-wCN" firstAttribute="leading" secondItem="Ifw-5N-ebI" secondAttribute="leading" constant="8" id="9XT-dz-vsX"/>
                                             <constraint firstItem="C8N-N4-a6Y" firstAttribute="top" secondItem="Tl0-gU-gkU" secondAttribute="bottom" constant="10" id="Btx-rz-L0u"/>
                                             <constraint firstItem="UHU-C0-wkI" firstAttribute="leading" secondItem="Ifw-5N-ebI" secondAttribute="leading" constant="8" id="FYL-DL-rQC"/>

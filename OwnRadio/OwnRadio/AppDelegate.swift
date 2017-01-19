@@ -31,15 +31,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			userDefaults.synchronize()
 		}
 		
+		let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+		
+		let tracksPath = documentsPath.appendingPathComponent("Tracks/")
+		do {
+			try FileManager.default.createDirectory(at: tracksPath, withIntermediateDirectories: true, attributes: nil)
+		} catch let error as NSError {
+			NSLog("Unable to create directory \(error.debugDescription)")
+		}
+
+		
 		if userDefaults.object(forKey: "MigrationWasDone") == nil
 		{
-			let destinationUrl = FileManager.documentsDir().appending("/Tracks")
+			let destinationUrl = FileManager.documentsDir().appending("/Tracks/")
 			do{
 				if let tracksContents = try? FileManager.default.contentsOfDirectory(atPath: FileManager.documentsDir()){
 					
-					if tracksContents.count > 0 {
+					if tracksContents.count > 3 {
 		
-					try? FileManager.default.createDirectory(at: URL(string:destinationUrl)!, withIntermediateDirectories: true, attributes: nil)
 					for track in tracksContents {
 						if track.contains("mp3") {
 						try? FileManager.default.moveItem(at:URL(string: track)! , to:URL(string: destinationUrl.appending(track))!)
