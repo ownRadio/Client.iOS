@@ -9,36 +9,37 @@
 
 import Foundation
 class Downloader {
-	class func load(completion: @escaping () -> ()) {
-		
-		let baseURL = URL(string: "http://api.ownradio.ru/v3/tracks/")
-		
-		var index = 0
+	
+	static let sharedInstance = Downloader()
+	var taskQueue: OperationQueue?
+	let baseURL = URL(string: "http://api.ownradio.ru/v3/tracks/")
+	
+	func load() {
+
 		//проверяем свободное место, если его достаточно - загружаем треки
 		if DiskStatus.folderSize(folderPath: FileManager.documentsDir()) <= (DiskStatus.freeDiskSpaceInBytes / 2)  {
-			while index < 3 {
-				
+			
 				//получаем trackId следующего трека и информацию о нем
 				ApiService.shared.getTrackIDFromServer { (dict) in
 					guard dict["id"] != nil else {
 						return
 					}
-					let trackURL = baseURL?.appendingPathComponent(dict["id"] as! String)
-					
+					let trackURL = self.baseURL?.appendingPathComponent(dict["id"] as! String)
 					if let audioUrl = trackURL {
 						//задаем директорию для сохранения трека
 						//						let documentsDirectoryURL =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-	//MARK: Start create new folder
 						
+	//MARK: Start create new folder
 						let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+						
 						let tracksPath = documentsPath.appendingPathComponent("Tracks")
 						do {
 							try FileManager.default.createDirectory(at: tracksPath, withIntermediateDirectories: true, attributes: nil)
 						} catch let error as NSError {
 							NSLog("Unable to create directory \(error.debugDescription)")
 						}
-						
 	//MARK:end creating folder
+						
 						let destinationUrl = tracksPath.appendingPathComponent(audioUrl.lastPathComponent)
 						//проверяем, существует ли в директории файл с таким GUID'ом
 						if FileManager.default.fileExists(atPath: destinationUrl.path) {
@@ -80,10 +81,6 @@ class Downloader {
 									NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"File moved to documents folder"])
 									print("File moved to documents folder")
 									
-									load {
-										
-									}
-									
 								} catch let error as NSError {
 									print(error.localizedDescription)
 								}
@@ -91,8 +88,21 @@ class Downloader {
 						}
 					}
 				}
-				index += 1
+		}
+	}
+
+	func addTaskToQueue () {
+		if self.taskQueue == nil {
+			self.taskQueue = OperationQueue()
+		}
+		
+		self.taskQueue?.maxConcurrentOperationCount = 1
+		for _ in 0..<3 {
+			self.taskQueue?.addOperation { [unowned self] in
+				self.load()
 			}
 		}
 	}
+
+	
 }

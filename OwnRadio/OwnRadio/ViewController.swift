@@ -88,12 +88,15 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 		
 		//подписываемся на уведомлени
 
+		NotificationCenter.default.addObserver(self, selector: #selector(downloadTracksBecomeActive(_:)), name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
+		
 		//обрыв воспроизведения трека
 		NotificationCenter.default.addObserver(self, selector: #selector(crashNetwork(_:)), name: NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: self.player.playerItem)
 		//трек доигран до конца
 		NotificationCenter.default.addObserver(self, selector: #selector(songDidPlay), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
 		//обновление системной информации
 		NotificationCenter.default.addObserver(self, selector: #selector(updateSysInfo(_:)), name: NSNotification.Name(rawValue:"updateSysInfo"), object: nil)
+
 	}
 	
 	func detectedHeadphones () {
@@ -121,6 +124,7 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 		NotificationCenter.default.removeObserver(self, name:  NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: nil)
 		NotificationCenter.default.removeObserver(self, name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player.playerItem)
 		NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil)
+		NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIApplicationDidBecomeActive, object: nil)
 	}
 	
 	//управление проигрыванием со шторки / экрана блокировки
@@ -158,12 +162,19 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 		guard currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable else {
 			return
 		}
-		Downloader.load() {
-			
+		DispatchQueue.global(qos: .background).async {
+			Downloader.sharedInstance.addTaskToQueue()
 		}
 	}
 	
 	// MARK: Notification Selectors
+	
+	func downloadTracksBecomeActive(_ notification: Notification) {
+		if CoreDataManager.instance.getCountOfTracks() < 3 {
+			downloadTracks()
+		}
+	}
+	
 	func songDidPlay() {
 		self.player.nextTrack { [unowned self] in
 			DispatchQueue.main.async {
@@ -317,6 +328,8 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 		} else {
 			self.playFrom.text = "Cache is empty, please wait for the tracks is load"
 		}
+		
+		getCountFilesInCache()
 		// обновление количевства записей в базе данных
 		self.numberOfFilesInDB.text = String(CoreDataManager.instance.chekCountOfEntitiesFor(entityName: "TrackEntity"))
 		
@@ -368,19 +381,20 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 		
 		self.timeObserver?.removeTimeObserver
 		//		self.player.isPlaying = true
-		getCountFilesInCache()
+		
 		
 	}
 	
 	//обработчик нажатий на кнопку play/pause
 	@IBAction func playBtnPressed() {
+
 		guard self.player.playerItem != nil else {
 			
 			nextTrackButtonPressed()
 			return
 		}
 		changePlayBtnState()
-		getCountFilesInCache()
+		
 	}
 
 	
