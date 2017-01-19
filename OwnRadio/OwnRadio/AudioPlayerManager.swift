@@ -206,8 +206,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	
 	//пропуск трека
 	func skipSong(complition: (() -> Void)?) {
-		
-		//		self.playerItem = nil
+	
 		if (self.playingSongID != nil) {
 			self.playingSong.isListen = -1
 			self.addDateToHistoryTable(playingSong: self.playingSong)
@@ -269,8 +268,8 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 			guard currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable else {
 				return
 			}
-			Downloader.load {
-				
+			DispatchQueue.global(qos: .background).async {
+				Downloader.sharedInstance.addTaskToQueue()
 			}
 		}
 	}
@@ -344,9 +343,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 			return
 		}
 		DispatchQueue.global(qos: .background).async {
-			Downloader.load {
-				
-			}
+			Downloader.sharedInstance.addTaskToQueue()
 		}
 	}
 	

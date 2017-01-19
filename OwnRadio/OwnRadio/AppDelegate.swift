@@ -19,10 +19,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	//с этой функции начинается загрузка приложения
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 		// Override point for customization after application launch.
+		
 		let userDefaults = UserDefaults.standard
 		//для получения отчетов об ошибках на фабрик
 		Fabric.with([Crashlytics.self, Answers.self])
-
+		
 		//если устройству не назначен deviceId - генерируем новый
 		if userDefaults.object(forKey: "UUIDDevice") == nil {
 			let UUID = NSUUID().uuidString.lowercased() //"17096171-1C39-4290-AE50-907D7E62F36A" //
@@ -30,9 +31,42 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			userDefaults.synchronize()
 		}
 		
+		let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+		
+		let tracksPath = documentsPath.appendingPathComponent("Tracks/")
+		do {
+			try FileManager.default.createDirectory(at: tracksPath, withIntermediateDirectories: true, attributes: nil)
+		} catch let error as NSError {
+			NSLog("Unable to create directory \(error.debugDescription)")
+		}
+
+		
+		if userDefaults.object(forKey: "MigrationWasDone") == nil
+		{
+			let destinationUrl = FileManager.documentsDir().appending("/Tracks/")
+			do{
+				if let tracksContents = try? FileManager.default.contentsOfDirectory(atPath: FileManager.documentsDir()){
+					
+					if tracksContents.count > 3 {
+		
+					for track in tracksContents {
+						if track.contains("mp3") {
+						try? FileManager.default.moveItem(at:URL(string: track)! , to:URL(string: destinationUrl.appending(track))!)
+							}
+					}
+				}
+				userDefaults.set(true, forKey: "MigrationWasDone")
+				userDefaults.synchronize()
+					}
+			}
+			
+		}
+		
+		
+		
 		return true
 	}
-
+	
 	
 	func applicationWillResignActive(_ application: UIApplication) {
 		// Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

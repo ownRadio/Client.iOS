@@ -49,6 +49,7 @@ class CoreDataManager {
 		let coordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
 		let url = self.applicationDocumentsDirectory.appendingPathComponent("SingleViewCoreData.sqlite")
 		var failureReason = "There was an error creating or loading the application's saved data."
+		DispatchQueue.global().async {
 		do {
 			let options = [NSMigratePersistentStoresAutomaticallyOption:true, NSInferMappingModelAutomaticallyOption:true]
 			try coordinator.addPersistentStore(ofType: NSSQLiteStoreType, configurationName: nil, at: url, options: options)
@@ -60,6 +61,7 @@ class CoreDataManager {
 			let wrappedError = NSError(domain: "YOUR_ERROR_DOMAIN", code: 9999, userInfo: dict)
 			NSLog("Unresolved error \(wrappedError), \(wrappedError.userInfo)")
 			abort()
+		}
 		}
 		return coordinator
 	}()

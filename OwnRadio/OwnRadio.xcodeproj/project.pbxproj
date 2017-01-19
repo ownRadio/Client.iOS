@@ -16,6 +16,8 @@
 		091679751DE451CF00619B3F /* OwnRadioUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 091679741DE451CF00619B3F /* OwnRadioUITests.swift */; };
 		091679C71DE47D4400619B3F /* ApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 091679C61DE47D4400619B3F /* ApiService.swift */; };
 		093FBD0C1DEEFEB800038EF0 /* SongObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093FBD0B1DEEFEB800038EF0 /* SongObject.swift */; };
+		0949CA291E3100010066F5A9 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 091679C91DE47D9900619B3F /* Alamofire.framework */; };
+		0949CA2A1E3100010066F5A9 /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 091679C91DE47D9900619B3F /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		0971662F1DF84A7F005AB0CE /* DiskStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0971662E1DF84A7F005AB0CE /* DiskStatus.swift */; };
 		0979B1B41DF00FCE003C01C7 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0979B1B31DF00FCE003C01C7 /* CoreData.framework */; };
 		0979B1B71DF01020003C01C7 /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0979B1B51DF01020003C01C7 /* DataModel.xcdatamodeld */; };
@@ -25,6 +27,9 @@
 		0989BD801DF6F33C005FE001 /* TrackEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0989BD7E1DF6F33C005FE001 /* TrackEntity+CoreDataClass.swift */; };
 		098B51561DF95E5000293DE5 /* HistoryEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 098B51541DF95E5000293DE5 /* HistoryEntity+CoreDataClass.swift */; };
 		098B515C1DF9623A00293DE5 /* HistoryEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 098B515B1DF9623A00293DE5 /* HistoryEntity+CoreDataProperties.swift */; };
+		099EAE491E2FAA05005478F2 /* SFUIText-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 099EAE471E2FAA05005478F2 /* SFUIText-Regular.otf */; };
+		099EAE4B1E2FADDF005478F2 /* SFUIDisplay-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 099EAE4A1E2FADDF005478F2 /* SFUIDisplay-Regular.otf */; };
+		099EAE511E30FC0B005478F2 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 091679C91DE47D9900619B3F /* Alamofire.framework */; };
 		09A054151DF168170008ACE7 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09A054141DF168170008ACE7 /* Utilities.swift */; };
 		09B953A11DFEBED70098417C /* CircularView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09B953A01DFEBED70098417C /* CircularView.swift */; };
 		09EA799B1DE57D040034B8DF /* AudioPlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EA799A1DE57D040034B8DF /* AudioPlayerManager.swift */; };
@@ -49,9 +54,21 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		0949CA2B1E3100010066F5A9 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				0949CA2A1E3100010066F5A9 /* Alamofire.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
-		0905010F1DE70FA600B1841C /* SFUIText-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SFUIText-Regular.otf"; path = "../../../Downloads/SFUIText-Regular.otf"; sourceTree = "<group>"; };
-		090501111DE7106300B1841C /* SFUIDisplay-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SFUIDisplay-Regular.otf"; path = "../../../Downloads/SFUIDisplay-Regular.otf"; sourceTree = "<group>"; };
 		091679511DE451CF00619B3F /* OwnRadio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OwnRadio.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		091679541DE451CF00619B3F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		091679561DE451CF00619B3F /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -78,6 +95,8 @@
 		098B51541DF95E5000293DE5 /* HistoryEntity+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HistoryEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
 		098B51581DF95FC100293DE5 /* DataModel 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "DataModel 2.xcdatamodel"; sourceTree = "<group>"; };
 		098B515B1DF9623A00293DE5 /* HistoryEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HistoryEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		099EAE471E2FAA05005478F2 /* SFUIText-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SFUIText-Regular.otf"; sourceTree = "<group>"; };
+		099EAE4A1E2FADDF005478F2 /* SFUIDisplay-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SFUIDisplay-Regular.otf"; sourceTree = "<group>"; };
 		09A054141DF168170008ACE7 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		09B953A01DFEBED70098417C /* CircularView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircularView.swift; sourceTree = "<group>"; };
 		09EA799A1DE57D040034B8DF /* AudioPlayerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioPlayerManager.swift; sourceTree = "<group>"; };
@@ -91,7 +110,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				0979B1B41DF00FCE003C01C7 /* CoreData.framework in Frameworks */,
+				099EAE511E30FC0B005478F2 /* Alamofire.framework in Frameworks */,
 				50D8269B1DE74B0800238F96 /* Crashlytics.framework in Frameworks */,
+				0949CA291E3100010066F5A9 /* Alamofire.framework in Frameworks */,
 				50D8269A1DE74B0800238F96 /* Fabric.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -116,8 +137,8 @@
 		090501101DE70FB400B1841C /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
-				090501111DE7106300B1841C /* SFUIDisplay-Regular.otf */,
-				0905010F1DE70FA600B1841C /* SFUIText-Regular.otf */,
+				099EAE4A1E2FADDF005478F2 /* SFUIDisplay-Regular.otf */,
+				099EAE471E2FAA05005478F2 /* SFUIText-Regular.otf */,
 			);
 			name = Fonts;
 			sourceTree = "<group>";
@@ -227,6 +248,7 @@
 				0916794F1DE451CF00619B3F /* Resources */,
 				50D826971DE747C900238F96 /* Fabric */,
 				0979B1B21DF008A5003C01C7 /* ShellScript */,
+				0949CA2B1E3100010066F5A9 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -325,7 +347,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				099EAE4B1E2FADDF005478F2 /* SFUIDisplay-Regular.otf in Resources */,
 				0916795F1DE451CF00619B3F /* LaunchScreen.storyboard in Resources */,
+				099EAE491E2FAA05005478F2 /* SFUIText-Regular.otf in Resources */,
 				0916795C1DE451CF00619B3F /* Assets.xcassets in Resources */,
 				0916795A1DE451CF00619B3F /* Main.storyboard in Resources */,
 			);
