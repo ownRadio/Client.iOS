@@ -176,7 +176,6 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		songInfo[MPMediaItemPropertyAlbumTitle] = "ownRadio"
 		songInfo[MPMediaItemPropertyArtist] = song.artistName
 		songInfo[MPMediaItemPropertyArtwork] = albumArt
-		print(song.trackLength)
 		songInfo[MPMediaItemPropertyPlaybackDuration] = NSNumber.init(value: song.trackLength)
 		
 		MPNowPlayingInfoCenter.default().nowPlayingInfo = songInfo

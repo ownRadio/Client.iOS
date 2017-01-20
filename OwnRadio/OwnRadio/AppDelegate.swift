@@ -40,26 +40,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			NSLog("Unable to create directory \(error.debugDescription)")
 		}
 
-		
 		if userDefaults.object(forKey: "MigrationWasDone") == nil
 		{
 			let destinationUrl = FileManager.documentsDir().appending("/Tracks/")
-			do{
-				if let tracksContents = try? FileManager.default.contentsOfDirectory(atPath: FileManager.documentsDir()){
-					
-					if tracksContents.count > 3 {
-		
-					for track in tracksContents {
-						if track.contains("mp3") {
-						try? FileManager.default.moveItem(at:URL(string: track)! , to:URL(string: destinationUrl.appending(track))!)
+			DispatchQueue.global().async {
+				do{
+					if let tracksContents = try? FileManager.default.contentsOfDirectory(atPath: FileManager.documentsDir()){
+						
+						if tracksContents.count > 3 {
+							
+							for track in tracksContents {
+								if track.contains("mp3") {
+									try? FileManager.default.moveItem(at:URL(string: track)! , to:URL(string: destinationUrl.appending(track))!)
+								}
 							}
+						}
+						userDefaults.set(true, forKey: "MigrationWasDone")
+						userDefaults.synchronize()
 					}
 				}
-				userDefaults.set(true, forKey: "MigrationWasDone")
-				userDefaults.synchronize()
-					}
 			}
-			
 		}
 		
 		

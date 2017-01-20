@@ -35,14 +35,11 @@ class ApiService {
 		let config = URLSessionConfiguration.default
 		let session = URLSession(configuration: config)
 		
-		
 		let task = session.dataTask(with: urlRequest as URLRequest, completionHandler: { (data, response, error) in
 			// do stuff with response, data & error here
-			
 			guard let data = data else {
 				return
 			}
-
 			do {
 				let anyJson = try JSONSerialization.jsonObject(with: data, options: [])
 				
