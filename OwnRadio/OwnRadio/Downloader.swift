@@ -8,11 +8,15 @@
 //	Download track in cache
 
 import Foundation
+
 class Downloader {
 	
 	static let sharedInstance = Downloader()
 	var taskQueue: OperationQueue?
 	let baseURL = URL(string: "http://api.ownradio.ru/v3/tracks/")
+	let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+	let tracksPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("Tracks/")
+	let tracksUrlString =  FileManager.documentsDir().appending("/Tracks/")
 	
 	func load() {
 
@@ -27,10 +31,7 @@ class Downloader {
 					let trackURL = self.baseURL?.appendingPathComponent(dict["id"] as! String)
 					if let audioUrl = trackURL {
 						//задаем директорию для сохранения трека
-
-						let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-						let tracksPath = documentsPath.appendingPathComponent("Tracks/")
-						let destinationUrl = tracksPath.appendingPathComponent(audioUrl.lastPathComponent)
+						let destinationUrl = self.tracksPath.appendingPathComponent(audioUrl.lastPathComponent)
 						
 						//проверяем, существует ли в директории файл с таким GUID'ом
 						if FileManager.default.fileExists(atPath: destinationUrl.path) {
@@ -79,9 +80,32 @@ class Downloader {
 						}
 					}
 				}
+		} else {
+			deleteOldTrack()
 		}
 	}
-
+	
+	func deleteOldTrack () {
+		
+		let song = CoreDataManager.instance.getOldTrack()
+		
+		let path = self.tracksUrlString.appending(song.path!)
+		if FileManager.default.fileExists(atPath: path) {
+			
+			do{
+				try FileManager.default.removeItem(atPath: path)
+				
+			}
+			catch {
+				print("Error with remove file ")
+			}
+			CoreDataManager.instance.deleteTrackFor(trackID: song.trackID)
+			CoreDataManager.instance.saveContext()
+		}
+		
+		load()
+	}
+	
 	func addTaskToQueue () {
 		if self.taskQueue == nil {
 			self.taskQueue = OperationQueue()

@@ -243,6 +243,37 @@ class CoreDataManager {
 		return count
 	}
 	
+	func getOldTrack () -> SongObject {
+		
+		let sectionSortDescriptor = NSSortDescriptor(key: "countPlay", ascending: false)
+		let sortDescriptors = [sectionSortDescriptor]
+		
+		let fetchRequest: NSFetchRequest<TrackEntity> = TrackEntity.fetchRequest()
+		fetchRequest.sortDescriptors = sortDescriptors
+		fetchRequest.fetchLimit = 1
+		let  song = SongObject()
+		do {
+			
+			let searchResults = try self.managedObjectContext.fetch(fetchRequest)
+			guard searchResults.count != 0 else {
+				return song
+			}
+			
+			let track = searchResults.first
+			
+			song.name = track?.trackName
+			song.artistName = track?.artistName
+			song.trackLength = track?.trackLength
+			song.trackID = track?.recId
+			song.path = track?.path
+			
+		} catch {
+			print("Error with request: \(error)")
+		}
+		return song
+	}
+
+	
 	// MARK: - Core Data Saving support
 	func saveContext () {
 		if managedObjectContext.hasChanges {
