@@ -98,6 +98,7 @@ class Downloader {
 		
 		self.taskQueue?.maxConcurrentOperationCount = 1
 		for _ in 0..<3 {
+			
 			self.taskQueue?.addOperation { [unowned self] in
 				self.load()
 			}

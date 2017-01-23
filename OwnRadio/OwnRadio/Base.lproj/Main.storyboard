@@ -108,7 +108,7 @@
                                                 <color key="textColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Error:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rld-oo-DpN">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Info:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rld-oo-DpN">
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -195,6 +195,12 @@
                                                     <outlet property="delegate" destination="BYZ-38-t0r" id="n6f-H2-je3"/>
                                                 </connections>
                                             </tableView>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gKs-Uh-ytP">
+                                                <state key="normal" title="REFRASH"/>
+                                                <connections>
+                                                    <action selector="refreshPressed" destination="BYZ-38-t0r" eventType="touchUpInside" id="fLQ-MD-41V"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.25524400684931509" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
@@ -232,7 +238,9 @@
                                             <constraint firstItem="OwP-Dt-Wqz" firstAttribute="leading" secondItem="IY3-Yy-ttG" secondAttribute="trailing" constant="10" id="icv-Hn-9eV"/>
                                             <constraint firstItem="C8N-N4-a6Y" firstAttribute="leading" secondItem="Ifw-5N-ebI" secondAttribute="leading" id="jaj-vE-1CG"/>
                                             <constraint firstItem="rld-oo-DpN" firstAttribute="leading" secondItem="Ifw-5N-ebI" secondAttribute="leading" constant="8" id="jt6-AO-UGm"/>
+                                            <constraint firstAttribute="trailing" secondItem="gKs-Uh-ytP" secondAttribute="trailing" constant="8" id="jxz-0m-dZ7"/>
                                             <constraint firstItem="YNl-dy-IVv" firstAttribute="centerY" secondItem="012-1F-nKb" secondAttribute="centerY" id="njA-mQ-1tE"/>
+                                            <constraint firstItem="gKs-Uh-ytP" firstAttribute="top" secondItem="Ifw-5N-ebI" secondAttribute="top" constant="10" id="qF5-Lz-6IB"/>
                                             <constraint firstItem="O47-RO-uEC" firstAttribute="leading" secondItem="Ifw-5N-ebI" secondAttribute="leading" constant="8" id="qth-AJ-72A"/>
                                             <constraint firstItem="1uo-sP-hKP" firstAttribute="centerY" secondItem="rld-oo-DpN" secondAttribute="centerY" id="sqJ-Xa-zmc"/>
                                             <constraint firstItem="l2B-f3-Jit" firstAttribute="centerY" secondItem="alF-Xe-fE6" secondAttribute="centerY" id="ukH-hx-WLu"/>

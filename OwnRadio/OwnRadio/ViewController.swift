@@ -58,15 +58,6 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 	var playedTracks: NSArray = CoreDataManager.instance.getGroupedTracks()
 	var reachability = NetworkReachabilityManager(host: "http://api.ownradio.ru/v3")
 	
-	// MARK: Test variable
-//	var buffer:NSMutableData = NSMutableData()
-//	var session:URLSession?
-//	var downTask:URLSessionDataTask?
-//	let url = NSURL(string:"http://i.stack.imgur.com/b8zkg.png" )!
-//	var expectedContentLength = 0
-//	var progressDownload = 0.0
-	//
-	
 	// MARK: Override
 	//выполняется при загрузке окна
 	override func viewDidLoad() {
@@ -112,30 +103,6 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 		NotificationCenter.default.addObserver(self, selector: #selector(updateSysInfo(_:)), name: NSNotification.Name(rawValue:"updateSysInfo"), object: nil)
 
 	}
-	
-	// MARK: start test
-	
-//	func URLSession(session: URLSession, dataTask: URLSessionDataTask, didReceiveResponse response: URLResponse, completionHandler: (URLSession.ResponseDisposition) -> Void) {
-//		
-//		//here you can get full lenth of your content
-//		expectedContentLength = Int(response.expectedContentLength)
-//		print(expectedContentLength)
-//		completionHandler(URLSession.ResponseDisposition.Allow)
-//	}
-//	func URLSession(session: URLSession, dataTask: URLSessionDataTask, didReceiveData data: NSData) {
-//		
-//		
-//		buffer.append(data as Data)
-//		
-//		let percentageDownloaded = Float(buffer.length) / Float(expectedContentLength)
-//		progressDownload =  Double(percentageDownloaded)
-//	}
-//	func URLSession(session: URLSession, task: URLSessionTask, didCompleteWithError error: NSError?) {
-//		//use buffer here.Download is done
-//		progressDownload = 1.0   // download 100% complete
-//	}
-	
-	// MARK: end of test
 	func detectedHeadphones () {
 		
 		let currentRoute = AVAudioSession.sharedInstance().currentRoute
@@ -428,6 +395,9 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 		
 	}
 
+	@IBAction func refreshPressed() {
+		updateUI()
+	}
 	
 }
 

@@ -33,27 +33,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		
 		let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
 		
-		let tracksPath = documentsPath.appendingPathComponent("Tracks/")
+		let tracksPath = documentsPath.appendingPathComponent("Tracks")
 		do {
 			try FileManager.default.createDirectory(at: tracksPath, withIntermediateDirectories: true, attributes: nil)
 		} catch let error as NSError {
 			NSLog("Unable to create directory \(error.debugDescription)")
 		}
-
+		
 		if userDefaults.object(forKey: "MigrationWasDone") == nil
 		{
-			let destinationUrl = FileManager.documentsDir().appending("/Tracks/")
+			let destinationUrl = FileManager.documentsDir().appending("/Tracks")
+			do{
+				try FileManager.default.createDirectory(atPath: destinationUrl, withIntermediateDirectories: true, attributes: nil)
+			}catch {
+				print("error with creation Tracks directory")
+			}
+			
 			DispatchQueue.global().async {
 				do{
 					if let tracksContents = try? FileManager.default.contentsOfDirectory(atPath: FileManager.documentsDir()){
-						
-						if tracksContents.count > 3 {
-							
+						if tracksContents.count > 4 {
 							for track in tracksContents {
 								if track.contains("mp3") {
-									try? FileManager.default.moveItem(at:URL(string: track)! , to:URL(string: destinationUrl.appending(track))!)
+									let atURL =  URL(string: FileManager.documentsDir().appending(track))!
+									do{
+										print(atURL)
+										try FileManager.default.removeItem(at: atURL)
+										
+									} catch  {
+										print("error with move file reason - \(error)")
+									}
 								}
 							}
+							CoreDataManager.instance.deleteAllTracks()
 						}
 						userDefaults.set(true, forKey: "MigrationWasDone")
 						userDefaults.synchronize()

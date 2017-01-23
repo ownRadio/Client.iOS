@@ -111,6 +111,15 @@ class CoreDataManager {
 		}
 	}
 	
+	func deleteAllTracks() {
+		let fetchRequest: NSFetchRequest<TrackEntity> = TrackEntity.fetchRequest()
+		if let result = try? self.managedObjectContext.fetch(fetchRequest) {
+			for object in result {
+				self.managedObjectContext.delete(object)
+			}
+		}
+	}
+	
 	// задает текущую дату для трека с заданным trackId
 	func setDateForTrackBy(trackId:String) {
 		let fetchRequest: NSFetchRequest<TrackEntity> = TrackEntity.fetchRequest()

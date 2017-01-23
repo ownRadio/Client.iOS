@@ -341,9 +341,9 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		guard currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable else {
 			return
 		}
-		DispatchQueue.global(qos: .background).async {
-			Downloader.sharedInstance.addTaskToQueue()
-		}
+//		DispatchQueue.global(qos: .background).async {
+//			Downloader.sharedInstance.addTaskToQueue()
+//		}
 	}
 	
 	//сохраняем историю прослушивания
