@@ -42,13 +42,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		//проверяем была ли совершена миграция
 		if userDefaults.object(forKey: "MigrationWasDone") == nil
 		{
-//			let destinationUrl = FileManager.documentsDir().appending("/Tracks")
-//			do{
-//				try FileManager.default.createDirectory(atPath: destinationUrl, withIntermediateDirectories: true, attributes: nil)
-//			}catch {
-//				print("error with creation Tracks directory")
-//			}
-			
 			DispatchQueue.global().async {
 				do{
 					// получаем содержимое папки Documents
@@ -103,7 +96,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	func applicationWillTerminate(_ application: UIApplication) {
 		// Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 	}
-	
-	
+
 }
 

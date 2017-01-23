@@ -102,7 +102,7 @@ class Downloader {
 			CoreDataManager.instance.saveContext()
 		}
 		// пытаемся опять загрузить трек
-		load()
+//		load()
 	}
 	
 	// создание очереди
