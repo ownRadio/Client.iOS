@@ -22,7 +22,6 @@ class Downloader {
 
 		//проверяем свободное место, если его достаточно - загружаем треки
 		if DiskStatus.folderSize(folderPath: FileManager.documentsDir()) <= (DiskStatus.freeDiskSpaceInBytes / 2)  {
-			
 				//получаем trackId следующего трека и информацию о нем
 				ApiService.shared.getTrackIDFromServer { (dict) in
 					guard dict["id"] != nil else {
@@ -37,14 +36,12 @@ class Downloader {
 						if FileManager.default.fileExists(atPath: destinationUrl.path) {
 							NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"The file already exists at path"])
 							print("The file already exists at path")
-							
 						} else {
 							//если этот трек не еще не загружен - загружаем трек
 							//используется замыкание для сохранения загруженного трека в файл и информации о треке в бд
 							URLSession.shared.downloadTask(with: audioUrl, completionHandler: { (location, response, error) -> Void in
 								guard let location = location, error == nil else { return }
 								do {
-									
 									let file = NSData(contentsOf: location)
 									let mp3Path = destinationUrl.appendingPathExtension("mp3")
 									guard FileManager.default.fileExists(atPath: mp3Path.absoluteString ) == false else {
@@ -81,36 +78,40 @@ class Downloader {
 					}
 				}
 		} else {
+			// если память заполнена удаляем трек 
 			deleteOldTrack()
 		}
 	}
 	
+	// удаление трека если память заполнена
 	func deleteOldTrack () {
-		
+		// получаем трек проиграный большее кол-во раз
 		let song = CoreDataManager.instance.getOldTrack()
-		
+		// получаем путь файла
 		let path = self.tracksUrlString.appending(song.path!)
 		if FileManager.default.fileExists(atPath: path) {
-			
 			do{
+				// удаляем обьект по пути
 				try FileManager.default.removeItem(atPath: path)
-				
 			}
 			catch {
 				print("Error with remove file ")
 			}
+			// удаляем трек с базы
 			CoreDataManager.instance.deleteTrackFor(trackID: song.trackID)
 			CoreDataManager.instance.saveContext()
 		}
-		
+		// пытаемся опять загрузить трек
 		load()
 	}
 	
+	// создание очереди
 	func addTaskToQueue () {
+//		проверка на существование очереди
 		if self.taskQueue == nil {
 			self.taskQueue = OperationQueue()
 		}
-		
+//		задаем единственную операцию в один момент времени
 		self.taskQueue?.maxConcurrentOperationCount = 1
 		for _ in 0..<3 {
 			

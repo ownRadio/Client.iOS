@@ -20,7 +20,6 @@ class DiskStatus {
 		return formatter.string(fromByteCount: bytes) as String
 	}
 	
-	
 	//MARK: Get String Value
 	class var totalDiskSpace:String {
 		get {
@@ -39,8 +38,7 @@ class DiskStatus {
 			return ByteCountFormatter.string(fromByteCount: Int64(usedDiskSpaceInBytes), countStyle: ByteCountFormatter.CountStyle.binary)
 		}
 	}
-	
-	
+
 	//MARK: Get raw value
 	//возвращает общее количество памяти
 	class var totalDiskSpaceInBytes:UInt {
@@ -56,8 +54,6 @@ class DiskStatus {
 	}
 	
 	//возвращает количество памяти, занимаемое треками
-	
-	
 	class func folderSize(folderPath:String) -> UInt{
 
 		let filesArray:[String]? = try? FileManager.default.subpathsOfDirectory(atPath: folderPath) as [String]

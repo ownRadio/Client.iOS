@@ -31,29 +31,32 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			userDefaults.synchronize()
 		}
 		
+		// создаем папку Tracks если ее нет
 		let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-		
 		let tracksPath = documentsPath.appendingPathComponent("Tracks")
 		do {
 			try FileManager.default.createDirectory(at: tracksPath, withIntermediateDirectories: true, attributes: nil)
 		} catch let error as NSError {
 			NSLog("Unable to create directory \(error.debugDescription)")
 		}
-		
+		//проверяем была ли совершена миграция
 		if userDefaults.object(forKey: "MigrationWasDone") == nil
 		{
-			let destinationUrl = FileManager.documentsDir().appending("/Tracks")
-			do{
-				try FileManager.default.createDirectory(atPath: destinationUrl, withIntermediateDirectories: true, attributes: nil)
-			}catch {
-				print("error with creation Tracks directory")
-			}
+//			let destinationUrl = FileManager.documentsDir().appending("/Tracks")
+//			do{
+//				try FileManager.default.createDirectory(atPath: destinationUrl, withIntermediateDirectories: true, attributes: nil)
+//			}catch {
+//				print("error with creation Tracks directory")
+//			}
 			
 			DispatchQueue.global().async {
 				do{
+					// получаем содержимое папки Documents
 					if let tracksContents = try? FileManager.default.contentsOfDirectory(atPath: FileManager.documentsDir()){
+						//если в папке больше 4 файлов (3 файла Sqlite и папка Tracks) то пытаемся удалить треки
 						if tracksContents.count > 4 {
 							for track in tracksContents {
+								// проверка для удаления только треков
 								if track.contains("mp3") {
 									let atPath = FileManager.documentsDir().appending("/").appending(track)
 									do{
@@ -65,17 +68,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 									}
 								}
 							}
+							//удаляем треки из базы
 							CoreDataManager.instance.deleteAllTracks()
 						}
+						// устанавливаем флаг о прохождении миграции
 						userDefaults.set(true, forKey: "MigrationWasDone")
 						userDefaults.synchronize()
 					}
 				}
 			}
 		}
-		
-		
-		
 		return true
 	}
 	

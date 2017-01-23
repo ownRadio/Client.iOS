@@ -82,7 +82,6 @@ class ApiService {
 		//isListen - флаг прослушан или пропущен трек, methodid - метод выдачи трека пользователю
 		let dict = ["lastListen":lastListen, "isListen":isListen, "methodid":1] as [String : Any]
 		do {
-			
 			let data = try JSONSerialization.data(withJSONObject: dict, options: [])
 //			let dataString = String(data: data, encoding: String.Encoding.utf8)!
 			request.httpBody = data

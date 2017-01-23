@@ -26,8 +26,6 @@ extension FileManager {
 }
 
 extension NSObject:Utilities{
-	
-	
 	enum ReachabilityStatus {
 		case notReachable
 		case reachableViaWWAN

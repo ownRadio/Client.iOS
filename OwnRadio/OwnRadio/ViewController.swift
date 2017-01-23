@@ -14,7 +14,6 @@ import Alamofire
 class RadioViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 	
 	// MARK:  Outlets
-	
 	@IBOutlet weak var backgroundImageView: UIImageView!
 	
 	@IBOutlet weak var infoView: UIView!
@@ -32,7 +31,6 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 	@IBOutlet var isNowPlaying: UILabel!
 	@IBOutlet var portType: UILabel!
 	@IBOutlet var tableView: UITableView!
-	
 	
 	@IBOutlet weak var playPauseBtn: UIButton!
 	@IBOutlet weak var nextButton: UIButton!
@@ -66,12 +64,10 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 		self.trackNameLbl.text = ""
 		//get version of app
 		if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
-			
 			if (Bundle.main.infoDictionary?["CFBundleVersion"] as? String) != nil {
 				self.versionLabel.text =  "v" + version
 			}
 		}
-		
 		self.circleViewConteiner.addSubview(self.progressView)
 		self.progressView.frame = self.circleViewConteiner.bounds
 		self.progressView.autoresizingMask = [.flexibleWidth,.flexibleHeight]
@@ -85,16 +81,13 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 		getCountFilesInCache()
 		
 		//подписываемся на уведомлени
-		
 		reachability?.listener = { [unowned self] status in
 			guard CoreDataManager.instance.getCountOfTracks() < 3 else {
 				return
 			}
 			self.downloadTracks()
-	
 		}
 		reachability?.startListening()
-		
 		//обрыв воспроизведения трека
 		NotificationCenter.default.addObserver(self, selector: #selector(crashNetwork(_:)), name: NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: self.player.playerItem)
 		//трек доигран до конца
@@ -117,9 +110,7 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 		} else {
 			print("requires connection to device")
 		}
-		
 		NotificationCenter.default.addObserver(self, selector:  #selector(RadioViewController.audioRouteChangeListener(notification:)), name: NSNotification.Name.AVAudioSessionRouteChange, object: nil)
-		
 	}
 	
 	//когда приложение скрыто - отписываемся от уведомлений
@@ -173,7 +164,6 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 	}
 	
 	// MARK: Notification Selectors
-	
 	func songDidPlay() {
 		self.player.nextTrack { [unowned self] in
 			DispatchQueue.main.async {
@@ -211,7 +201,6 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 			for description in currentRoute.outputs {
 				
 				self.portType.text = description.portType
-				
 				if description.portType == AVAudioSessionPortHeadphones {
 					print(description.portType)
 					print(self.player.isPlaying)
@@ -228,11 +217,9 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 			
 		case AVAudioSessionRouteChangeReason.categoryChange.rawValue:
 			
-			//
 			for description in AVAudioSession.sharedInstance().currentRoute.outputs {
 				
 				self.portType.text = description.portType
-				
 				switch description.portType {
 					
 				case AVAudioSessionPortBluetoothA2DP:
@@ -247,12 +234,9 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 							
 						}
 					}
-					
 				default: break
 				}
 			}
-			//
-			
 		default:
 			break
 		}
@@ -261,7 +245,6 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 	//меняет состояние проигрывания и кнопку playPause
 	func changePlayBtnState() {
 		//если трек проигрывается - ставим на паузу
-		
 		if player.isPlaying == true {
 			player.pauseSong(complition: { [unowned self] in
 				
@@ -287,10 +270,8 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 	//функция отображения количества файлов в кеше
 	func getCountFilesInCache () {
 		do {
-			
 			let docUrl = NSURL(string:FileManager.documentsDir())?.appendingPathComponent("Tracks")
 			let directoryContents = try FileManager.default.contentsOfDirectory(at: docUrl!, includingPropertiesForKeys: nil, options: [])
-			
 			let mp3Files = directoryContents.filter{ $0.pathExtension == "mp3" }
 			self.numberOfFiles.text = String.init(format:"%d", mp3Files.count)
 			
@@ -331,7 +312,6 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 		getCountFilesInCache()
 		// обновление количевства записей в базе данных
 		self.numberOfFilesInDB.text = String(CoreDataManager.instance.chekCountOfEntitiesFor(entityName: "TrackEntity"))
-		
 		// update table 
 		self.playedTracks = CoreDataManager.instance.getGroupedTracks()
 		self.tableView.reloadData()
@@ -354,8 +334,6 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 		}
 		return cell
 	}
-
-	
 	
 	// MARK: Actions
 	@IBAction func tripleTapAction(_ sender: AnyObject) {
@@ -371,33 +349,26 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 	
 	@IBAction func nextTrackButtonPressed() {
 		self.player.skipSong { [unowned self] in
-			
 			DispatchQueue.main.async { [unowned self] in
 				self.updateUI()
 			}
 		}
 		self.progressView.configure()
-		
 		self.timeObserver?.removeTimeObserver
-		//		self.player.isPlaying = true
-
 	}
 	
 	//обработчик нажатий на кнопку play/pause
 	@IBAction func playBtnPressed() {
-
 		guard self.player.playerItem != nil else {
 			self.player.isPlaying = true
 			nextTrackButtonPressed()
 			return
 		}
 		changePlayBtnState()
-		
 	}
 
 	@IBAction func refreshPressed() {
 		updateUI()
 	}
-	
 }
 
