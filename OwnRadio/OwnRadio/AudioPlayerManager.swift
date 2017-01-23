@@ -261,16 +261,15 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		//если есть кешированные треки - играем из кеша
 		if self.checkCountFileInCache() {
 			self.playFromCache(complition: complition)
-		} else {
-			//иначе пытаемся загрузить треки
-			//проверка подключения к интернету
-			guard currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable else {
-				return
-			}
-			DispatchQueue.global(qos: .background).async {
-				Downloader.sharedInstance.addTaskToQueue()
-			}
 		}
+		//проверка подключения к интернету
+		guard currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable else {
+			return
+		}
+		DispatchQueue.global(qos: .background).async {
+			Downloader.sharedInstance.addTaskToQueue()
+		}
+		
 	}
 	
 	//проверяем есть ли кешированные треки

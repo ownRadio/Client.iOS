@@ -55,10 +55,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 						if tracksContents.count > 4 {
 							for track in tracksContents {
 								if track.contains("mp3") {
-									let atURL =  URL(string: FileManager.documentsDir().appending(track))!
+									let atPath = FileManager.documentsDir().appending("/").appending(track)
 									do{
-										print(atURL)
-										try FileManager.default.removeItem(at: atURL)
+										print(atPath)
+										try FileManager.default.removeItem(atPath: atPath)
 										
 									} catch  {
 										print("error with move file reason - \(error)")
