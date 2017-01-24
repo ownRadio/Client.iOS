@@ -35,14 +35,11 @@ class ApiService {
 		let config = URLSessionConfiguration.default
 		let session = URLSession(configuration: config)
 		
-		
 		let task = session.dataTask(with: urlRequest as URLRequest, completionHandler: { (data, response, error) in
 			// do stuff with response, data & error here
-			
 			guard let data = data else {
 				return
 			}
-
 			do {
 				let anyJson = try JSONSerialization.jsonObject(with: data, options: [])
 				
@@ -85,7 +82,6 @@ class ApiService {
 		//isListen - флаг прослушан или пропущен трек, methodid - метод выдачи трека пользователю
 		let dict = ["lastListen":lastListen, "isListen":isListen, "methodid":1] as [String : Any]
 		do {
-			
 			let data = try JSONSerialization.data(withJSONObject: dict, options: [])
 //			let dataString = String(data: data, encoding: String.Encoding.utf8)!
 			request.httpBody = data

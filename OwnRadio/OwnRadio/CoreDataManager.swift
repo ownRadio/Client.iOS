@@ -34,7 +34,6 @@ class CoreDataManager {
 	}
 	
 	// MARK: - Core Data stack
-	
 	lazy var applicationDocumentsDirectory: NSURL = {
 		let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
 		return urls[urls.count-1] as NSURL
@@ -74,9 +73,7 @@ class CoreDataManager {
 	}()
 	
 	// End of data stack
-	
 	//MARK: Support Functions
-	
 	// возвращает количество записей в таблице
 	func chekCountOfEntitiesFor(entityName:String) -> Int {
 		let request:NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName:entityName)
@@ -93,7 +90,6 @@ class CoreDataManager {
 	// удаляет историю прослушивания трека с заданным trackId
 	func deleteHistoryFor(trackID:String) {
 		let fetchRequest: NSFetchRequest<HistoryEntity> = HistoryEntity.fetchRequest()
-//		fetchRequest.predicate = NSPredicate(format: "trackId = %@", trackID)
 		if let result = try? self.managedObjectContext.fetch(fetchRequest) {
 			for object in result {
 				self.managedObjectContext.delete(object)
@@ -111,9 +107,20 @@ class CoreDataManager {
 		}
 	}
 	
+	// удаление всех сущностей в таблице Track, для миграции из папки Documents
+	func deleteAllTracks() {
+		let fetchRequest: NSFetchRequest<TrackEntity> = TrackEntity.fetchRequest()
+		if let result = try? self.managedObjectContext.fetch(fetchRequest) {
+			for object in result {
+				self.managedObjectContext.delete(object)
+			}
+		}
+	}
+	
 	// задает текущую дату для трека с заданным trackId
 	func setDateForTrackBy(trackId:String) {
 		let fetchRequest: NSFetchRequest<TrackEntity> = TrackEntity.fetchRequest()
+		// устанавливаем предикат для запроса
 		fetchRequest.predicate = NSPredicate(format: "recId = %@", trackId)
 		if let result = try? self.managedObjectContext.fetch(fetchRequest) {
 			for object in result {
@@ -122,15 +129,16 @@ class CoreDataManager {
 		}
 	}
 	
+	// увеличивает число проигрываний
 	func setCountOfPlayForTrackBy(trackId:String) {
 		let fetchRequest: NSFetchRequest<TrackEntity> = TrackEntity.fetchRequest()
+		// устанавливаем предикат для запроса
 		fetchRequest.predicate = NSPredicate(format: "recId = %@", trackId)
 		if let result = try? self.managedObjectContext.fetch(fetchRequest) {
 			for object in result {
 				object.countPlay += 1
 			}
 		}
-		
 	}
 	
 	func sentHistory () {
@@ -142,13 +150,10 @@ class CoreDataManager {
 		let fetchRequest: NSFetchRequest<HistoryEntity> = HistoryEntity.fetchRequest()
 		
 		do {
-			
+			// выполняем запрос и отправляем историю о каждом треке
 			let searchResults = try self.managedObjectContext.fetch(fetchRequest)
 			for track in searchResults {
-				
 				ApiService.shared.saveHistory(trackId: track.trackId!, isListen: Int(track.isListen))
-				
-				print("\(track.value(forKey: "trackId"))")
 			}
 		} catch {
 			print("Error with request: \(error)")
@@ -160,7 +165,7 @@ class CoreDataManager {
 		//задаем сортировку по возрастанию даты проигрывания
 		let sectionSortDescriptor = NSSortDescriptor(key: "playingDate", ascending: true)
 		let sortDescriptors = [sectionSortDescriptor]
-		
+		// создание запроса
 		let fetchRequest: NSFetchRequest<TrackEntity> = TrackEntity.fetchRequest()
 		fetchRequest.sortDescriptors = sortDescriptors
 		fetchRequest.fetchLimit = 1
@@ -187,14 +192,14 @@ class CoreDataManager {
 		return song
 	}
 	
-	
+	// запрос groupBy для получения кол-ва проигрываний
 	func getGroupedTracks () -> NSArray {
-		
+		// создаем запрос и устанавливаем конфигурации для запроса
 		let fetchRequest:NSFetchRequest<NSFetchRequestResult> = NSFetchRequest()
 		let entityDescription = NSEntityDescription.entity(forEntityName: "TrackEntity", in: self.managedObjectContext)
 		fetchRequest.resultType = .dictionaryResultType
 		fetchRequest.entity = entityDescription
-
+		// создаем выражение для propertiesToFetch
 		let keyPathExpression = NSExpression.init(forKeyPath: "countPlay")
 		let countExpression = NSExpression(forFunction: "count:", arguments: [keyPathExpression])
 		
@@ -204,13 +209,13 @@ class CoreDataManager {
 		expressionDescription.expression = countExpression
 		expressionDescription.expressionResultType = .integer32AttributeType
 		
-		
+		// устанавливаем значения propertiesToFetch и propertiesToGroupBy для запроса groupby
 		fetchRequest.propertiesToFetch = ["countPlay", expressionDescription]
 		fetchRequest.propertiesToGroupBy = ["countPlay"]
 		
 		var resultsArray = NSArray()
-		
 		do{
+			//выполняем запрос
 			let res = try self.managedObjectContext.fetch(fetchRequest)
 			resultsArray = res as NSArray
 		} catch {
@@ -219,13 +224,13 @@ class CoreDataManager {
 		return resultsArray
 	}
 	
+	// возвращает соличество сущностей в таблице TrackEntity
 	func getCountOfTracks() -> Int {
-		
+		// создаем запрос
 		let fetchRequest: NSFetchRequest<TrackEntity> = TrackEntity.fetchRequest()
 		var count = 0
 		do {
-			//go get the results
-			
+			//выполняем запрос и устанавливаем count
 			let searchResults = try self.managedObjectContext.fetch(fetchRequest)
 			count = searchResults.count
 		} catch {
@@ -234,7 +239,40 @@ class CoreDataManager {
 		return count
 	}
 	
+	// получает трек с найбольшим кол-вом проигрываний
+	func getOldTrack () -> SongObject {
+		// устанавливаем сортировку по кол-ву поигрываний
+		let sectionSortDescriptor = NSSortDescriptor(key: "countPlay", ascending: false)
+		let sortDescriptors = [sectionSortDescriptor]
+		
+		// создаем запрос к базе с сортировкой
+		let fetchRequest: NSFetchRequest<TrackEntity> = TrackEntity.fetchRequest()
+		fetchRequest.sortDescriptors = sortDescriptors
+		fetchRequest.fetchLimit = 1
+		let  song = SongObject()
+		do {
+			// выполняем запрос и проверяем кол-во результатов
+			let searchResults = try self.managedObjectContext.fetch(fetchRequest)
+			guard searchResults.count != 0 else {
+				return song
+			}
+			//берем первый обьект из результата
+			let track = searchResults.first
+			
+			song.name = track?.trackName
+			song.artistName = track?.artistName
+			song.trackLength = track?.trackLength
+			song.trackID = track?.recId
+			song.path = track?.path
+			
+		} catch {
+			print("Error with request: \(error)")
+		}
+		return song
+	}
+
 	// MARK: - Core Data Saving support
+	// функция сохранения контекста
 	func saveContext () {
 		if managedObjectContext.hasChanges {
 			do {

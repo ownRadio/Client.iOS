@@ -31,39 +31,46 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			userDefaults.synchronize()
 		}
 		
+		// создаем папку Tracks если ее нет
 		let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-		
-		let tracksPath = documentsPath.appendingPathComponent("Tracks/")
+		let tracksPath = documentsPath.appendingPathComponent("Tracks")
 		do {
 			try FileManager.default.createDirectory(at: tracksPath, withIntermediateDirectories: true, attributes: nil)
 		} catch let error as NSError {
 			NSLog("Unable to create directory \(error.debugDescription)")
 		}
-
-		
+		//проверяем была ли совершена миграция
 		if userDefaults.object(forKey: "MigrationWasDone") == nil
 		{
-			let destinationUrl = FileManager.documentsDir().appending("/Tracks/")
-			do{
-				if let tracksContents = try? FileManager.default.contentsOfDirectory(atPath: FileManager.documentsDir()){
-					
-					if tracksContents.count > 3 {
-		
-					for track in tracksContents {
-						if track.contains("mp3") {
-						try? FileManager.default.moveItem(at:URL(string: track)! , to:URL(string: destinationUrl.appending(track))!)
+			DispatchQueue.global().async {
+				do{
+					// получаем содержимое папки Documents
+					if let tracksContents = try? FileManager.default.contentsOfDirectory(atPath: FileManager.documentsDir()){
+						//если в папке больше 4 файлов (3 файла Sqlite и папка Tracks) то пытаемся удалить треки
+						if tracksContents.count > 4 {
+							for track in tracksContents {
+								// проверка для удаления только треков
+								if track.contains("mp3") {
+									let atPath = FileManager.documentsDir().appending("/").appending(track)
+									do{
+										print(atPath)
+										try FileManager.default.removeItem(atPath: atPath)
+										
+									} catch  {
+										print("error with move file reason - \(error)")
+									}
+								}
 							}
+							//удаляем треки из базы
+							CoreDataManager.instance.deleteAllTracks()
+						}
+						// устанавливаем флаг о прохождении миграции
+						userDefaults.set(true, forKey: "MigrationWasDone")
+						userDefaults.synchronize()
 					}
 				}
-				userDefaults.set(true, forKey: "MigrationWasDone")
-				userDefaults.synchronize()
-					}
 			}
-			
 		}
-		
-		
-		
 		return true
 	}
 	
@@ -89,7 +96,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	func applicationWillTerminate(_ application: UIApplication) {
 		// Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 	}
-	
-	
+
 }
 

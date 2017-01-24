@@ -94,12 +94,10 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 						}
 					}
 				}
-				
 			case .failed:
 				break
 			case .unknown:
 				break
-				
 			}
 		}
 	}
@@ -147,7 +145,6 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 			}
 			
 		case .began: //interruption started
-			
 			if self.isPlaying == true {
 				print("Began Playing - TRUE")
 			} else {
@@ -176,7 +173,6 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		songInfo[MPMediaItemPropertyAlbumTitle] = "ownRadio"
 		songInfo[MPMediaItemPropertyArtist] = song.artistName
 		songInfo[MPMediaItemPropertyArtwork] = albumArt
-		print(song.trackLength)
 		songInfo[MPMediaItemPropertyPlaybackDuration] = NSNumber.init(value: song.trackLength)
 		
 		MPNowPlayingInfoCenter.default().nowPlayingInfo = songInfo
@@ -201,7 +197,6 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		self.player.pause()
 		
 		complition()
-		
 	}
 	
 	//пропуск трека
@@ -245,7 +240,6 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		                       forKeyPath: #keyPath(AVPlayerItem.status),
 		                       options: [.old, .new],
 		                       context: nil)
-		
 		player = AVPlayer(playerItem: playerItem)
 	}
 	
@@ -262,15 +256,13 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		//если есть кешированные треки - играем из кеша
 		if self.checkCountFileInCache() {
 			self.playFromCache(complition: complition)
-		} else {
-			//иначе пытаемся загрузить треки
-			//проверка подключения к интернету
-			guard currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable else {
-				return
-			}
-			DispatchQueue.global(qos: .background).async {
-				Downloader.sharedInstance.addTaskToQueue()
-			}
+		}
+		//проверка подключения к интернету
+		guard currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable else {
+			return
+		}
+		DispatchQueue.global(qos: .background).async {
+			Downloader.sharedInstance.addTaskToQueue()
 		}
 	}
 	
@@ -292,18 +284,14 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	CoreDataManager.instance.sentHistory()
 	//получаем информацию о следующем треке
 	ApiService.shared.getTrackIDFromServer {  (dictionary) in
-	
 	self.playingSong = SongObject()
-	
 	self.playingSong.initWithDict(dict: dictionary)
-	
 	//формируем URL трека для проигрывания
 	let trackURL = self.baseURL?.appendingPathComponent(self.playingSong.trackID)
 	guard let url = trackURL else {
 	return
 	}
 	self.playAudioWith(trackURL: url)
-	
 	self.playingSongID = self.playingSong.trackID
 	self.titleSong = self.playingSong.name
 	self.configurePlayingSong(song: self.playingSong)
@@ -320,7 +308,6 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		if currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable{
 			CoreDataManager.instance.sentHistory()
 		}
-		
 		//получаем из БД трек для проигрывания
 		self.playingSong = CoreDataManager.instance.getTrackToPlaing()
 		let docUrl = NSURL(string:FileManager.documentsDir())?.appendingPathComponent("Tracks")
@@ -341,9 +328,6 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		self.setWayForPlay(complition: complition)
 		guard currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable else {
 			return
-		}
-		DispatchQueue.global(qos: .background).async {
-			Downloader.sharedInstance.addTaskToQueue()
 		}
 	}
 	
