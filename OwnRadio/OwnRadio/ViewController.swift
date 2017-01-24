@@ -23,13 +23,13 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 	@IBOutlet weak var authorNameLbl: UILabel!
 	@IBOutlet weak var trackIDLbl: UILabel!
 	@IBOutlet weak var deviceIdLbl: UILabel!
-	@IBOutlet weak var exceptionLbl: UILabel!
+	@IBOutlet weak var infoLabel1: UILabel!
+	@IBOutlet weak var infoLabel2: UILabel!
+	@IBOutlet weak var infoLabel3: UILabel!
 	@IBOutlet var versionLabel: UILabel!
 	@IBOutlet var numberOfFiles: UILabel!
 	@IBOutlet var numberOfFilesInDB: UILabel!
-	@IBOutlet var playFrom: UILabel!
 	@IBOutlet var isNowPlaying: UILabel!
-	@IBOutlet var portType: UILabel!
 	@IBOutlet var tableView: UITableView!
 	
 	@IBOutlet weak var playPauseBtn: UIButton!
@@ -62,6 +62,11 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 		super.viewDidLoad()
 		self.authorNameLbl.text = "ownRadio"
 		self.trackNameLbl.text = ""
+		
+		if CoreDataManager.instance.getCountOfTracks() < 3 {
+			self.playPauseBtn.isEnabled = false
+			self.nextButton.isEnabled = false
+		}
 		//get version of app
 		if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
 			if (Bundle.main.infoDictionary?["CFBundleVersion"] as? String) != nil {
@@ -83,6 +88,7 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 		//подписываемся на уведомлени
 		reachability?.listener = { [unowned self] status in
 			guard CoreDataManager.instance.getCountOfTracks() < 3 else {
+				self.updateUI()
 				return
 			}
 			self.downloadTracks()
@@ -159,7 +165,9 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 			return
 		}
 		DispatchQueue.global(qos: .background).async {
-			Downloader.sharedInstance.addTaskToQueue()
+			Downloader.sharedInstance.addTaskToQueueWith {
+				self.updateUI()
+			}
 		}
 	}
 	
@@ -177,10 +185,14 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 		DispatchQueue.main.async {
 			guard let userInfo = notification.userInfo,
 				let message = userInfo["message"] as? String else {
-					self.exceptionLbl.text = "No userInfo found in notification"
+					self.infoLabel3.text = self.infoLabel2.text
+					self.infoLabel2.text = self.infoLabel1.text
+					self.infoLabel1.text = "No userInfo found in notification"
 					return
 			}
-			self.exceptionLbl.text = message
+			self.infoLabel3.text = self.infoLabel2.text
+			self.infoLabel2.text = self.infoLabel1.text
+			self.infoLabel1.text = message
 		}
 	}
 	
@@ -188,7 +200,9 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 		self.playPauseBtn.setImage(UIImage(named: "playImg"), for: UIControlState.normal)
 		self.leftPlayBtnConstraint.constant = pauseBtnConstraintConstant
 		self.trackIDLbl.text = ""
-		self.exceptionLbl.text = notification.description
+		self.infoLabel3.text = self.infoLabel2.text
+		self.infoLabel2.text = self.infoLabel1.text
+		self.infoLabel1.text = notification.description
 	}
 	
 	func audioRouteChangeListener(notification:NSNotification) {
@@ -200,7 +214,6 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 			let currentRoute = AVAudioSession.sharedInstance().currentRoute
 			for description in currentRoute.outputs {
 				
-				self.portType.text = description.portType
 				if description.portType == AVAudioSessionPortHeadphones {
 					print(description.portType)
 					print(self.player.isPlaying)
@@ -219,19 +232,15 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 			
 			for description in AVAudioSession.sharedInstance().currentRoute.outputs {
 				
-				self.portType.text = description.portType
 				switch description.portType {
-					
 				case AVAudioSessionPortBluetoothA2DP:
 					if self.player.isPlaying == false {
 						self.player.pauseSong {
-							
 						}
 					}
 				case AVAudioSessionPortBluetoothLE:
 					if self.player.isPlaying == false {
 						self.player.pauseSong {
-							
 						}
 					}
 				default: break
@@ -287,12 +296,28 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 		self.authorNameLbl.text = self.player.playingSong.artistName
 		self.isNowPlaying.text = String(self.player.isPlaying)
 		
+		if CoreDataManager.instance.getCountOfTracks() < 3 {
+			self.playPauseBtn.isEnabled = false
+			self.nextButton.isEnabled = false
+		} else {
+			self.playPauseBtn.isEnabled = true
+			self.nextButton.isEnabled = true
+		}
+		
 		//обновляение прогресс бара
 		self.timeObserver = self.player.player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(1.0, 1) , queue: DispatchQueue.main) { [unowned self] (time) in
 			if self.player.isPlaying == true {
 				self.progressView.progress = (CGFloat(time.seconds) / CGFloat((self.player.playingSong.trackLength)!))
 			}
 			} as AnyObject?
+		
+//		if CoreDataManager.instance.getCountOfTracks() < 3 {
+//			self.playPauseBtn.isEnabled = false
+//			self.nextButton.isEnabled = false
+//		} else {
+//			self.playPauseBtn.isEnabled = true
+//			self.nextButton.isEnabled = true
+//		}
 		
 		//обновление кнопки playPause
 		if self.player.isPlaying == false {
@@ -301,12 +326,6 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 		} else {
 			self.playPauseBtn.setImage(UIImage(named: "pauseImg"), for: UIControlState.normal)
 			self.leftPlayBtnConstraint.constant = pauseBtnConstraintConstant
-		}
-		//обновление источника проигрывания
-		if CoreDataManager.instance.getCountOfTracks() > 0 {
-			self.playFrom.text = "Cache"
-		} else {
-			self.playFrom.text = "Cache is empty, please wait for the tracks is load"
 		}
 		
 		getCountFilesInCache()
@@ -348,6 +367,7 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 	}
 	
 	@IBAction func nextTrackButtonPressed() {
+		
 		self.player.skipSong { [unowned self] in
 			DispatchQueue.main.async { [unowned self] in
 				self.updateUI()

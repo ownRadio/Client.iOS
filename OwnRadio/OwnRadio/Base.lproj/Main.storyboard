@@ -118,7 +118,7 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Error_Message" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1uo-sP-hKP">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Info_Message" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1uo-sP-hKP">
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -134,16 +134,6 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Number_Of_Files" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RTW-Mz-mCz">
-                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Play from: " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UHU-C0-wkI">
-                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Online_Cache" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zaa-oV-FBx">
                                                 <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -168,16 +158,6 @@
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PortType: " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mvU-J8-Y6U">
-                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Type" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tl0-gU-gkU">
-                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
                                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="C8N-N4-a6Y">
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <prototypes>
@@ -196,45 +176,51 @@
                                                 </connections>
                                             </tableView>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gKs-Uh-ytP">
-                                                <state key="normal" title="REFRASH"/>
+                                                <state key="normal" title="REFRESH"/>
                                                 <connections>
                                                     <action selector="refreshPressed" destination="BYZ-38-t0r" eventType="touchUpInside" id="fLQ-MD-41V"/>
                                                 </connections>
                                             </button>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Info_Message" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hZv-zt-SUs">
+                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Info_Message" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="E3S-J6-XRL">
+                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
                                         </subviews>
                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.25524400684931509" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
-                                            <constraint firstItem="UHU-C0-wkI" firstAttribute="top" secondItem="012-1F-nKb" secondAttribute="bottom" constant="8" id="3cs-V5-KSB"/>
+                                            <constraint firstItem="E3S-J6-XRL" firstAttribute="top" secondItem="hZv-zt-SUs" secondAttribute="bottom" constant="3" id="2p4-pL-7YB"/>
                                             <constraint firstAttribute="height" constant="470" id="6V4-GO-QLI"/>
                                             <constraint firstItem="gbX-RN-wCN" firstAttribute="leading" secondItem="Ifw-5N-ebI" secondAttribute="leading" constant="8" id="9XT-dz-vsX"/>
-                                            <constraint firstItem="C8N-N4-a6Y" firstAttribute="top" secondItem="Tl0-gU-gkU" secondAttribute="bottom" constant="10" id="Btx-rz-L0u"/>
-                                            <constraint firstItem="UHU-C0-wkI" firstAttribute="leading" secondItem="Ifw-5N-ebI" secondAttribute="leading" constant="8" id="FYL-DL-rQC"/>
+                                            <constraint firstItem="hZv-zt-SUs" firstAttribute="leading" secondItem="1uo-sP-hKP" secondAttribute="leading" id="GBm-0d-X6g"/>
                                             <constraint firstItem="QfG-Ow-1wG" firstAttribute="top" secondItem="O47-RO-uEC" secondAttribute="bottom" constant="8" id="GDI-ID-18j"/>
+                                            <constraint firstItem="hZv-zt-SUs" firstAttribute="top" secondItem="1uo-sP-hKP" secondAttribute="bottom" constant="3" id="GbU-Dc-mZj"/>
                                             <constraint firstItem="alF-Xe-fE6" firstAttribute="leading" secondItem="Ifw-5N-ebI" secondAttribute="leading" constant="8" id="HUq-dH-K7h"/>
                                             <constraint firstItem="IY3-Yy-ttG" firstAttribute="leading" secondItem="Ifw-5N-ebI" secondAttribute="leading" constant="8" id="Ixz-Q5-0Sw"/>
                                             <constraint firstItem="O47-RO-uEC" firstAttribute="top" secondItem="Ifw-5N-ebI" secondAttribute="top" constant="10" id="JPf-Vg-JPK"/>
-                                            <constraint firstItem="Zaa-oV-FBx" firstAttribute="leading" secondItem="UHU-C0-wkI" secondAttribute="trailing" constant="10" id="Jh2-3b-Ye5"/>
                                             <constraint firstItem="fIJ-N1-pAG" firstAttribute="leading" secondItem="O47-RO-uEC" secondAttribute="trailing" constant="10" id="Ls9-A2-v1d"/>
                                             <constraint firstItem="IY3-Yy-ttG" firstAttribute="top" secondItem="QfG-Ow-1wG" secondAttribute="bottom" constant="8" id="Lvd-UO-t8n"/>
+                                            <constraint firstItem="gbX-RN-wCN" firstAttribute="top" secondItem="E3S-J6-XRL" secondAttribute="bottom" constant="10" id="PWl-pY-Rf8"/>
                                             <constraint firstItem="l2B-f3-Jit" firstAttribute="leading" secondItem="alF-Xe-fE6" secondAttribute="trailing" constant="10" id="Pnk-7M-0Fj"/>
-                                            <constraint firstItem="gbX-RN-wCN" firstAttribute="top" secondItem="rld-oo-DpN" secondAttribute="bottom" constant="8" id="Ppd-sd-iNh"/>
                                             <constraint firstItem="wCB-G2-6rJ" firstAttribute="leading" secondItem="QfG-Ow-1wG" secondAttribute="trailing" constant="10" id="QFC-VS-aib"/>
                                             <constraint firstItem="OwP-Dt-Wqz" firstAttribute="centerY" secondItem="IY3-Yy-ttG" secondAttribute="centerY" id="Qhn-iR-mWv"/>
+                                            <constraint firstItem="E3S-J6-XRL" firstAttribute="leading" secondItem="hZv-zt-SUs" secondAttribute="leading" id="VNY-Ye-Lys"/>
+                                            <constraint firstItem="C8N-N4-a6Y" firstAttribute="top" secondItem="alF-Xe-fE6" secondAttribute="bottom" constant="10" id="VuH-o8-OZI"/>
                                             <constraint firstItem="wCB-G2-6rJ" firstAttribute="centerY" secondItem="QfG-Ow-1wG" secondAttribute="centerY" id="Yqe-pX-QmV"/>
-                                            <constraint firstItem="Tl0-gU-gkU" firstAttribute="centerY" secondItem="mvU-J8-Y6U" secondAttribute="centerY" id="avJ-xd-un9"/>
                                             <constraint firstItem="YNl-dy-IVv" firstAttribute="leading" secondItem="012-1F-nKb" secondAttribute="trailing" constant="10" id="b5I-Vi-GMB"/>
-                                            <constraint firstItem="mvU-J8-Y6U" firstAttribute="leading" secondItem="Ifw-5N-ebI" secondAttribute="leading" constant="8" id="byR-9p-6Ur"/>
-                                            <constraint firstItem="Zaa-oV-FBx" firstAttribute="centerY" secondItem="UHU-C0-wkI" secondAttribute="centerY" id="cuA-zG-hkw"/>
                                             <constraint firstAttribute="trailing" secondItem="C8N-N4-a6Y" secondAttribute="trailing" id="dAF-RF-dCY"/>
                                             <constraint firstItem="1uo-sP-hKP" firstAttribute="leading" secondItem="rld-oo-DpN" secondAttribute="trailing" constant="10" id="dPg-J6-TeX"/>
                                             <constraint firstItem="QfG-Ow-1wG" firstAttribute="leading" secondItem="Ifw-5N-ebI" secondAttribute="leading" constant="8" id="eJ0-e9-yL5"/>
-                                            <constraint firstItem="mvU-J8-Y6U" firstAttribute="top" secondItem="alF-Xe-fE6" secondAttribute="bottom" constant="8" id="fKB-lE-V2z"/>
+                                            <constraint firstItem="alF-Xe-fE6" firstAttribute="top" secondItem="012-1F-nKb" secondAttribute="bottom" constant="10" id="fAg-kz-OI5"/>
                                             <constraint firstItem="012-1F-nKb" firstAttribute="top" secondItem="gbX-RN-wCN" secondAttribute="bottom" constant="8" id="fzl-ca-zJD"/>
                                             <constraint firstAttribute="bottom" secondItem="C8N-N4-a6Y" secondAttribute="bottom" constant="5" id="gO3-6k-N9M"/>
                                             <constraint firstItem="rld-oo-DpN" firstAttribute="top" secondItem="IY3-Yy-ttG" secondAttribute="bottom" constant="8" id="geA-4J-cdO"/>
-                                            <constraint firstItem="Tl0-gU-gkU" firstAttribute="leading" secondItem="mvU-J8-Y6U" secondAttribute="trailing" constant="10" id="huS-vH-SU9"/>
                                             <constraint firstItem="RTW-Mz-mCz" firstAttribute="centerY" secondItem="gbX-RN-wCN" secondAttribute="centerY" id="i4t-qy-c1W"/>
-                                            <constraint firstItem="alF-Xe-fE6" firstAttribute="top" secondItem="UHU-C0-wkI" secondAttribute="bottom" constant="8" id="iUg-hD-LGc"/>
                                             <constraint firstItem="OwP-Dt-Wqz" firstAttribute="leading" secondItem="IY3-Yy-ttG" secondAttribute="trailing" constant="10" id="icv-Hn-9eV"/>
                                             <constraint firstItem="C8N-N4-a6Y" firstAttribute="leading" secondItem="Ifw-5N-ebI" secondAttribute="leading" id="jaj-vE-1CG"/>
                                             <constraint firstItem="rld-oo-DpN" firstAttribute="leading" secondItem="Ifw-5N-ebI" secondAttribute="leading" constant="8" id="jt6-AO-UGm"/>
@@ -294,16 +280,16 @@
                         <outlet property="backgroundImageView" destination="rOy-th-Dzd" id="uOQ-I1-Fr4"/>
                         <outlet property="circleViewConteiner" destination="2yL-rq-KcF" id="ruC-fw-qJ9"/>
                         <outlet property="deviceIdLbl" destination="OwP-Dt-Wqz" id="fM9-zo-qo6"/>
-                        <outlet property="exceptionLbl" destination="1uo-sP-hKP" id="BOh-0c-qGK"/>
+                        <outlet property="infoLabel1" destination="1uo-sP-hKP" id="pBr-Q7-IpR"/>
+                        <outlet property="infoLabel2" destination="hZv-zt-SUs" id="HHn-Oo-Rd4"/>
+                        <outlet property="infoLabel3" destination="E3S-J6-XRL" id="Kxt-gR-INh"/>
                         <outlet property="infoView" destination="Ifw-5N-ebI" id="Dcf-Gx-RUV"/>
                         <outlet property="isNowPlaying" destination="l2B-f3-Jit" id="DOF-q3-BNA"/>
                         <outlet property="leftPlayBtnConstraint" destination="ZbW-Ke-wpW" id="31t-FB-cLO"/>
                         <outlet property="nextButton" destination="YTu-Iv-xLQ" id="BMO-N8-vAQ"/>
                         <outlet property="numberOfFiles" destination="RTW-Mz-mCz" id="O6X-xf-McM"/>
                         <outlet property="numberOfFilesInDB" destination="YNl-dy-IVv" id="TR4-fK-MPf"/>
-                        <outlet property="playFrom" destination="Zaa-oV-FBx" id="0ie-4V-Efb"/>
                         <outlet property="playPauseBtn" destination="kuP-oH-VBW" id="RSB-WG-s4B"/>
-                        <outlet property="portType" destination="Tl0-gU-gkU" id="OxZ-nU-tCy"/>
                         <outlet property="tableView" destination="C8N-N4-a6Y" id="grj-gb-69C"/>
                         <outlet property="trackIDLbl" destination="wCB-G2-6rJ" id="nry-P9-0rE"/>
                         <outlet property="trackNameLbl" destination="QXq-lk-UPI" id="Qmj-ey-PEd"/>
