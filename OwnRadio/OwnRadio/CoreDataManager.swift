@@ -240,21 +240,24 @@ class CoreDataManager {
 	}
 	
 	// получает трек с найбольшим кол-вом проигрываний
-	func getOldTrack () -> SongObject {
-		// устанавливаем сортировку по кол-ву поигрываний
-		let sectionSortDescriptor = NSSortDescriptor(key: "countPlay", ascending: false)
-		let sortDescriptors = [sectionSortDescriptor]
+	func getOldTrack () -> SongObject? {
+		// устанавливаем сортировку по кол-ву поигрываний и по дате
+		let countSortDescriptor = NSSortDescriptor(key: "countPlay", ascending: false)
+		let dateSortDescriptor = NSSortDescriptor(key: "playingDate", ascending: true)
+		let sortDescriptors = [countSortDescriptor, dateSortDescriptor]
 		
 		// создаем запрос к базе с сортировкой
 		let fetchRequest: NSFetchRequest<TrackEntity> = TrackEntity.fetchRequest()
 		fetchRequest.sortDescriptors = sortDescriptors
+//		задаем предикат
+		fetchRequest.predicate = NSPredicate(format: "countPlay > %d", 0)
 		fetchRequest.fetchLimit = 1
 		let  song = SongObject()
 		do {
 			// выполняем запрос и проверяем кол-во результатов
 			let searchResults = try self.managedObjectContext.fetch(fetchRequest)
 			guard searchResults.count != 0 else {
-				return song
+				return nil
 			}
 			//берем первый обьект из результата
 			let track = searchResults.first

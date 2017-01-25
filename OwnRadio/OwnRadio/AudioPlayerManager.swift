@@ -160,7 +160,9 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		guard currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable else {
 			return
 		}
-		self.nextTrack(complition: nil)
+		self.nextTrack {
+			
+		}
 	}
 	
 	///  confirure album cover and other params for playing song
@@ -200,7 +202,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	}
 	
 	//пропуск трека
-	func skipSong(complition: (() -> Void)?) {
+	func skipSong(complition: @escaping (() -> Void)) {
 	
 		if (self.playingSongID != nil) {
 			self.playingSong.isListen = -1
@@ -252,7 +254,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	}
 	
 	// selection way to playing (Online or Cache)
-	func setWayForPlay(complition: (() -> Void)?) {
+	func setWayForPlay(complition: @escaping (() -> Void)) {
 		//если есть кешированные треки - играем из кеша
 		if self.checkCountFileInCache() {
 			self.playFromCache(complition: complition)
@@ -262,7 +264,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 			return
 		}
 		DispatchQueue.global(qos: .background).async {
-			Downloader.sharedInstance.addTaskToQueue()
+			Downloader.sharedInstance.addTaskToQueueWith(complition: complition)
 		}
 	}
 	
@@ -324,7 +326,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		}
 	}
 	
-	func nextTrack(complition: (() -> Void)?) {
+	func nextTrack(complition: @escaping (() -> Void)) {
 		self.setWayForPlay(complition: complition)
 		guard currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable else {
 			return
