@@ -27,9 +27,11 @@ class CircularView: UIView {
 			} else if (newValue < 0) {
 				circlePathLayer.strokeEnd = 0
 			} else {
+
 				circlePathLayer.strokeEnd = newValue
 			}
 		}
+	
 	}
 	
 	override init(frame: CGRect) {
@@ -66,6 +68,7 @@ class CircularView: UIView {
 		let rect = circleFrame()
 		
 //		circleCenter = CGPoint(x: circlePathLayer.bounds.midX, y: circlePathLayer.bounds.midY)  -CGFloat(M_PI_2)
+		
 		
 		let circlePath = UIBezierPath(arcCenter: CGPoint(x:rect.midX , y:rect.midY), radius: CGFloat(rect.width/2), startAngle: -CGFloat(M_PI_2), endAngle: CGFloat(3*M_PI/2), clockwise: true)
 		

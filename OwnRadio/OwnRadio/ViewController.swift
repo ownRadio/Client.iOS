@@ -46,7 +46,7 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 	var visibleInfoView: Bool!
 	
 	var timer = Timer()
-	var timeObserver:AnyObject?
+	var timeObserverToken:AnyObject? = nil
 	
 	let progressView = CircularView(frame: CGRect.zero)
 	
@@ -174,6 +174,7 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 	// MARK: Notification Selectors
 	func songDidPlay() {
 		self.player.nextTrack { [unowned self] in
+			self.progressView.isHidden = true
 			DispatchQueue.main.async {
 				self.updateUI()
 			}
@@ -305,8 +306,12 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 		}
 		
 		//обновляение прогресс бара
-		self.timeObserver = self.player.player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(1.0, 1) , queue: DispatchQueue.main) { [unowned self] (time) in
+		
+
+		//		self.timeObserverToken =
+		 self.timeObserverToken = self.player.player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(1.0, 1) , queue: DispatchQueue.main) { [unowned self] (time) in
 			if self.player.isPlaying == true {
+
 				self.progressView.progress = (CGFloat(time.seconds) / CGFloat((self.player.playingSong.trackLength)!))
 			}
 			} as AnyObject?
@@ -367,23 +372,31 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 	}
 	
 	@IBAction func nextTrackButtonPressed() {
+		if player.isPlaying == true {
+			self.player.player.pause()
+		}
+		self.progressView.isHidden = true
+		self.progressView.configure()
 		
 		self.player.skipSong { [unowned self] in
 			DispatchQueue.main.async { [unowned self] in
 				self.updateUI()
 			}
 		}
-		self.progressView.configure()
-		self.timeObserver?.removeTimeObserver
+		if self.timeObserverToken != nil {
+			self.timeObserverToken = nil
+		}
 	}
 	
 	//обработчик нажатий на кнопку play/pause
 	@IBAction func playBtnPressed() {
 		guard self.player.playerItem != nil else {
+			
 			self.player.isPlaying = true
 			nextTrackButtonPressed()
 			return
 		}
+		self.progressView.isHidden = false
 		changePlayBtnState()
 	}
 
