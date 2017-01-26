@@ -72,7 +72,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	                           of object: Any?,
 	                           change: [NSKeyValueChangeKey : Any]?,
 	                           context: UnsafeMutableRawPointer?) {
-		
+
 		if keyPath == #keyPath(AVPlayerItem.status) {
 			let status: AVPlayerItemStatus
 			
@@ -86,11 +86,20 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 			// Switch over the status
 			switch status {
 			case .readyToPlay:
+				
 				if wasInterreption {
 					wasInterreption = false
 				} else {
 					if isPlaying == true {
 						self.resumeSong {
+							if let rootController = UIApplication.shared.keyWindow?.rootViewController {
+								let radioViewContr = rootController as! RadioViewController
+								DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: { 
+									radioViewContr.progressView.isHidden = false
+								})
+							}
+						CoreDataManager.instance.setCountOfPlayForTrackBy(trackId: self.playingSong.trackID)
+						CoreDataManager.instance.saveContext()
 						}
 					}
 				}
@@ -111,7 +120,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 			self.addDateToHistoryTable(playingSong: self.playingSong)
 			if self.playingSong.trackID != nil  {
 				CoreDataManager.instance.setDateForTrackBy(trackId: self.playingSong.trackID)
-				CoreDataManager.instance.setCountOfPlayForTrackBy(trackId: self.playingSong.trackID)
+//				CoreDataManager.instance.setCountOfPlayForTrackBy(trackId: self.playingSong.trackID)
 				CoreDataManager.instance.saveContext()
 			}
 		}
@@ -160,8 +169,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		guard currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable else {
 			return
 		}
-		self.nextTrack {
-			
+		self.nextTrack {	
 		}
 	}
 	
@@ -186,7 +194,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		isPlaying = true
 		if self.playerItem != nil {
 			self.player.play()
-			
+
 			complition()
 		} else {
 			self.nextTrack(complition: complition)
