@@ -32,6 +32,8 @@
 		099EAE511E30FC0B005478F2 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 091679C91DE47D9900619B3F /* Alamofire.framework */; };
 		09A054151DF168170008ACE7 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09A054141DF168170008ACE7 /* Utilities.swift */; };
 		09B953A11DFEBED70098417C /* CircularView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09B953A01DFEBED70098417C /* CircularView.swift */; };
+		09D52F8C1E3F36EF006B66E6 /* CachingView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 09D52F8B1E3F36EF006B66E6 /* CachingView.xib */; };
+		09D52F8E1E3F3F37006B66E6 /* CachingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09D52F8D1E3F3F37006B66E6 /* CachingView.swift */; };
 		09EA799B1DE57D040034B8DF /* AudioPlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EA799A1DE57D040034B8DF /* AudioPlayerManager.swift */; };
 		50D8269A1DE74B0800238F96 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50D826981DE74B0800238F96 /* Fabric.framework */; };
 		50D8269B1DE74B0800238F96 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50D826991DE74B0800238F96 /* Crashlytics.framework */; };
@@ -99,6 +101,8 @@
 		099EAE4A1E2FADDF005478F2 /* SFUIDisplay-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SFUIDisplay-Regular.otf"; sourceTree = "<group>"; };
 		09A054141DF168170008ACE7 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		09B953A01DFEBED70098417C /* CircularView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircularView.swift; sourceTree = "<group>"; };
+		09D52F8B1E3F36EF006B66E6 /* CachingView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CachingView.xib; sourceTree = "<group>"; };
+		09D52F8D1E3F3F37006B66E6 /* CachingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachingView.swift; sourceTree = "<group>"; };
 		09EA799A1DE57D040034B8DF /* AudioPlayerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioPlayerManager.swift; sourceTree = "<group>"; };
 		50D826981DE74B0800238F96 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		50D826991DE74B0800238F96 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
@@ -178,6 +182,7 @@
 				091679C61DE47D4400619B3F /* ApiService.swift */,
 				09EA799A1DE57D040034B8DF /* AudioPlayerManager.swift */,
 				091679561DE451CF00619B3F /* ViewController.swift */,
+				09D52F8A1E3F36BA006B66E6 /* View */,
 				091679581DE451CF00619B3F /* Main.storyboard */,
 				0916795B1DE451CF00619B3F /* Assets.xcassets */,
 				0916795D1DE451CF00619B3F /* LaunchScreen.storyboard */,
@@ -234,6 +239,15 @@
 				0979B1B81DF01085003C01C7 /* CoreDataManager.swift */,
 			);
 			name = CoreDataManager;
+			sourceTree = "<group>";
+		};
+		09D52F8A1E3F36BA006B66E6 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				09D52F8B1E3F36EF006B66E6 /* CachingView.xib */,
+				09D52F8D1E3F3F37006B66E6 /* CachingView.swift */,
+			);
+			name = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -347,6 +361,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				09D52F8C1E3F36EF006B66E6 /* CachingView.xib in Resources */,
 				099EAE4B1E2FADDF005478F2 /* SFUIDisplay-Regular.otf in Resources */,
 				0916795F1DE451CF00619B3F /* LaunchScreen.storyboard in Resources */,
 				099EAE491E2FAA05005478F2 /* SFUIText-Regular.otf in Resources */,
@@ -410,6 +425,7 @@
 				0979B1B91DF01085003C01C7 /* CoreDataManager.swift in Sources */,
 				0989BD801DF6F33C005FE001 /* TrackEntity+CoreDataClass.swift in Sources */,
 				093FBD0C1DEEFEB800038EF0 /* SongObject.swift in Sources */,
+				09D52F8E1E3F3F37006B66E6 /* CachingView.swift in Sources */,
 				091679571DE451CF00619B3F /* ViewController.swift in Sources */,
 				09A054151DF168170008ACE7 /* Utilities.swift in Sources */,
 				0971662F1DF84A7F005AB0CE /* DiskStatus.swift in Sources */,
