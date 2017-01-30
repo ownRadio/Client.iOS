@@ -67,11 +67,6 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 		self.authorNameLbl.text = "ownRadio"
 		self.trackNameLbl.text = ""
 		
-		
-		if CoreDataManager.instance.getCountOfTracks() < 3 {
-			self.playPauseBtn.isEnabled = false
-			self.nextButton.isEnabled = false
-		}
 		//get version of app
 		if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
 			if (Bundle.main.infoDictionary?["CFBundleVersion"] as? String) != nil {
@@ -93,8 +88,9 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 		//подписываемся на уведомлени
 		reachability?.listener = { [unowned self] status in
 			guard CoreDataManager.instance.getCountOfTracks() < 3 else {
-				self.updateUI()
-			
+				DispatchQueue.main.async {
+					self.updateUI()
+				}
 				return
 			}
 			self.downloadTracks()
@@ -188,6 +184,7 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 				self.updateUI()
 			}
 		}
+		
 	}
 	
 	//функция обновления поля Info системной информации
