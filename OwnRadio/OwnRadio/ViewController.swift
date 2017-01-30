@@ -53,6 +53,7 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 	let playBtnConstraintConstant = CGFloat(15.0)
 	let pauseBtnConstraintConstant = CGFloat(10.0)
 	
+	var cachingView = CachingView.instanceFromNib()
 	var playedTracks: NSArray = CoreDataManager.instance.getGroupedTracks()
 	var reachability = NetworkReachabilityManager(host: "http://api.ownradio.ru/v3")
 	
@@ -60,13 +61,12 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 	//выполняется при загрузке окна
 	override func viewDidLoad() {
 		super.viewDidLoad()
+		
+		cachingView.frame = self.view.bounds
+		
 		self.authorNameLbl.text = "ownRadio"
 		self.trackNameLbl.text = ""
 		
-		if CoreDataManager.instance.getCountOfTracks() < 3 {
-			self.playPauseBtn.isEnabled = false
-			self.nextButton.isEnabled = false
-		}
 		//get version of app
 		if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
 			if (Bundle.main.infoDictionary?["CFBundleVersion"] as? String) != nil {
@@ -88,12 +88,15 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 		//подписываемся на уведомлени
 		reachability?.listener = { [unowned self] status in
 			guard CoreDataManager.instance.getCountOfTracks() < 3 else {
-				self.updateUI()
+				DispatchQueue.main.async {
+					self.updateUI()
+				}
 				return
 			}
 			self.downloadTracks()
 		}
 		reachability?.startListening()
+		self.updateUI()
 		//обрыв воспроизведения трека
 		NotificationCenter.default.addObserver(self, selector: #selector(crashNetwork(_:)), name: NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: self.player.playerItem)
 		//трек доигран до конца
@@ -122,7 +125,7 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 	//когда приложение скрыто - отписываемся от уведомлений
 	override func viewDidDisappear(_ animated: Bool) {
 		super.viewDidDisappear(animated)
-		reachability?.stopListening()
+//		reachability?.stopListening()
 		
 		NotificationCenter.default.removeObserver(self, name:  NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: nil)
 		NotificationCenter.default.removeObserver(self, name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player.playerItem)
@@ -166,7 +169,9 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 		}
 		DispatchQueue.global(qos: .background).async {
 			Downloader.sharedInstance.addTaskToQueueWith {
-				self.updateUI()
+				DispatchQueue.main.async {
+					self.updateUI()
+				}
 			}
 		}
 	}
@@ -179,6 +184,7 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 				self.updateUI()
 			}
 		}
+		
 	}
 	
 	//функция обновления поля Info системной информации
@@ -300,9 +306,11 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 		if CoreDataManager.instance.getCountOfTracks() < 3 {
 			self.playPauseBtn.isEnabled = false
 			self.nextButton.isEnabled = false
+			self.view.addSubview(self.cachingView)
 		} else {
 			self.playPauseBtn.isEnabled = true
 			self.nextButton.isEnabled = true
+			self.cachingView.removeFromSuperview()
 		}
 		
 		//обновляение прогресс бара
@@ -315,14 +323,6 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 				self.progressView.progress = (CGFloat(time.seconds) / CGFloat((self.player.playingSong.trackLength)!))
 			}
 			} as AnyObject?
-		
-//		if CoreDataManager.instance.getCountOfTracks() < 3 {
-//			self.playPauseBtn.isEnabled = false
-//			self.nextButton.isEnabled = false
-//		} else {
-//			self.playPauseBtn.isEnabled = true
-//			self.nextButton.isEnabled = true
-//		}
 		
 		//обновление кнопки playPause
 		if self.player.isPlaying == false {
