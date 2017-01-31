@@ -39,7 +39,7 @@ class Downloader {
 						} else {
 							//если этот трек не еще не загружен - загружаем трек
 							//используется замыкание для сохранения загруженного трека в файл и информации о треке в бд
-							URLSession.shared.downloadTask(with: audioUrl, completionHandler: { (location, response, error) -> Void in
+							let downloadRequest = URLSession.shared.downloadTask(with: audioUrl, completionHandler: { (location, response, error) -> Void in
 								guard let location = location, error == nil else { return }
 								do {
 									let file = NSData(contentsOf: location)
@@ -74,7 +74,11 @@ class Downloader {
 								} catch let error as NSError {
 									print(error.localizedDescription)
 								}
-							}).resume()
+							})
+							self.taskQueue?.addOperation {
+								downloadRequest.resume()
+							}
+							
 						}
 					}
 				}
@@ -116,10 +120,7 @@ class Downloader {
 //		задаем единственную операцию в один момент времени
 		self.taskQueue?.maxConcurrentOperationCount = 1
 		for _ in 0..<3 {
-			
-			self.taskQueue?.addOperation { [unowned self] in
-				self.load(complition: complition)
-			}
+			self.load(complition: complition)
 		}
 	}
 
