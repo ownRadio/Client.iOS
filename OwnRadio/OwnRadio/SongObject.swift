@@ -9,7 +9,7 @@
 
 import Foundation
 
-class SongObject {
+class SongObject: NSObject {
 	var name: String!
 	var artistName: String!
 	var trackID: String!
@@ -25,4 +25,5 @@ class SongObject {
 		self.artistName = dict["artist"] as? String!
 		self.methodId = dict["methodid"] as? String!
 	}
+
 }

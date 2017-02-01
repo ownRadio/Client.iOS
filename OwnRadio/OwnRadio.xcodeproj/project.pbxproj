@@ -16,7 +16,6 @@
 		091679751DE451CF00619B3F /* OwnRadioUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 091679741DE451CF00619B3F /* OwnRadioUITests.swift */; };
 		091679C71DE47D4400619B3F /* ApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 091679C61DE47D4400619B3F /* ApiService.swift */; };
 		093FBD0C1DEEFEB800038EF0 /* SongObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093FBD0B1DEEFEB800038EF0 /* SongObject.swift */; };
-		0949CA291E3100010066F5A9 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 091679C91DE47D9900619B3F /* Alamofire.framework */; };
 		0949CA2A1E3100010066F5A9 /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 091679C91DE47D9900619B3F /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		0971662F1DF84A7F005AB0CE /* DiskStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0971662E1DF84A7F005AB0CE /* DiskStatus.swift */; };
 		0979B1B41DF00FCE003C01C7 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0979B1B31DF00FCE003C01C7 /* CoreData.framework */; };
@@ -116,7 +115,6 @@
 				0979B1B41DF00FCE003C01C7 /* CoreData.framework in Frameworks */,
 				099EAE511E30FC0B005478F2 /* Alamofire.framework in Frameworks */,
 				50D8269B1DE74B0800238F96 /* Crashlytics.framework in Frameworks */,
-				0949CA291E3100010066F5A9 /* Alamofire.framework in Frameworks */,
 				50D8269A1DE74B0800238F96 /* Fabric.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -316,7 +314,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0800;
-				LastUpgradeCheck = 0800;
+				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = "Roll'n'Code";
 				TargetAttributes = {
 					091679501DE451CF00619B3F = {
@@ -509,6 +507,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -559,6 +558,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;

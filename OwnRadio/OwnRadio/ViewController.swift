@@ -62,10 +62,14 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
-		cachingView.frame = self.view.bounds
-		
 		self.authorNameLbl.text = "ownRadio"
 		self.trackNameLbl.text = ""
+		
+		self.checkMemoryWarning()
+		
+		cachingView.frame = self.view.bounds
+		
+		
 		
 		//get version of app
 		if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
@@ -105,6 +109,17 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 		NotificationCenter.default.addObserver(self, selector: #selector(updateSysInfo(_:)), name: NSNotification.Name(rawValue:"updateSysInfo"), object: nil)
 
 	}
+	
+	func checkMemoryWarning() {
+		guard DiskStatus.freeDiskSpaceInBytes < 104857600 else {
+			return
+		}
+		self.authorNameLbl.text = "Not enough free memory. To work correctly, you need at least 100 mb"
+		self.trackNameLbl.text = ""
+		self.playPauseBtn.isEnabled = false
+		self.nextButton.isEnabled = false
+	}
+	
 	func detectedHeadphones () {
 		
 		let currentRoute = AVAudioSession.sharedInstance().currentRoute
@@ -179,12 +194,11 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 	// MARK: Notification Selectors
 	func songDidPlay() {
 		self.player.nextTrack { [unowned self] in
-			self.progressView.isHidden = true
 			DispatchQueue.main.async {
 				self.updateUI()
 			}
 		}
-		
+		self.progressView.isHidden = true
 	}
 	
 	//функция обновления поля Info системной информации
