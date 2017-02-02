@@ -87,12 +87,12 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="268.5"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ownRadio" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QXq-lk-UPI">
-                                        <rect key="frame" x="153.5" y="125.5" width="69" height="18"/>
+                                        <rect key="frame" x="153" y="125.5" width="69" height="18"/>
                                         <fontDescription key="fontDescription" name="SFUIText-Regular" family="SF UI  Text" pointSize="15"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Author_Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Va0-Ci-1zg">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Author_Name" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Va0-Ci-1zg">
                                         <rect key="frame" x="137.5" y="100.5" width="100.5" height="20"/>
                                         <fontDescription key="fontDescription" name="SFUIDisplay-Regular" family="SF UI Display" pointSize="17"/>
                                         <color key="textColor" red="0.30588235294117649" green="0.67843137254901964" blue="0.88627450980392153" alpha="1" colorSpace="calibratedRGB"/>
@@ -276,7 +276,9 @@
                                     <constraint firstAttribute="trailing" secondItem="Ifw-5N-ebI" secondAttribute="trailing" id="FCh-q7-Wkw"/>
                                     <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="QXq-lk-UPI" secondAttribute="trailing" constant="10" id="H0F-4J-K7y"/>
                                     <constraint firstItem="QXq-lk-UPI" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="cjQ-kN-iGY" secondAttribute="leading" constant="10" id="V5o-fR-rSG"/>
+                                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Va0-Ci-1zg" secondAttribute="trailing" constant="20" id="WMg-ZX-QC3"/>
                                     <constraint firstItem="QXq-lk-UPI" firstAttribute="top" secondItem="Va0-Ci-1zg" secondAttribute="bottom" constant="5" id="hxf-82-Bdk"/>
+                                    <constraint firstItem="Va0-Ci-1zg" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="cjQ-kN-iGY" secondAttribute="leading" constant="20" id="jTp-LY-dnn"/>
                                     <constraint firstItem="Va0-Ci-1zg" firstAttribute="centerX" secondItem="cjQ-kN-iGY" secondAttribute="centerX" id="kGe-wq-ftz"/>
                                     <constraint firstItem="Ifw-5N-ebI" firstAttribute="leading" secondItem="cjQ-kN-iGY" secondAttribute="leading" id="yrd-fZ-Sod"/>
                                 </constraints>

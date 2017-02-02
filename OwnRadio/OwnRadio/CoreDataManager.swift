@@ -164,7 +164,8 @@ class CoreDataManager {
 	func getTrackToPlaing() -> SongObject {
 		//задаем сортировку по возрастанию даты проигрывания
 		let sectionSortDescriptor = NSSortDescriptor(key: "playingDate", ascending: true)
-		let sortDescriptors = [sectionSortDescriptor]
+		let countSortDescriptor = NSSortDescriptor(key: "countPlay", ascending: true)
+		let sortDescriptors = [ countSortDescriptor, sectionSortDescriptor]
 		// создание запроса
 		let fetchRequest: NSFetchRequest<TrackEntity> = TrackEntity.fetchRequest()
 		fetchRequest.sortDescriptors = sortDescriptors
