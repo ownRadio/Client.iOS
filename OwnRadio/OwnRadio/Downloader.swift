@@ -21,7 +21,7 @@ class Downloader {
 	func load(complition: @escaping (() -> Void)) {
 
 		//проверяем свободное место, если его достаточно - загружаем треки
-		if DiskStatus.folderSize(folderPath: FileManager.documentsDir()) <= (DiskStatus.freeDiskSpaceInBytes / 2)  {
+		if DiskStatus.folderSize(folderPath: tracksUrlString) <= (DiskStatus.freeDiskSpaceInBytes / 2)  {
 				//получаем trackId следующего трека и информацию о нем
 				ApiService.shared.getTrackIDFromServer { (dict) in
 					guard dict["id"] != nil else {
@@ -40,7 +40,13 @@ class Downloader {
 							//если этот трек не еще не загружен - загружаем трек
 							//используется замыкание для сохранения загруженного трека в файл и информации о треке в бд
 							let downloadRequest = URLSession.shared.downloadTask(with: audioUrl, completionHandler: { (location, response, error) -> Void in
-								guard let location = location, error == nil else { return }
+								guard error == nil else {
+									NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":error.debugDescription])
+									return
+								}
+								guard let location = location, error == nil else {return }
+								
+								
 								do {
 									let file = NSData(contentsOf: location)
 									let mp3Path = destinationUrl.appendingPathExtension("mp3")
@@ -49,6 +55,7 @@ class Downloader {
 										print("MP3 file exist")
 										return
 									}
+									
 									//сохраняем трек
 									try file?.write(to: destinationUrl, options:.noFileProtection)
 									//задаем конечных путь хранения файла (добавляем расширение)
@@ -78,7 +85,6 @@ class Downloader {
 							self.taskQueue?.addOperation {
 								downloadRequest.resume()
 							}
-							
 						}
 					}
 				}
