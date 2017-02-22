@@ -16,6 +16,7 @@
 		091679751DE451CF00619B3F /* OwnRadioUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 091679741DE451CF00619B3F /* OwnRadioUITests.swift */; };
 		091679C71DE47D4400619B3F /* ApiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 091679C61DE47D4400619B3F /* ApiService.swift */; };
 		093FBD0C1DEEFEB800038EF0 /* SongObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093FBD0B1DEEFEB800038EF0 /* SongObject.swift */; };
+		0949CA2A1E3100010066F5A9 /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 091679C91DE47D9900619B3F /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		0971662F1DF84A7F005AB0CE /* DiskStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0971662E1DF84A7F005AB0CE /* DiskStatus.swift */; };
 		0979B1B41DF00FCE003C01C7 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0979B1B31DF00FCE003C01C7 /* CoreData.framework */; };
 		0979B1B71DF01020003C01C7 /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 0979B1B51DF01020003C01C7 /* DataModel.xcdatamodeld */; };
@@ -25,8 +26,13 @@
 		0989BD801DF6F33C005FE001 /* TrackEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0989BD7E1DF6F33C005FE001 /* TrackEntity+CoreDataClass.swift */; };
 		098B51561DF95E5000293DE5 /* HistoryEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 098B51541DF95E5000293DE5 /* HistoryEntity+CoreDataClass.swift */; };
 		098B515C1DF9623A00293DE5 /* HistoryEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 098B515B1DF9623A00293DE5 /* HistoryEntity+CoreDataProperties.swift */; };
+		099EAE491E2FAA05005478F2 /* SFUIText-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 099EAE471E2FAA05005478F2 /* SFUIText-Regular.otf */; };
+		099EAE4B1E2FADDF005478F2 /* SFUIDisplay-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 099EAE4A1E2FADDF005478F2 /* SFUIDisplay-Regular.otf */; };
+		099EAE511E30FC0B005478F2 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 091679C91DE47D9900619B3F /* Alamofire.framework */; };
 		09A054151DF168170008ACE7 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09A054141DF168170008ACE7 /* Utilities.swift */; };
 		09B953A11DFEBED70098417C /* CircularView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09B953A01DFEBED70098417C /* CircularView.swift */; };
+		09D52F8C1E3F36EF006B66E6 /* CachingView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 09D52F8B1E3F36EF006B66E6 /* CachingView.xib */; };
+		09D52F8E1E3F3F37006B66E6 /* CachingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09D52F8D1E3F3F37006B66E6 /* CachingView.swift */; };
 		09EA799B1DE57D040034B8DF /* AudioPlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EA799A1DE57D040034B8DF /* AudioPlayerManager.swift */; };
 		50D8269A1DE74B0800238F96 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50D826981DE74B0800238F96 /* Fabric.framework */; };
 		50D8269B1DE74B0800238F96 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50D826991DE74B0800238F96 /* Crashlytics.framework */; };
@@ -49,9 +55,21 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		0949CA2B1E3100010066F5A9 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				0949CA2A1E3100010066F5A9 /* Alamofire.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
-		0905010F1DE70FA600B1841C /* SFUIText-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SFUIText-Regular.otf"; path = "../../../Downloads/SFUIText-Regular.otf"; sourceTree = "<group>"; };
-		090501111DE7106300B1841C /* SFUIDisplay-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; name = "SFUIDisplay-Regular.otf"; path = "../../../Downloads/SFUIDisplay-Regular.otf"; sourceTree = "<group>"; };
 		091679511DE451CF00619B3F /* OwnRadio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OwnRadio.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		091679541DE451CF00619B3F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		091679561DE451CF00619B3F /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -78,8 +96,12 @@
 		098B51541DF95E5000293DE5 /* HistoryEntity+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HistoryEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
 		098B51581DF95FC100293DE5 /* DataModel 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "DataModel 2.xcdatamodel"; sourceTree = "<group>"; };
 		098B515B1DF9623A00293DE5 /* HistoryEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HistoryEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		099EAE471E2FAA05005478F2 /* SFUIText-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SFUIText-Regular.otf"; sourceTree = "<group>"; };
+		099EAE4A1E2FADDF005478F2 /* SFUIDisplay-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SFUIDisplay-Regular.otf"; sourceTree = "<group>"; };
 		09A054141DF168170008ACE7 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		09B953A01DFEBED70098417C /* CircularView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircularView.swift; sourceTree = "<group>"; };
+		09D52F8B1E3F36EF006B66E6 /* CachingView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CachingView.xib; sourceTree = "<group>"; };
+		09D52F8D1E3F3F37006B66E6 /* CachingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachingView.swift; sourceTree = "<group>"; };
 		09EA799A1DE57D040034B8DF /* AudioPlayerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioPlayerManager.swift; sourceTree = "<group>"; };
 		50D826981DE74B0800238F96 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		50D826991DE74B0800238F96 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
@@ -91,6 +113,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0979B1B41DF00FCE003C01C7 /* CoreData.framework in Frameworks */,
+				099EAE511E30FC0B005478F2 /* Alamofire.framework in Frameworks */,
 				50D8269B1DE74B0800238F96 /* Crashlytics.framework in Frameworks */,
 				50D8269A1DE74B0800238F96 /* Fabric.framework in Frameworks */,
 			);
@@ -116,8 +139,8 @@
 		090501101DE70FB400B1841C /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
-				090501111DE7106300B1841C /* SFUIDisplay-Regular.otf */,
-				0905010F1DE70FA600B1841C /* SFUIText-Regular.otf */,
+				099EAE4A1E2FADDF005478F2 /* SFUIDisplay-Regular.otf */,
+				099EAE471E2FAA05005478F2 /* SFUIText-Regular.otf */,
 			);
 			name = Fonts;
 			sourceTree = "<group>";
@@ -157,6 +180,7 @@
 				091679C61DE47D4400619B3F /* ApiService.swift */,
 				09EA799A1DE57D040034B8DF /* AudioPlayerManager.swift */,
 				091679561DE451CF00619B3F /* ViewController.swift */,
+				09D52F8A1E3F36BA006B66E6 /* View */,
 				091679581DE451CF00619B3F /* Main.storyboard */,
 				0916795B1DE451CF00619B3F /* Assets.xcassets */,
 				0916795D1DE451CF00619B3F /* LaunchScreen.storyboard */,
@@ -215,6 +239,15 @@
 			name = CoreDataManager;
 			sourceTree = "<group>";
 		};
+		09D52F8A1E3F36BA006B66E6 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				09D52F8B1E3F36EF006B66E6 /* CachingView.xib */,
+				09D52F8D1E3F3F37006B66E6 /* CachingView.swift */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -227,6 +260,7 @@
 				0916794F1DE451CF00619B3F /* Resources */,
 				50D826971DE747C900238F96 /* Fabric */,
 				0979B1B21DF008A5003C01C7 /* ShellScript */,
+				0949CA2B1E3100010066F5A9 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -280,7 +314,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0800;
-				LastUpgradeCheck = 0800;
+				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = "Roll'n'Code";
 				TargetAttributes = {
 					091679501DE451CF00619B3F = {
@@ -325,7 +359,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				09D52F8C1E3F36EF006B66E6 /* CachingView.xib in Resources */,
+				099EAE4B1E2FADDF005478F2 /* SFUIDisplay-Regular.otf in Resources */,
 				0916795F1DE451CF00619B3F /* LaunchScreen.storyboard in Resources */,
+				099EAE491E2FAA05005478F2 /* SFUIText-Regular.otf in Resources */,
 				0916795C1DE451CF00619B3F /* Assets.xcassets in Resources */,
 				0916795A1DE451CF00619B3F /* Main.storyboard in Resources */,
 			);
@@ -386,6 +423,7 @@
 				0979B1B91DF01085003C01C7 /* CoreDataManager.swift in Sources */,
 				0989BD801DF6F33C005FE001 /* TrackEntity+CoreDataClass.swift in Sources */,
 				093FBD0C1DEEFEB800038EF0 /* SongObject.swift in Sources */,
+				09D52F8E1E3F3F37006B66E6 /* CachingView.swift in Sources */,
 				091679571DE451CF00619B3F /* ViewController.swift in Sources */,
 				09A054151DF168170008ACE7 /* Utilities.swift in Sources */,
 				0971662F1DF84A7F005AB0CE /* DiskStatus.swift in Sources */,
@@ -469,12 +507,13 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -519,6 +558,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;

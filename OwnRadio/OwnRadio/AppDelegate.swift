@@ -19,10 +19,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	//с этой функции начинается загрузка приложения
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
 		// Override point for customization after application launch.
+		
 		let userDefaults = UserDefaults.standard
 		//для получения отчетов об ошибках на фабрик
 		Fabric.with([Crashlytics.self, Answers.self])
-
+		
 		//если устройству не назначен deviceId - генерируем новый
 		if userDefaults.object(forKey: "UUIDDevice") == nil {
 			let UUID = NSUUID().uuidString.lowercased() //"17096171-1C39-4290-AE50-907D7E62F36A" //
@@ -30,9 +31,49 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			userDefaults.synchronize()
 		}
 		
+		// создаем папку Tracks если ее нет
+		let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+		let tracksPath = documentsPath.appendingPathComponent("Tracks")
+		do {
+			try FileManager.default.createDirectory(at: tracksPath, withIntermediateDirectories: true, attributes: nil)
+		} catch let error as NSError {
+			NSLog("Unable to create directory \(error.debugDescription)")
+		}
+		//проверяем была ли совершена миграция
+		if userDefaults.object(forKey: "MigrationWasDone") == nil
+		{
+			DispatchQueue.global().async {
+				do{
+					// получаем содержимое папки Documents
+					if let tracksContents = try? FileManager.default.contentsOfDirectory(atPath: FileManager.documentsDir()){
+						//если в папке больше 4 файлов (3 файла Sqlite и папка Tracks) то пытаемся удалить треки
+						if tracksContents.count > 4 {
+							for track in tracksContents {
+								// проверка для удаления только треков
+								if track.contains("mp3") {
+									let atPath = FileManager.documentsDir().appending("/").appending(track)
+									do{
+										print(atPath)
+										try FileManager.default.removeItem(atPath: atPath)
+										
+									} catch  {
+										print("error with move file reason - \(error)")
+									}
+								}
+							}
+							//удаляем треки из базы
+							CoreDataManager.instance.deleteAllTracks()
+						}
+						// устанавливаем флаг о прохождении миграции
+						userDefaults.set(true, forKey: "MigrationWasDone")
+						userDefaults.synchronize()
+					}
+				}
+			}
+		}
 		return true
 	}
-
+	
 	
 	func applicationWillResignActive(_ application: UIApplication) {
 		// Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -55,7 +96,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	func applicationWillTerminate(_ application: UIApplication) {
 		// Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 	}
-	
-	
+
 }
 

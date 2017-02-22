@@ -20,34 +20,32 @@ class DiskStatus {
 		return formatter.string(fromByteCount: bytes) as String
 	}
 	
-	
 	//MARK: Get String Value
 	class var totalDiskSpace:String {
 		get {
-			return ByteCountFormatter.string(fromByteCount: totalDiskSpaceInBytes, countStyle: ByteCountFormatter.CountStyle.binary)
+			return ByteCountFormatter.string(fromByteCount: Int64(totalDiskSpaceInBytes), countStyle: ByteCountFormatter.CountStyle.binary)
 		}
 	}
 	
 	class var freeDiskSpace:String {
 		get {
-			return ByteCountFormatter.string(fromByteCount: freeDiskSpaceInBytes, countStyle: ByteCountFormatter.CountStyle.binary)
+			return ByteCountFormatter.string(fromByteCount: Int64(freeDiskSpaceInBytes), countStyle: ByteCountFormatter.CountStyle.binary)
 		}
 	}
 	
 	class var usedDiskSpace:String {
 		get {
-			return ByteCountFormatter.string(fromByteCount: usedDiskSpaceInBytes, countStyle: ByteCountFormatter.CountStyle.binary)
+			return ByteCountFormatter.string(fromByteCount: Int64(usedDiskSpaceInBytes), countStyle: ByteCountFormatter.CountStyle.binary)
 		}
 	}
-	
-	
+
 	//MARK: Get raw value
 	//возвращает общее количество памяти
-	class var totalDiskSpaceInBytes:Int64 {
+	class var totalDiskSpaceInBytes:UInt {
 		get {
 			do {
 				let systemAttributes = try FileManager.default.attributesOfFileSystem(forPath: NSHomeDirectory() as String)
-				let space = (systemAttributes[FileAttributeKey.systemSize] as? NSNumber)?.int64Value
+				let space = (systemAttributes[FileAttributeKey.systemSize] as? NSNumber)?.uintValue
 				return space!
 			} catch {
 				return 0
@@ -56,7 +54,7 @@ class DiskStatus {
 	}
 	
 	//возвращает количество памяти, занимаемое треками
-	class func folderSize(folderPath:String) -> Int64{
+	class func folderSize(folderPath:String) -> UInt{
 
 		let filesArray:[String]? = try? FileManager.default.subpathsOfDirectory(atPath: folderPath) as [String]
 		var fileSize:UInt = 0
@@ -69,19 +67,19 @@ class DiskStatus {
 				let fileDictionary:NSDictionary = try FileManager.default.attributesOfItem(atPath: (filePath?.absoluteString)!) as NSDictionary
 				fileSize += UInt(fileDictionary.fileSize())
 			} catch {
-				print("error with folder size ")
+				print(error.localizedDescription)
 			}
 		}
 		
-		return Int64(fileSize)
+		return fileSize
 	}
 	
 	//возвращает количество свободной памяти
-	class var freeDiskSpaceInBytes:Int64 {
+	class var freeDiskSpaceInBytes:UInt {
 		get {
 			do {
 				let systemAttributes = try FileManager.default.attributesOfFileSystem(forPath: NSHomeDirectory() as String)
-				let freeSpace = (systemAttributes[FileAttributeKey.systemFreeSize] as? NSNumber)?.int64Value
+				let freeSpace = (systemAttributes[FileAttributeKey.systemFreeSize] as? NSNumber)?.uintValue
 				return freeSpace!
 			} catch {
 				return 0
@@ -90,7 +88,7 @@ class DiskStatus {
 	}
 	
 	//возвращает общее количество занятой памяти
-	class var usedDiskSpaceInBytes:Int64 {
+	class var usedDiskSpaceInBytes:UInt {
 		get {
 			let usedSpace = totalDiskSpaceInBytes - freeDiskSpaceInBytes
 			return usedSpace
@@ -98,3 +96,4 @@ class DiskStatus {
 	}
 	
 }
+

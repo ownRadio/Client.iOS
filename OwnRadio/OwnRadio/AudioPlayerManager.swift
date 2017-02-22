@@ -86,20 +86,27 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 			// Switch over the status
 			switch status {
 			case .readyToPlay:
+				
 				if wasInterreption {
 					wasInterreption = false
 				} else {
 					if isPlaying == true {
 						self.resumeSong {
+							if let rootController = UIApplication.shared.keyWindow?.rootViewController {
+								let radioViewContr = rootController as! RadioViewController
+								DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
+									radioViewContr.progressView.isHidden = false
+								})
+							}
+							CoreDataManager.instance.setCountOfPlayForTrackBy(trackId: self.playingSong.trackID)
+							CoreDataManager.instance.saveContext()
 						}
 					}
 				}
-				
 			case .failed:
 				break
 			case .unknown:
 				break
-				
 			}
 		}
 	}
@@ -113,6 +120,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 			self.addDateToHistoryTable(playingSong: self.playingSong)
 			if self.playingSong.trackID != nil  {
 				CoreDataManager.instance.setDateForTrackBy(trackId: self.playingSong.trackID)
+				//				CoreDataManager.instance.setCountOfPlayForTrackBy(trackId: self.playingSong.trackID)
 				CoreDataManager.instance.saveContext()
 			}
 		}
@@ -140,13 +148,17 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 				let interruptionOption = AVAudioSessionInterruptionOptions(rawValue: rawInterruptionOption.uintValue)
 				if interruptionOption == AVAudioSessionInterruptionOptions.shouldResume {
 					self.pauseSong {
-						
+						if let rootController = UIApplication.shared.keyWindow?.rootViewController {
+							let radioViewContr = rootController as! RadioViewController
+							DispatchQueue.main.async {
+								radioViewContr.updateUI()
+							}
+						}
 					}
 				}
 			}
 			
 		case .began: //interruption started
-			
 			if self.isPlaying == true {
 				print("Began Playing - TRUE")
 			} else {
@@ -162,7 +174,8 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		guard currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable else {
 			return
 		}
-		self.nextTrack(complition: nil)
+		self.nextTrack {
+		}
 	}
 	
 	///  confirure album cover and other params for playing song
@@ -175,7 +188,6 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		songInfo[MPMediaItemPropertyAlbumTitle] = "ownRadio"
 		songInfo[MPMediaItemPropertyArtist] = song.artistName
 		songInfo[MPMediaItemPropertyArtwork] = albumArt
-		print(song.trackLength)
 		songInfo[MPMediaItemPropertyPlaybackDuration] = NSNumber.init(value: song.trackLength)
 		
 		MPNowPlayingInfoCenter.default().nowPlayingInfo = songInfo
@@ -200,17 +212,16 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		self.player.pause()
 		
 		complition()
-		
 	}
 	
 	//пропуск трека
-	func skipSong(complition: (() -> Void)?) {
-		self.playingSong.isListen = -1
-		//		self.playerItem = nil
+	func skipSong(complition: @escaping (() -> Void)) {
+		
 		if (self.playingSongID != nil) {
+			self.playingSong.isListen = -1
 			self.addDateToHistoryTable(playingSong: self.playingSong)
 			if  self.playingSong.path != nil {
-				let path = FileManager.documentsDir().appending("/").appending(self.playingSong.path!)
+				let path = FileManager.documentsDir().appending("/").appending("Tracks").appending("/").appending(self.playingSong.path!)
 				if FileManager.default.fileExists(atPath: path) {
 					//удаляем пропущенный трек
 					do{
@@ -244,7 +255,6 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		                       forKeyPath: #keyPath(AVPlayerItem.status),
 		                       options: [.old, .new],
 		                       context: nil)
-		
 		player = AVPlayer(playerItem: playerItem)
 	}
 	
@@ -257,19 +267,17 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	}
 	
 	// selection way to playing (Online or Cache)
-	func setWayForPlay(complition: (() -> Void)?) {
+	func setWayForPlay(complition: @escaping (() -> Void)) {
 		//если есть кешированные треки - играем из кеша
 		if self.checkCountFileInCache() {
 			self.playFromCache(complition: complition)
-		} else {
-			//иначе пытаемся загрузить треки
-			//проверка подключения к интернету
-			guard currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable else {
-				return
-			}
-			Downloader.load {
-				
-			}
+		}
+		//проверка подключения к интернету
+		guard currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable else {
+			return
+		}
+		DispatchQueue.global(qos: .background).async {
+			Downloader.sharedInstance.addTaskToQueueWith(complition: complition)
 		}
 	}
 	
@@ -291,18 +299,14 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	CoreDataManager.instance.sentHistory()
 	//получаем информацию о следующем треке
 	ApiService.shared.getTrackIDFromServer {  (dictionary) in
-	
 	self.playingSong = SongObject()
-	
 	self.playingSong.initWithDict(dict: dictionary)
-	
 	//формируем URL трека для проигрывания
 	let trackURL = self.baseURL?.appendingPathComponent(self.playingSong.trackID)
 	guard let url = trackURL else {
 	return
 	}
 	self.playAudioWith(trackURL: url)
-	
 	self.playingSongID = self.playingSong.trackID
 	self.titleSong = self.playingSong.name
 	self.configurePlayingSong(song: self.playingSong)
@@ -319,11 +323,10 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		if currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable{
 			CoreDataManager.instance.sentHistory()
 		}
-		
 		//получаем из БД трек для проигрывания
-		self.playingSong = CoreDataManager.instance.getRandomTrack()
-		let docUrl = NSURL(string:FileManager.documentsDir())
-		let resUrl = docUrl?.absoluteURL?.appendingPathComponent(playingSong.path!)
+		self.playingSong = CoreDataManager.instance.getTrackToPlaing()
+		let docUrl = NSURL(string:FileManager.documentsDir())?.appendingPathComponent("Tracks")
+		let resUrl = docUrl?.absoluteURL.appendingPathComponent(playingSong.path!)
 		guard let url = resUrl else {
 			return
 		}
@@ -336,8 +339,11 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		}
 	}
 	
-	func nextTrack(complition: (() -> Void)?) {
+	func nextTrack(complition: @escaping (() -> Void)) {
 		self.setWayForPlay(complition: complition)
+		guard currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable else {
+			return
+		}
 	}
 	
 	//сохраняем историю прослушивания
