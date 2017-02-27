@@ -100,7 +100,9 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 				}
 				return
 			}
-			self.downloadTracks()
+            if status != NetworkReachabilityManager.NetworkReachabilityStatus.notReachable {
+                self.downloadTracks()
+            }
 		}
 		reachability?.startListening()
 		self.updateUI()
