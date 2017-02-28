@@ -84,7 +84,7 @@ class Downloader {
 									
 									complition()
                                     if self.loadCallCount >= 3 && self.successCount >= 1 && self.successCount < 3 {
-                                        self.addTaskToQueueWith {
+                                        self.load {
                                             complition()
                                         }
                                     }
