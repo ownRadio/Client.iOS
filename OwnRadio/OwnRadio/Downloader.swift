@@ -24,7 +24,7 @@ class Downloader {
 	func load(complition: @escaping (() -> Void)) {
 
 		//проверяем свободное место, если его достаточно - загружаем треки
-		if DiskStatus.folderSize(folderPath: tracksUrlString) <= (DiskStatus.freeDiskSpaceInBytes / 2)  {
+		if UInt64(DiskStatus.folderSize(folderPath: tracksUrlString)) <= (DiskStatus.freeDiskSpaceInBytes / 2)  {
 				//получаем trackId следующего трека и информацию о нем
 				ApiService.shared.getTrackIDFromServer { [unowned self] (dict) in
 					guard dict["id"] != nil else {

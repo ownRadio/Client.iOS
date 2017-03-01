@@ -41,11 +41,11 @@ class DiskStatus {
 
 	//MARK: Get raw value
 	//возвращает общее количество памяти
-	class var totalDiskSpaceInBytes:UInt {
+	class var totalDiskSpaceInBytes:UInt64 {
 		get {
 			do {
 				let systemAttributes = try FileManager.default.attributesOfFileSystem(forPath: NSHomeDirectory() as String)
-				let space = (systemAttributes[FileAttributeKey.systemSize] as? NSNumber)?.uintValue
+				let space = (systemAttributes[FileAttributeKey.systemSize] as? NSNumber)?.uint64Value
 				return space!
 			} catch {
 				return 0
@@ -75,7 +75,7 @@ class DiskStatus {
 	}
 	
 	//возвращает количество свободной памяти
-	class var freeDiskSpaceInBytes:UInt {
+	class var freeDiskSpaceInBytes:UInt64 {
 		get {
 			do {
 				let systemAttributes = try FileManager.default.attributesOfFileSystem(forPath: NSHomeDirectory() as String)
@@ -89,7 +89,7 @@ class DiskStatus {
 	
 	
 	//возвращает общее количество занятой памяти
-	class var usedDiskSpaceInBytes:UInt {
+	class var usedDiskSpaceInBytes:UInt64 {
 		get {
 			let usedSpace = totalDiskSpaceInBytes - freeDiskSpaceInBytes
 			return usedSpace
