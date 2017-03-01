@@ -20,7 +20,7 @@ class Downloader {
 	
     var loadCallCount = 0;
     var successCount = 0
-    
+	
 	func load(complition: @escaping (() -> Void)) {
 
 		//проверяем свободное место, если его достаточно - загружаем треки
@@ -101,6 +101,7 @@ class Downloader {
 					}
 				}
 		} else {
+			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"cache is full"])
 			// если память заполнена удаляем трек 
 			deleteOldTrack()
 		}
