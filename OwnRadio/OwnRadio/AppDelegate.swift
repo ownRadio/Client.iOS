@@ -32,8 +32,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		}
 		
 		// создаем папку Tracks если ее нет
-		let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-		let tracksPath = documentsPath.appendingPathComponent("Tracks")
+		let applicationSupportPath = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
+		let tracksPath = applicationSupportPath.appendingPathComponent("Tracks")
 		do {
 			try FileManager.default.createDirectory(at: tracksPath, withIntermediateDirectories: true, attributes: nil)
 		} catch let error as NSError {
@@ -45,13 +45,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			DispatchQueue.global().async {
 				do{
 					// получаем содержимое папки Documents
-					if let tracksContents = try? FileManager.default.contentsOfDirectory(atPath: FileManager.documentsDir()){
+					if let tracksContents = try? FileManager.default.contentsOfDirectory(atPath: FileManager.docDir()){
 						//если в папке больше 4 файлов (3 файла Sqlite и папка Tracks) то пытаемся удалить треки
 						if tracksContents.count > 4 {
 							for track in tracksContents {
 								// проверка для удаления только треков
 								if track.contains("mp3") {
-									let atPath = FileManager.documentsDir().appending("/").appending(track)
+									let atPath = FileManager.applicationSupportDir().appending("/").appending(track)
 									do{
 										print(atPath)
 										try FileManager.default.removeItem(atPath: atPath)

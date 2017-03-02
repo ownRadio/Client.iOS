@@ -61,7 +61,8 @@ class DiskStatus {
 		
 		for fileName in filesArray!{
 			
-			let folderUrl = NSURL(string: folderPath)
+			let str = folderPath.addingPercentEncoding(withAllowedCharacters:.urlPathAllowed)
+			let folderUrl = NSURL(string: str!)
 			let filePath = folderUrl?.appendingPathComponent(fileName)
 			do {
 				let fileDictionary:NSDictionary = try FileManager.default.attributesOfItem(atPath: (filePath?.absoluteString)!) as NSDictionary
@@ -80,7 +81,7 @@ class DiskStatus {
 			do {
 				let systemAttributes = try FileManager.default.attributesOfFileSystem(forPath: NSHomeDirectory() as String)
 				let freeSpace = (systemAttributes[FileAttributeKey.systemFreeSize] as? NSNumber)?.uintValue
-				return freeSpace!
+				return UInt64(freeSpace!)
 			} catch {
 				return 0
 			}

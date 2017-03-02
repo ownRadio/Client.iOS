@@ -305,7 +305,8 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 	//функция отображения количества файлов в кеше
 	func getCountFilesInCache () {
 		do {
-			let docUrl = NSURL(string:FileManager.documentsDir())?.appendingPathComponent("Tracks")
+//			let appSupportUrl = URL(string: FileManager.applicationSupportDir().appending("/"))
+			let docUrl = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first?.appendingPathComponent("Tracks")
 			let directoryContents = try FileManager.default.contentsOfDirectory(at: docUrl!, includingPropertiesForKeys: nil, options: [])
 			let mp3Files = directoryContents.filter{ $0.pathExtension == "mp3" }
 			self.numberOfFiles.text = String.init(format:"%d", mp3Files.count)

@@ -14,9 +14,9 @@ class Downloader {
 	static let sharedInstance = Downloader()
 	var taskQueue: OperationQueue?
 	let baseURL = URL(string: "http://api.ownradio.ru/v3/tracks/")
-	let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-	let tracksPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("Tracks/")
-	let tracksUrlString =  FileManager.documentsDir().appending("/Tracks/")
+	let applicationSupportPath = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
+	let tracksPath = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!.appendingPathComponent("Tracks/")
+	let tracksUrlString =  FileManager.applicationSupportDir().appending("/Tracks/")
 	
     var loadCallCount = 0;
     var successCount = 0
