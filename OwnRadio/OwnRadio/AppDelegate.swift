@@ -46,34 +46,42 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 				do{
 					// получаем содержимое папки Documents
 					if let tracksContents = try? FileManager.default.contentsOfDirectory(atPath: FileManager.docDir()){
-						//если в папке больше 4 файлов (3 файла Sqlite и папка Tracks) то пытаемся удалить треки
-						if tracksContents.count > 4 {
-							for track in tracksContents {
-								// проверка для удаления только треков
-								if track.contains("mp3") {
-									let atPath = FileManager.applicationSupportDir().appending("/").appending(track)
-									do{
-										print(atPath)
-										try FileManager.default.removeItem(atPath: atPath)
-										
-									} catch  {
-										print("error with move file reason - \(error)")
-									}
-								}
-							}
-							//удаляем треки из базы
-							CoreDataManager.instance.deleteAllTracks()
-						}
-						// устанавливаем флаг о прохождении миграции
-						userDefaults.set(true, forKey: "MigrationWasDone")
-						userDefaults.synchronize()
+						self.removeFilesFromDirectory(tracksContents: tracksContents)
+
+					} else if let tracksContents = try? FileManager.default.contentsOfDirectory(atPath: FileManager.docDir().appending("/Tracks")) {
+						self.removeFilesFromDirectory(tracksContents: tracksContents)
 					}
+					//удаляем треки из базы
+					CoreDataManager.instance.deleteAllTracks()
+					// устанавливаем флаг о прохождении миграции
+					userDefaults.set(true, forKey: "MigrationWasDone")
+					userDefaults.synchronize()
 				}
 			}
 		}
 		return true
 	}
 	
+	func removeFilesFromDirectory (tracksContents:[String]) {
+		//если в папке больше 4 файлов (3 файла Sqlite и папка Tracks) то пытаемся удалить треки
+		if tracksContents.count > 4 {
+			for track in tracksContents {
+				// проверка для удаления только треков
+				if track.contains("mp3") {
+					let atPath = FileManager.applicationSupportDir().appending("/").appending(track)
+					do{
+						print(atPath)
+						try FileManager.default.removeItem(atPath: atPath)
+						
+					} catch  {
+						print("error with move file reason - \(error)")
+					}
+				}
+			}
+			
+			
+		}
+	}
 	
 	func applicationWillResignActive(_ application: UIApplication) {
 		// Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
