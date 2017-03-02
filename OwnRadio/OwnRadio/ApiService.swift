@@ -34,6 +34,7 @@ class ApiService {
 		// set up the session
 		let config = URLSessionConfiguration.default
 		let session = URLSession(configuration: config)
+		print(urlRequest.description)
 		
 		let task = session.dataTask(with: urlRequest as URLRequest, completionHandler: { (data, response, error) in
 			// do stuff with response, data & error here
@@ -85,6 +86,7 @@ class ApiService {
 			let data = try JSONSerialization.data(withJSONObject: dict, options: [])
 //			let dataString = String(data: data, encoding: String.Encoding.utf8)!
 			request.httpBody = data
+			
 			
 		} catch {
 			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"JSON serialization failed: \(error)"])

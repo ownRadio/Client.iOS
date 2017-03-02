@@ -69,7 +69,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		if tracksContents.count > 1 {
 			for track in tracksContents {
 				// проверка для удаления только треков
-//				if track.contains("mp3") {
+				if !track.contains("sqlite") {
 					let atPath = FileManager.docDir().appending("/").appending(track)
 					do{
 						print(atPath)
@@ -78,7 +78,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 					} catch  {
 						print("error with move file reason - \(error)")
 					}
-//				}
+				}
 			}
 			
 			

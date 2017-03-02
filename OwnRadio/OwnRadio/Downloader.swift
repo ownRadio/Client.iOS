@@ -31,9 +31,9 @@ class Downloader {
 					guard dict["id"] != nil else {
 						return
 					}
-                    if self.successCount < 3 {
-                        self.successCount += 1
-                    }
+//                    if self.successCount < 3 {
+//                        self.successCount += 1
+//                    }
 
 					let trackURL = self.baseURL?.appendingPathComponent(dict["id"] as! String)
 					if let audioUrl = trackURL {
