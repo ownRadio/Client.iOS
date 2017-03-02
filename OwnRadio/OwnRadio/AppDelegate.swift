@@ -25,11 +25,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		Fabric.with([Crashlytics.self, Answers.self])
 		
 		//если устройству не назначен deviceId - генерируем новый
-		if userDefaults.object(forKey: "UUIDDevice") == nil {
-			let UUID = NSUUID().uuidString.lowercased() //"17096171-1C39-4290-AE50-907D7E62F36A" //
-			userDefaults.set(UUID, forKey: "UUIDDevice")
-			userDefaults.synchronize()
-		}
+//		if userDefaults.object(forKey: "UUIDDevice") == nil {
+//			let UUID = NSUUID().uuidString.lowercased() //"17096171-1C39-4290-AE50-907D7E62F36A" //
+//			userDefaults.set(UUID, forKey: "UUIDDevice")
+//			userDefaults.synchronize()
+//		}
 		
 		// создаем папку Tracks если ее нет
 		let applicationSupportPath = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!

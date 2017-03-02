@@ -56,16 +56,16 @@ class DiskStatus {
 	//возвращает количество памяти, занимаемое треками
 	class func folderSize(folderPath:String) -> UInt{
 
-		let filesArray:[String]? = try? FileManager.default.subpathsOfDirectory(atPath: folderPath) as [String]
+		let filesArray:[String]? = try? FileManager.default.subpathsOfDirectory(atPath: folderPath.appending("/")) as [String]
 		var fileSize:UInt = 0
 		
 		for fileName in filesArray!{
 			
-			let str = folderPath.addingPercentEncoding(withAllowedCharacters:.urlPathAllowed)
-			let folderUrl = NSURL(string: str!)
-			let filePath = folderUrl?.appendingPathComponent(fileName)
+			let str  =  folderPath.appending(fileName)  //folderPath.addingPercentEncoding(withAllowedCharacters:.urlUserAllowed)
+//			let folderUrl = NSURL(fileURLWithPath: str)
+//			let filePath = folderUrl.appendingPathComponent(fileName)?.absoluteString
 			do {
-				let fileDictionary:NSDictionary = try FileManager.default.attributesOfItem(atPath: (filePath?.absoluteString)!) as NSDictionary
+				let fileDictionary:NSDictionary = try FileManager.default.attributesOfItem(atPath: str) as NSDictionary
 				fileSize += UInt(fileDictionary.fileSize())
 			} catch {
 				print(error.localizedDescription)

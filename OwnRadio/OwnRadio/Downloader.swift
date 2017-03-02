@@ -24,6 +24,7 @@ class Downloader {
 	func load(complition: @escaping (() -> Void)) {
 
 		//проверяем свободное место, если его достаточно - загружаем треки
+		
 		if UInt64(DiskStatus.folderSize(folderPath: tracksUrlString)) <= (DiskStatus.freeDiskSpaceInBytes / 2)  {
 				//получаем trackId следующего трека и информацию о нем
 				ApiService.shared.getTrackIDFromServer { [unowned self] (dict) in
@@ -83,11 +84,11 @@ class Downloader {
 									CoreDataManager.instance.saveContext()
 									
 									complition()
-                                    if self.loadCallCount >= 3 && self.successCount >= 1 && self.successCount < 3 {
-                                        self.load {
-                                            complition()
-                                        }
-                                    }
+//                                    if self.loadCallCount >= 3 && self.successCount >= 1 && self.successCount < 3 {
+//                                        self.load {
+//                                            complition()
+//                                        }
+//                                    }
 									NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"File moved to documents folder"])
 									print("File moved to documents folder")
 								} catch let error as NSError {
@@ -140,9 +141,9 @@ class Downloader {
 		self.taskQueue?.maxConcurrentOperationCount = 1
 		for _ in 0..<3 {
             self.load(complition: complition)
-            if loadCallCount < 3 {
-                loadCallCount += 1
-            }
+//            if loadCallCount < 3 {
+//                loadCallCount += 1
+//            }
 		}
 	}
 

@@ -87,7 +87,7 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 		self.player = AudioPlayerManager.sharedInstance
 		self.detectedHeadphones()
 		
-		self.deviceIdLbl.text = (UserDefaults.standard.object(forKey: "UUIDDevice") as! String).lowercased()
+		self.deviceIdLbl.text = NSUUID().uuidString.lowercased()
 		self.visibleInfoView = false
 		
 		getCountFilesInCache()

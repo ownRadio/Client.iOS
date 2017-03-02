@@ -325,7 +325,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		}
 		//получаем из БД трек для проигрывания
 		self.playingSong = CoreDataManager.instance.getTrackToPlaing()
-		let str = FileManager.applicationSupportDir().addingPercentEncoding(withAllowedCharacters:.urlPathAllowed)
+		let str = FileManager.applicationSupportDir().addingPercentEncoding(withAllowedCharacters:.urlHostAllowed)
 		let docUrl = NSURL(string:str!)?.appendingPathComponent("Tracks")
 		let resUrl = docUrl?.absoluteURL.appendingPathComponent(playingSong.path!)
 		guard let url = resUrl else {
