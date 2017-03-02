@@ -40,21 +40,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			NSLog("Unable to create directory \(error.debugDescription)")
 		}
 		//проверяем была ли совершена миграция
-		if userDefaults.object(forKey: "MigrationWasDone") == nil
+		if userDefaults.object(forKey: "MigrationWasDoneV2") == nil
 		{
 			DispatchQueue.global().async {
 				do{
 					// получаем содержимое папки Documents
 					if let tracksContents = try? FileManager.default.contentsOfDirectory(atPath: FileManager.docDir()){
+
 						self.removeFilesFromDirectory(tracksContents: tracksContents)
 
-					} else if let tracksContents = try? FileManager.default.contentsOfDirectory(atPath: FileManager.docDir().appending("/Tracks")) {
+					}
+					if let tracksContents = try? FileManager.default.contentsOfDirectory(atPath: FileManager.docDir().appending("/Tracks")) {
 						self.removeFilesFromDirectory(tracksContents: tracksContents)
 					}
 					//удаляем треки из базы
 					CoreDataManager.instance.deleteAllTracks()
 					// устанавливаем флаг о прохождении миграции
-					userDefaults.set(true, forKey: "MigrationWasDone")
+					userDefaults.set(true, forKey: "MigrationWasDoneV2")
 					userDefaults.synchronize()
 				}
 			}
@@ -64,11 +66,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	func removeFilesFromDirectory (tracksContents:[String]) {
 		//если в папке больше 4 файлов (3 файла Sqlite и папка Tracks) то пытаемся удалить треки
-		if tracksContents.count > 4 {
+		if tracksContents.count > 1 {
 			for track in tracksContents {
 				// проверка для удаления только треков
-				if track.contains("mp3") {
-					let atPath = FileManager.applicationSupportDir().appending("/").appending(track)
+//				if track.contains("mp3") {
+					let atPath = FileManager.docDir().appending("/").appending(track)
 					do{
 						print(atPath)
 						try FileManager.default.removeItem(atPath: atPath)
@@ -76,7 +78,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 					} catch  {
 						print("error with move file reason - \(error)")
 					}
-				}
+//				}
 			}
 			
 			
