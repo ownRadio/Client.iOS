@@ -41,11 +41,11 @@ class DiskStatus {
 
 	//MARK: Get raw value
 	//возвращает общее количество памяти
-	class var totalDiskSpaceInBytes:UInt {
+	class var totalDiskSpaceInBytes:UInt64 {
 		get {
 			do {
 				let systemAttributes = try FileManager.default.attributesOfFileSystem(forPath: NSHomeDirectory() as String)
-				let space = (systemAttributes[FileAttributeKey.systemSize] as? NSNumber)?.uintValue
+				let space = (systemAttributes[FileAttributeKey.systemSize] as? NSNumber)?.uint64Value
 				return space!
 			} catch {
 				return 0
@@ -56,15 +56,16 @@ class DiskStatus {
 	//возвращает количество памяти, занимаемое треками
 	class func folderSize(folderPath:String) -> UInt{
 
-		let filesArray:[String]? = try? FileManager.default.subpathsOfDirectory(atPath: folderPath) as [String]
+		let filesArray:[String]? = try? FileManager.default.subpathsOfDirectory(atPath: folderPath.appending("/")) as [String]
 		var fileSize:UInt = 0
 		
 		for fileName in filesArray!{
 			
-			let folderUrl = NSURL(string: folderPath)
-			let filePath = folderUrl?.appendingPathComponent(fileName)
+			let str  =  folderPath.appending(fileName)  //folderPath.addingPercentEncoding(withAllowedCharacters:.urlUserAllowed)
+//			let folderUrl = NSURL(fileURLWithPath: str)
+//			let filePath = folderUrl.appendingPathComponent(fileName)?.absoluteString
 			do {
-				let fileDictionary:NSDictionary = try FileManager.default.attributesOfItem(atPath: (filePath?.absoluteString)!) as NSDictionary
+				let fileDictionary:NSDictionary = try FileManager.default.attributesOfItem(atPath: str) as NSDictionary
 				fileSize += UInt(fileDictionary.fileSize())
 			} catch {
 				print(error.localizedDescription)
@@ -75,32 +76,21 @@ class DiskStatus {
 	}
 	
 	//возвращает количество свободной памяти
-	class var freeDiskSpaceInBytes:UInt {
+	class var freeDiskSpaceInBytes:UInt64 {
 		get {
-			
-			let documentDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).last!
-			guard
-				let systemAttributes = try? FileManager.default.attributesOfFileSystem(forPath: documentDirectory),
-				let freeSize = systemAttributes[.systemFreeSize] as? NSNumber
-    else {
-		// something failed
-		return 0
+			do {
+				let systemAttributes = try FileManager.default.attributesOfFileSystem(forPath: NSHomeDirectory() as String)
+				let freeSpace = (systemAttributes[FileAttributeKey.systemFreeSize] as? NSNumber)?.uintValue
+				return UInt64(freeSpace!)
+			} catch {
+				return 0
 			}
-			return freeSize.uintValue
-			
-			
-			//			do {
-			//				let systemAttributes = try FileManager.default.attributesOfFileSystem(forPath: NSHomeDirectory() as String)
-			//				let freeSpace = (systemAttributes[FileAttributeKey.systemFreeSize] as? NSNumber)?.uintValue
-			//				return freeSpace!
-			//			} catch {
-			//				return 0
-			//			}
 		}
 	}
 	
+	
 	//возвращает общее количество занятой памяти
-	class var usedDiskSpaceInBytes:UInt {
+	class var usedDiskSpaceInBytes:UInt64 {
 		get {
 			let usedSpace = totalDiskSpaceInBytes - freeDiskSpaceInBytes
 			return usedSpace

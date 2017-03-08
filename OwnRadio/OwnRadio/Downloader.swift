@@ -14,19 +14,27 @@ class Downloader {
 	static let sharedInstance = Downloader()
 	var taskQueue: OperationQueue?
 	let baseURL = URL(string: "http://api.ownradio.ru/v3/tracks/")
-	let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-	let tracksPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("Tracks/")
-	let tracksUrlString =  FileManager.documentsDir().appending("/Tracks/")
+	let applicationSupportPath = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
+	let tracksPath = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!.appendingPathComponent("Tracks/")
+	let tracksUrlString =  FileManager.applicationSupportDir().appending("/Tracks/")
+	
+    var loadCallCount = 0;
+    var successCount = 0
 	
 	func load(complition: @escaping (() -> Void)) {
 
 		//проверяем свободное место, если его достаточно - загружаем треки
-		if DiskStatus.folderSize(folderPath: tracksUrlString) <= (DiskStatus.freeDiskSpaceInBytes / 2)  {
+		
+		if UInt64(DiskStatus.folderSize(folderPath: tracksUrlString)) <= (DiskStatus.freeDiskSpaceInBytes / 2)  {
 				//получаем trackId следующего трека и информацию о нем
-				ApiService.shared.getTrackIDFromServer { (dict) in
+				ApiService.shared.getTrackIDFromServer { [unowned self] (dict) in
 					guard dict["id"] != nil else {
 						return
 					}
+//                    if self.successCount < 3 {
+//                        self.successCount += 1
+//                    }
+
 					let trackURL = self.baseURL?.appendingPathComponent(dict["id"] as! String)
 					if let audioUrl = trackURL {
 						//задаем директорию для сохранения трека
@@ -39,7 +47,7 @@ class Downloader {
 						} else {
 							//если этот трек не еще не загружен - загружаем трек
 							//используется замыкание для сохранения загруженного трека в файл и информации о треке в бд
-							let downloadRequest = URLSession.shared.downloadTask(with: audioUrl, completionHandler: { (location, response, error) -> Void in
+							let downloadRequest = URLSession.shared.downloadTask(with: audioUrl, completionHandler: { [unowned self] (location, response, error) -> Void in
 								guard error == nil else {
 									NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":error.debugDescription])
 									return
@@ -76,6 +84,11 @@ class Downloader {
 									CoreDataManager.instance.saveContext()
 									
 									complition()
+//                                    if self.loadCallCount >= 3 && self.successCount >= 1 && self.successCount < 3 {
+//                                        self.load {
+//                                            complition()
+//                                        }
+//                                    }
 									NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"File moved to documents folder"])
 									print("File moved to documents folder")
 								} catch let error as NSError {
@@ -89,6 +102,7 @@ class Downloader {
 					}
 				}
 		} else {
+			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"cache is full"])
 			// если память заполнена удаляем трек 
 			deleteOldTrack()
 		}
@@ -126,7 +140,10 @@ class Downloader {
 //		задаем единственную операцию в один момент времени
 		self.taskQueue?.maxConcurrentOperationCount = 1
 		for _ in 0..<3 {
-			self.load(complition: complition)
+            self.load(complition: complition)
+//            if loadCallCount < 3 {
+//                loadCallCount += 1
+//            }
 		}
 	}
 
