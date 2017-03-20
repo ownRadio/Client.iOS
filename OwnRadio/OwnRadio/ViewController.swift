@@ -44,6 +44,7 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 	
 	var isPlaying: Bool!
 	var visibleInfoView: Bool!
+    var isStartListening: Bool! = false
 	
 	var timer = Timer()
 	var timeObserverToken:AnyObject? = nil
@@ -62,7 +63,9 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
-		self.authorNameLbl.text = "ownRadio"
+        if isStartListening == false {
+            self.authorNameLbl.text = "ownRadio"
+        }
 		self.trackNameLbl.text = ""
 		
 		self.checkMemoryWarning()
@@ -84,7 +87,7 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 		self.player = AudioPlayerManager.sharedInstance
 		self.detectedHeadphones()
 		
-		self.deviceIdLbl.text = (UserDefaults.standard.object(forKey: "UUIDDevice") as! String).lowercased()
+		self.deviceIdLbl.text = NSUUID().uuidString.lowercased()
 		self.visibleInfoView = false
 		
 		getCountFilesInCache()
@@ -97,7 +100,9 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 				}
 				return
 			}
-			self.downloadTracks()
+            if status != NetworkReachabilityManager.NetworkReachabilityStatus.notReachable {
+                self.downloadTracks()
+            }
 		}
 		reachability?.startListening()
 		self.updateUI()
@@ -300,7 +305,8 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 	//функция отображения количества файлов в кеше
 	func getCountFilesInCache () {
 		do {
-			let docUrl = NSURL(string:FileManager.documentsDir())?.appendingPathComponent("Tracks")
+//			let appSupportUrl = URL(string: FileManager.applicationSupportDir().appending("/"))
+			let docUrl = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first?.appendingPathComponent("Tracks")
 			let directoryContents = try FileManager.default.contentsOfDirectory(at: docUrl!, includingPropertiesForKeys: nil, options: [])
 			let mp3Files = directoryContents.filter{ $0.pathExtension == "mp3" }
 			self.numberOfFiles.text = String.init(format:"%d", mp3Files.count)
@@ -312,9 +318,12 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 	
 	//обновление UI
 	func updateUI() {
+        
+        if isStartListening == true {
+            self.trackNameLbl.text = self.player.playingSong.name
+            self.authorNameLbl.text = self.player.playingSong.artistName
+        }
 		self.trackIDLbl.text = self.player.playingSong.trackID
-		self.trackNameLbl.text = self.player.playingSong.name
-		self.authorNameLbl.text = self.player.playingSong.artistName
 		self.isNowPlaying.text = String(self.player.isPlaying)
 		
 		if CoreDataManager.instance.getCountOfTracks() < 3 {
@@ -386,6 +395,8 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 	}
 	
 	@IBAction func nextTrackButtonPressed() {
+        isStartListening = true
+        
 		if player.isPlaying == true {
 			self.player.player.pause()
 		}
@@ -404,6 +415,8 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 	
 	//обработчик нажатий на кнопку play/pause
 	@IBAction func playBtnPressed() {
+        isStartListening = true
+        
 		guard self.player.playerItem != nil else {
 			
 			self.player.isPlaying = true

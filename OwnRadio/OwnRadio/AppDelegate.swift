@@ -25,55 +25,65 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		Fabric.with([Crashlytics.self, Answers.self])
 		
 		//если устройству не назначен deviceId - генерируем новый
-		if userDefaults.object(forKey: "UUIDDevice") == nil {
-			let UUID = NSUUID().uuidString.lowercased() //"17096171-1C39-4290-AE50-907D7E62F36A" //
-			userDefaults.set(UUID, forKey: "UUIDDevice")
-			userDefaults.synchronize()
-		}
+//		if userDefaults.object(forKey: "UUIDDevice") == nil {
+//			let UUID = NSUUID().uuidString.lowercased() //"17096171-1C39-4290-AE50-907D7E62F36A" //
+//			userDefaults.set(UUID, forKey: "UUIDDevice")
+//			userDefaults.synchronize()
+//		}
 		
 		// создаем папку Tracks если ее нет
-		let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-		let tracksPath = documentsPath.appendingPathComponent("Tracks")
+		let applicationSupportPath = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
+		let tracksPath = applicationSupportPath.appendingPathComponent("Tracks")
 		do {
 			try FileManager.default.createDirectory(at: tracksPath, withIntermediateDirectories: true, attributes: nil)
 		} catch let error as NSError {
 			NSLog("Unable to create directory \(error.debugDescription)")
 		}
 		//проверяем была ли совершена миграция
-		if userDefaults.object(forKey: "MigrationWasDone") == nil
+		if userDefaults.object(forKey: "MigrationWasDoneV2") == nil
 		{
 			DispatchQueue.global().async {
 				do{
 					// получаем содержимое папки Documents
-					if let tracksContents = try? FileManager.default.contentsOfDirectory(atPath: FileManager.documentsDir()){
-						//если в папке больше 4 файлов (3 файла Sqlite и папка Tracks) то пытаемся удалить треки
-						if tracksContents.count > 4 {
-							for track in tracksContents {
-								// проверка для удаления только треков
-								if track.contains("mp3") {
-									let atPath = FileManager.documentsDir().appending("/").appending(track)
-									do{
-										print(atPath)
-										try FileManager.default.removeItem(atPath: atPath)
-										
-									} catch  {
-										print("error with move file reason - \(error)")
-									}
-								}
-							}
-							//удаляем треки из базы
-							CoreDataManager.instance.deleteAllTracks()
-						}
-						// устанавливаем флаг о прохождении миграции
-						userDefaults.set(true, forKey: "MigrationWasDone")
-						userDefaults.synchronize()
+					if let tracksContents = try? FileManager.default.contentsOfDirectory(atPath: FileManager.docDir()){
+
+						self.removeFilesFromDirectory(tracksContents: tracksContents)
+
 					}
+					if let tracksContents = try? FileManager.default.contentsOfDirectory(atPath: FileManager.docDir().appending("/Tracks")) {
+						self.removeFilesFromDirectory(tracksContents: tracksContents)
+					}
+					//удаляем треки из базы
+					CoreDataManager.instance.deleteAllTracks()
+					// устанавливаем флаг о прохождении миграции
+					userDefaults.set(true, forKey: "MigrationWasDoneV2")
+					userDefaults.synchronize()
 				}
 			}
 		}
 		return true
 	}
 	
+	func removeFilesFromDirectory (tracksContents:[String]) {
+		//если в папке больше 4 файлов (3 файла Sqlite и папка Tracks) то пытаемся удалить треки
+		if tracksContents.count > 1 {
+			for track in tracksContents {
+				// проверка для удаления только треков
+				if !track.contains("sqlite") {
+					let atPath = FileManager.docDir().appending("/").appending(track)
+					do{
+						print(atPath)
+						try FileManager.default.removeItem(atPath: atPath)
+						
+					} catch  {
+						print("error with move file reason - \(error)")
+					}
+				}
+			}
+			
+			
+		}
+	}
 	
 	func applicationWillResignActive(_ application: UIApplication) {
 		// Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

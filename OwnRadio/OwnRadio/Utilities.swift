@@ -14,7 +14,12 @@ protocol Utilities {
 }
 
 extension FileManager {
-	class func documentsDir() -> String {
+	class func applicationSupportDir() -> String {
+		var paths = NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true) as [String]
+		return paths[0]
+	}
+	
+	class func docDir() -> String {
 		var paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true) as [String]
 		return paths[0]
 	}

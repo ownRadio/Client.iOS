@@ -22,7 +22,7 @@ class ApiService {
 	func getTrackIDFromServer (complition:  @escaping ([String:AnyObject]) -> Void)  {
 		
 		//формируем URL для получения информации о следующем треке (trackId, name, artist, methodId, length)
-		let trackurl = self.tracksUrl?.appendingPathComponent((UserDefaults.standard.object(forKey: "UUIDDevice") as! String)).appendingPathComponent("/next")
+		let trackurl = self.tracksUrl?.appendingPathComponent((NSUUID().uuidString.lowercased())).appendingPathComponent("/next")
 		
 		guard let url = trackurl else {
 			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"Error: cannot create URL"])
@@ -34,6 +34,7 @@ class ApiService {
 		// set up the session
 		let config = URLSessionConfiguration.default
 		let session = URLSession(configuration: config)
+		print(urlRequest.description)
 		
 		let task = session.dataTask(with: urlRequest as URLRequest, completionHandler: { (data, response, error) in
 			// do stuff with response, data & error here
@@ -60,7 +61,7 @@ class ApiService {
 		
 		let historyUrl = URL(string: "http://api.ownradio.ru/v3/histories/")
 		//формируем URL для отправки истории прослушивания на сервер
-		let trackHistoryUrl = historyUrl?.appendingPathComponent((UserDefaults.standard.object(forKey: "UUIDDevice") as! String)).appendingPathComponent(trackId)
+		let trackHistoryUrl = historyUrl?.appendingPathComponent((NSUUID().uuidString.lowercased())).appendingPathComponent(trackId)
 		
 		guard let url = trackHistoryUrl else {
 			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"Error: cannot create URL"])
@@ -85,6 +86,7 @@ class ApiService {
 			let data = try JSONSerialization.data(withJSONObject: dict, options: [])
 //			let dataString = String(data: data, encoding: String.Encoding.utf8)!
 			request.httpBody = data
+			
 			
 		} catch {
 			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"JSON serialization failed: \(error)"])
