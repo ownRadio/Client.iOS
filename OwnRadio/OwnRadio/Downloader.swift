@@ -31,9 +31,6 @@ class Downloader {
 					guard dict["id"] != nil else {
 						return
 					}
-//                    if self.successCount < 3 {
-//                        self.successCount += 1
-//                    }
 
 					let trackURL = self.baseURL?.appendingPathComponent(dict["id"] as! String)
 					if let audioUrl = trackURL {
@@ -47,7 +44,7 @@ class Downloader {
 						} else {
 							//если этот трек не еще не загружен - загружаем трек
 							//используется замыкание для сохранения загруженного трека в файл и информации о треке в бд
-							let downloadRequest = URLSession.shared.downloadTask(with: audioUrl, completionHandler: { [unowned self] (location, response, error) -> Void in
+							let downloadRequest = URLSession.shared.downloadTask(with: audioUrl, completionHandler: { (location, response, error) -> Void in
 								guard error == nil else {
 									NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":error.debugDescription])
 									return
@@ -84,11 +81,6 @@ class Downloader {
 									CoreDataManager.instance.saveContext()
 									
 									complition()
-//                                    if self.loadCallCount >= 3 && self.successCount >= 1 && self.successCount < 3 {
-//                                        self.load {
-//                                            complition()
-//                                        }
-//                                    }
 									NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"File moved to documents folder"])
 									print("File moved to documents folder")
 								} catch let error as NSError {
@@ -141,9 +133,6 @@ class Downloader {
 		self.taskQueue?.maxConcurrentOperationCount = 1
 		for _ in 0..<3 {
             self.load(complition: complition)
-//            if loadCallCount < 3 {
-//                loadCallCount += 1
-//            }
 		}
 	}
 
