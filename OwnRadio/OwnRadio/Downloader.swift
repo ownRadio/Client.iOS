@@ -18,6 +18,8 @@ class Downloader {
 	let tracksPath = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!.appendingPathComponent("Tracks/")
 	let tracksUrlString =  FileManager.applicationSupportDir().appending("/Tracks/")
 	
+	let limitMemory = UInt64(300 * 1024 * 1024)
+	
     var loadCallCount = 0;
     var successCount = 0
 	
@@ -25,7 +27,8 @@ class Downloader {
 
 		//проверяем свободное место, если его достаточно - загружаем треки
 		
-		if UInt64(DiskStatus.folderSize(folderPath: tracksUrlString)) <= (DiskStatus.freeDiskSpaceInBytes / 2)  {
+//		if DiskStatus.folderSize(folderPath: tracksUrlString) <= (DiskStatus.freeDiskSpaceInBytes / 2)  {
+			if DiskStatus.freeDiskSpaceInBytes >= limitMemory  {
 				//получаем trackId следующего трека и информацию о нем
 				ApiService.shared.getTrackIDFromServer { [unowned self] (dict) in
 					guard dict["id"] != nil else {

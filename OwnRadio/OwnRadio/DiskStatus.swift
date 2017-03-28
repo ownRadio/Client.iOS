@@ -78,13 +78,28 @@ class DiskStatus {
 	//возвращает количество свободной памяти
 	class var freeDiskSpaceInBytes:UInt64 {
 		get {
-			do {
-				let systemAttributes = try FileManager.default.attributesOfFileSystem(forPath: NSHomeDirectory() as String)
-				let freeSpace = (systemAttributes[FileAttributeKey.systemFreeSize] as? NSNumber)?.uintValue
-				return UInt64(freeSpace!)
-			} catch {
-				return 0
+//			do {
+//				let systemAttributes = try FileManager.default.attributesOfFileSystem(forPath: NSHomeDirectory() as String)
+//				
+//				let freeSpace = (systemAttributes[FileAttributeKey.systemFreeSize] as? NSNumber)?.uint64Value
+//				return freeSpace!
+//			} catch {
+//				return 0
+//			}
+			
+			
+			let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+			if let dictionary = try? FileManager.default.attributesOfFileSystem(forPath: paths.last!) {
+				if let freeSize = dictionary[FileAttributeKey.systemFreeSize] as? NSNumber {
+					
+					let newsize = freeSize.doubleValue * 0.8;
+					print(UInt64(newsize))
+					return UInt64(newsize)
+				}
+			}else{
+				print("Error Obtaining System Memory Info:")
 			}
+			return 0
 		}
 	}
 	
