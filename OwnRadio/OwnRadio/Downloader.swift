@@ -12,7 +12,7 @@ import Foundation
 class Downloader {
 	
 	static let sharedInstance = Downloader()
-	var taskQueue: OperationQueue?
+//	var taskQueue: OperationQueue?
 	let baseURL = URL(string: "http://api.ownradio.ru/v3/tracks/")
 	let applicationSupportPath = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
 	let tracksPath = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!.appendingPathComponent("Tracks/")
@@ -20,87 +20,110 @@ class Downloader {
 	
 	let limitMemory = UInt64(300 * 1024 * 1024)
 	
-    var loadCallCount = 0;
-    var successCount = 0
+	var requestCount = 0;
+	var completionHandler:(()->Void)? = nil  //{_ in }
 	
 	func load(complition: @escaping (() -> Void)) {
 
 		//проверяем свободное место, если его достаточно - загружаем треки
-		
 //		if DiskStatus.folderSize(folderPath: tracksUrlString) <= (DiskStatus.freeDiskSpaceInBytes / 2)  {
 			if DiskStatus.freeDiskSpaceInBytes >= limitMemory  {
 				//получаем trackId следующего трека и информацию о нем
+				self.completionHandler = complition
 				ApiService.shared.getTrackIDFromServer { [unowned self] (dict) in
 					guard dict["id"] != nil else {
 						return
 					}
-
+					print(dict["id"])
 					let trackURL = self.baseURL?.appendingPathComponent(dict["id"] as! String)
 					if let audioUrl = trackURL {
 						//задаем директорию для сохранения трека
 						let destinationUrl = self.tracksPath.appendingPathComponent(audioUrl.lastPathComponent)
-						
-						//проверяем, существует ли в директории файл с таким GUID'ом
-						if FileManager.default.fileExists(atPath: destinationUrl.path) {
-							NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"The file already exists at path"])
-							print("The file already exists at path")
-						} else {
 							//если этот трек не еще не загружен - загружаем трек
-							//используется замыкание для сохранения загруженного трека в файл и информации о треке в бд
-							let downloadRequest = URLSession.shared.downloadTask(with: audioUrl, completionHandler: { (location, response, error) -> Void in
-								guard error == nil else {
-									NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":error.debugDescription])
-									return
-								}
-								guard let location = location, error == nil else {return }
-								
-								
-								do {
-									let file = NSData(contentsOf: location)
-									let mp3Path = destinationUrl.appendingPathExtension("mp3")
-									guard FileManager.default.fileExists(atPath: mp3Path.absoluteString ) == false else {
-										NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"MP3 file exist"])
-										print("MP3 file exist")
-										return
-									}
-									
-									//сохраняем трек
-									try file?.write(to: destinationUrl, options:.noFileProtection)
-									//задаем конечных путь хранения файла (добавляем расширение)
-									let endPath = destinationUrl.appendingPathExtension("mp3")
-									//перемещаем файл по заданному пути
-									try FileManager.default.moveItem(at: destinationUrl, to: endPath)
-									//сохраняем информацию о файле в базу данных
-									let trackEntity = TrackEntity()
-									
-									trackEntity.path = String(describing: endPath.lastPathComponent)
-									trackEntity.countPlay = 0
-									trackEntity.artistName = dict["artist"] as? String
-									trackEntity.trackName = dict["name"] as? String
-									trackEntity.trackLength = NSString(string: dict["length"] as! String).doubleValue
-									trackEntity.recId = dict["id"] as! String?
-									trackEntity.playingDate = NSDate.init(timeIntervalSince1970: 0)
-									
-									CoreDataManager.instance.saveContext()
-									
-									complition()
-									NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"File moved to documents folder"])
-									print("File moved to documents folder")
-								} catch let error as NSError {
-									print(error.localizedDescription)
-								}
-							})
-							self.taskQueue?.addOperation {
-								downloadRequest.resume()
-							}
+//						let mp3Path = destinationUrl.appendingPathExtension("mp3")
+						guard FileManager.default.fileExists(atPath: destinationUrl.path ) == false else {
+							self.createPostNotificationSysInfo(message: "File already exist and won't load")
+							return
 						}
+							//используется замыкание для сохранения загруженного трека в файл и информации о треке в бд
+							let downloadRequest = self.createDownloadTask(audioUrl: audioUrl, destinationUrl: destinationUrl, dict: dict)
+						
+								downloadRequest.resume()
+						
+//						}
 					}
 				}
+				
 		} else {
-			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"cache is full"])
-			// если память заполнена удаляем трек 
+			// если память заполнена удаляем трек
+			self.requestCount = 0;
 			deleteOldTrack()
 		}
+	}
+
+	func createDownloadTask(audioUrl:URL, destinationUrl:URL, dict:[String:AnyObject]) -> URLSessionDownloadTask {
+		return URLSession.shared.downloadTask(with: audioUrl, completionHandler: { (location, response, error) -> Void in
+			guard error == nil else {
+				self.createPostNotificationSysInfo(message: error.debugDescription)
+				return
+			}
+			guard let newLocation = location, error == nil else {return }
+			
+			do {
+				let file = NSData(contentsOf: newLocation)
+				let mp3Path = destinationUrl.appendingPathExtension("mp3")
+				guard FileManager.default.fileExists(atPath: mp3Path.path ) == false else {
+					self.createPostNotificationSysInfo(message: "MP3 file exist")
+					return
+				}
+				
+				//сохраняем трек
+				//задаем конечных путь хранения файла (добавляем расширение)
+				let endPath = destinationUrl.appendingPathExtension("mp3")
+				try file?.write(to: endPath, options:.noFileProtection)
+				
+				//сохраняем информацию о файле в базу данных
+				
+				guard FileManager.default.fileExists(atPath: mp3Path.absoluteString ) == false else {
+					self.createPostNotificationSysInfo(message: "MP3 file exist")
+					return
+				}
+				
+				let trackEntity = TrackEntity()
+				
+				trackEntity.path = String(describing: endPath.lastPathComponent)
+				trackEntity.countPlay = 0
+				trackEntity.artistName = dict["artist"] as? String
+				trackEntity.trackName = dict["name"] as? String
+				trackEntity.trackLength = NSString(string: dict["length"] as! String).doubleValue
+				trackEntity.recId = dict["id"] as! String?
+				trackEntity.playingDate = NSDate.init(timeIntervalSince1970: 0)
+				
+				CoreDataManager.instance.saveContext()
+				
+				if self.requestCount < 2 {
+					if self.completionHandler != nil {
+						self.completionHandler!()
+					}
+					self.load {
+						
+					}
+					self.requestCount += 1
+				} else {
+					self.requestCount = 0
+				}
+				
+//				complition()
+				self.createPostNotificationSysInfo(message: "File moved to documents folder")
+				print("File moved to documents folder")
+			} catch let error as NSError {
+				print(error.localizedDescription)
+			}
+		})
+	}
+	
+	func createPostNotificationSysInfo (message:String) {
+		NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":message])
 	}
 	
 	// удаление трека если память заполнена
@@ -126,17 +149,4 @@ class Downloader {
 		}
 	}
 	
-	// создание очереди
-	func addTaskToQueueWith (complition: @escaping (() -> Void)) {
-//		проверка на существование очереди
-		if self.taskQueue == nil {
-			self.taskQueue = OperationQueue()
-		}
-//		задаем единственную операцию в один момент времени
-		self.taskQueue?.maxConcurrentOperationCount = 1
-		for _ in 0..<3 {
-            self.load(complition: complition)
-		}
-	}
-
 }

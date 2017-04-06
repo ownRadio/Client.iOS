@@ -53,7 +53,9 @@ class ApiService {
 				print("Achtung! Eror! \(error)")
 			}
 		})
+		
 		task.resume()
+		
 	}
 	
 	//функция сохранения истории прослушивания треков

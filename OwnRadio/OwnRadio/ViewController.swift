@@ -94,7 +94,7 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 		
 		//подписываемся на уведомлени
 		reachability?.listener = { [unowned self] status in
-			guard CoreDataManager.instance.getCountOfTracks() < 3 else {
+			guard CoreDataManager.instance.getCountOfTracks() < 1 else {
 				DispatchQueue.main.async {
 					self.updateUI()
 				}
@@ -188,7 +188,7 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 			return
 		}
 		DispatchQueue.global(qos: .background).async {
-			Downloader.sharedInstance.addTaskToQueueWith {
+			Downloader.sharedInstance.load {
 				DispatchQueue.main.async {
 					self.updateUI()
 				}
@@ -309,8 +309,7 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 			let docUrl = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first?.appendingPathComponent("Tracks")
 			let directoryContents = try FileManager.default.contentsOfDirectory(at: docUrl!, includingPropertiesForKeys: nil, options: [])
 			let mp3Files = directoryContents.filter{ $0.pathExtension == "mp3" }
-			self.numberOfFiles.text = String.init(format:"%d", mp3Files.count)
-			
+			self.numberOfFiles.text = String(CoreDataManager.instance.chekCountOfEntitiesFor(entityName: "TrackEntity"))
 		} catch let error as NSError {
 			print(error.localizedDescription)
 		}
@@ -326,11 +325,14 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 		self.trackIDLbl.text = self.player.playingSong.trackID
 		self.isNowPlaying.text = String(self.player.isPlaying)
 		
-		if CoreDataManager.instance.getCountOfTracks() < 3 {
-			self.playPauseBtn.isEnabled = false
+		if CoreDataManager.instance.getCountOfTracks() < 3 && CoreDataManager.instance.getCountOfTracks() != 0 {
+//			self.playPauseBtn.isEnabled = false
 			self.nextButton.isEnabled = false
+			self.cachingView.removeFromSuperview()
+		}else if CoreDataManager.instance.getCountOfTracks() < 1 {
+			self.playPauseBtn.isEnabled = true
 			self.view.addSubview(self.cachingView)
-		} else {
+		}else {
 			self.playPauseBtn.isEnabled = true
 			self.nextButton.isEnabled = true
 			self.cachingView.removeFromSuperview()
