@@ -277,7 +277,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 			return
 		}
 		DispatchQueue.global(qos: .background).async {
-			Downloader.sharedInstance.addTaskToQueueWith(complition: complition)
+			Downloader.sharedInstance.load(complition: complition)
 		}
 	}
 	
