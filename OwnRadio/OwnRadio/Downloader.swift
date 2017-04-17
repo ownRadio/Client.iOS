@@ -18,7 +18,7 @@ class Downloader {
 	let tracksPath = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!.appendingPathComponent("Tracks/")
 	let tracksUrlString =  FileManager.applicationSupportDir().appending("/Tracks/")
 	
-	let limitMemory = UInt64(300 * 1024 * 1024)
+	let limitMemory =  UInt64(DiskStatus.freeDiskSpaceInBytes / 2)
 	
 	var requestCount = 0;
 	var completionHandler:(()->Void)? = nil  //{_ in }
@@ -26,8 +26,7 @@ class Downloader {
 	func load(complition: @escaping (() -> Void)) {
 
 		//проверяем свободное место, если его достаточно - загружаем треки
-//		if DiskStatus.folderSize(folderPath: tracksUrlString) <= (DiskStatus.freeDiskSpaceInBytes / 2)  {
-			if DiskStatus.freeDiskSpaceInBytes >= limitMemory  {
+			if DiskStatus.folderSize(folderPath: tracksUrlString) <= limitMemory  {
 				//получаем trackId следующего трека и информацию о нем
 				self.completionHandler = complition
 				ApiService.shared.getTrackIDFromServer { [unowned self] (dict) in
@@ -144,8 +143,11 @@ class Downloader {
 				print("Error with remove file ")
 			}
 			// удаляем трек с базы
-			CoreDataManager.instance.deleteTrackFor(trackID: (song?.trackID)!)
-			CoreDataManager.instance.saveContext()
+			CoreDataManager.instance.managedObjectContext.performAndWait {
+				CoreDataManager.instance.deleteTrackFor(trackID: (song?.trackID)!)
+				CoreDataManager.instance.saveContext()
+			}
+			
 		}
 	}
 	
