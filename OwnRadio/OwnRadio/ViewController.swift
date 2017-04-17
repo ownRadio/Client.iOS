@@ -19,6 +19,9 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 	@IBOutlet weak var infoView: UIView!
 	@IBOutlet weak var circleViewConteiner: UIView!
 	
+	@IBOutlet weak var freeSpaceLbl:UILabel!
+	@IBOutlet weak var folderSpaceLbl: UILabel!
+	
 	@IBOutlet weak var trackNameLbl: UILabel!
 	@IBOutlet weak var authorNameLbl: UILabel!
 	@IBOutlet weak var trackIDLbl: UILabel!
@@ -57,6 +60,8 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 	var cachingView = CachingView.instanceFromNib()
 	var playedTracks: NSArray = CoreDataManager.instance.getGroupedTracks()
 	var reachability = NetworkReachabilityManager(host: "http://api.ownradio.ru/v3")
+	
+	let tracksUrlString =  FileManager.applicationSupportDir().appending("/Tracks/")
 	
 	// MARK: Override
 	//выполняется при загрузке окна
@@ -364,6 +369,10 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 		// update table 
 		self.playedTracks = CoreDataManager.instance.getGroupedTracks()
 		self.tableView.reloadData()
+		
+		self.freeSpaceLbl.text = String(DiskStatus.freeDiskSpaceInBytes)
+		self.folderSpaceLbl.text = String(DiskStatus.folderSize(folderPath: tracksUrlString))
+		
 	}
 	
 	// MARK: UITableViewDataSource
