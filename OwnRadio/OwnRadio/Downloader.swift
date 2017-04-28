@@ -21,12 +21,12 @@ class Downloader {
 	let limitMemory =  UInt64(DiskStatus.freeDiskSpaceInBytes / 2)
 	
 	var requestCount = 0;
-	var completionHandler:(()->Void)? = nil  //{_ in }
+	var completionHandler:(()->Void)? = nil
 	
 	func load(complition: @escaping (() -> Void)) {
 
 		//проверяем свободное место, если его достаточно - загружаем треки
-			if DiskStatus.folderSize(folderPath: tracksUrlString) <= limitMemory  {
+			if DiskStatus.folderSize(folderPath: tracksUrlString) < limitMemory  {
 				//получаем trackId следующего трека и информацию о нем
 				self.completionHandler = complition
 				ApiService.shared.getTrackIDFromServer { [unowned self] (dict) in
@@ -55,8 +55,22 @@ class Downloader {
 				
 		} else {
 			// если память заполнена удаляем трек
-			self.requestCount = 0;
-			deleteOldTrack()
+				if self.requestCount <= 2 {
+					if self.completionHandler != nil {
+						self.completionHandler!()
+					}
+					self.requestCount += 1
+					deleteOldTrack()
+					
+					self.createPostNotificationSysInfo(message: "File was delete")
+					self.load {
+						
+					}
+				
+				}else {
+					self.requestCount = 0
+				}
+
 		}
 	}
 
