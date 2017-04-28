@@ -96,7 +96,7 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 		self.visibleInfoView = false
 		
 		getCountFilesInCache()
-		
+	
 		//подписываемся на уведомлени
 		reachability?.listener = { [unowned self] status in
 			guard CoreDataManager.instance.getCountOfTracks() < 1 else {
