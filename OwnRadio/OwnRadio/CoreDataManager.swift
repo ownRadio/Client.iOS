@@ -250,7 +250,7 @@ class CoreDataManager {
 		let fetchRequest: NSFetchRequest<TrackEntity> = TrackEntity.fetchRequest()
 		fetchRequest.sortDescriptors = sortDescriptors
 //		задаем предикат
-		fetchRequest.predicate = NSPredicate(format: "countPlay > %d", 0)
+		fetchRequest.predicate = NSPredicate(format: "countPlay >= %d", 0)
 		fetchRequest.fetchLimit = 1
 		let  song = SongObject()
 		do {
