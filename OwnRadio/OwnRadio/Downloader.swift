@@ -55,14 +55,14 @@ class Downloader {
 				
 		} else {
 			// если память заполнена удаляем трек
-				if self.requestCount <= 2 {
+				if self.requestCount < 2 {
 					if self.completionHandler != nil {
 						self.completionHandler!()
 					}
 					self.requestCount += 1
 					deleteOldTrack()
 					
-					self.createPostNotificationSysInfo(message: "File was delete")
+					
 					self.load {
 						
 					}
@@ -152,6 +152,7 @@ class Downloader {
 			do{
 				// удаляем обьект по пути
 				try FileManager.default.removeItem(atPath: path)
+				self.createPostNotificationSysInfo(message: "File was delete")
 			}
 			catch {
 				print("Error with remove file ")
