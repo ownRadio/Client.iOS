@@ -152,8 +152,14 @@ class CoreDataManager {
 		do {
 			// выполняем запрос и отправляем историю о каждом треке
 			let searchResults = try self.managedObjectContext.fetch(fetchRequest)
+			var buff:String = ""
 			for track in searchResults {
+				if track.trackId == buff {
+					print("TRACKS IDs are equal!!! ")
+				}
 				ApiService.shared.saveHistory(trackId: track.trackId!, isListen: Int(track.isListen))
+				
+				buff = track.trackId!
 			}
 		} catch {
 			print("Error with request: \(error)")
