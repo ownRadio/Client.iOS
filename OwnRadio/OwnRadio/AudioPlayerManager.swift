@@ -105,6 +105,8 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 					}
 				}
 			case .failed:
+				Downloader.sharedInstance.createPostNotificationSysInfo(message: "Playeer Item was fail")
+				print(playerItem.error.debugDescription)
 				break
 			case .unknown:
 				break
@@ -120,7 +122,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 			self.playingSong.isListen = 1
 			self.addDateToHistoryTable(playingSong: self.playingSong)
 			if self.playingSong.trackID != nil  {
-				CoreDataManager.instance.setDateForTrackBy(trackId: self.playingSong.trackID)
+//				CoreDataManager.instance.setDateForTrackBy(trackId: self.playingSong.trackID)
 				//				CoreDataManager.instance.setCountOfPlayForTrackBy(trackId: self.playingSong.trackID)
 				CoreDataManager.instance.saveContext()
 			}
@@ -257,6 +259,9 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		                       options: [.old, .new],
 		                       context: nil)
 		player = AVPlayer(playerItem: playerItem)
+		if currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable{
+			CoreDataManager.instance.sentHistory()
+		}
 	}
 	
 	func createPlayerItemWith(url:URL) {
@@ -321,9 +326,9 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	// проигрываем трек из кеша
 	func playFromCache(complition: (() -> Void)?) {
 		
-		if currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable{
-			CoreDataManager.instance.sentHistory()
-		}
+//		if currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable{
+//			CoreDataManager.instance.sentHistory()
+//		}
 		//получаем из БД трек для проигрывания
 		self.playingSong = CoreDataManager.instance.getTrackToPlaing()
 		let str = FileManager.applicationSupportDir().addingPercentEncoding(withAllowedCharacters:.urlHostAllowed)
