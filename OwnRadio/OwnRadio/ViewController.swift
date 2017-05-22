@@ -100,9 +100,7 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 		//подписываемся на уведомлени
 		reachability?.listener = { [unowned self] status in
 			guard CoreDataManager.instance.getCountOfTracks() < 1 else {
-				DispatchQueue.main.async {
 					self.updateUI()
-				}
 				return
 			}
             if status != NetworkReachabilityManager.NetworkReachabilityStatus.notReachable {
@@ -164,11 +162,17 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 		if event?.type == UIEventType.remoteControl {
 			switch event!.subtype {
 			case UIEventSubtype.remoteControlPause:
+				guard MPNowPlayingInfoCenter.default().nowPlayingInfo != nil else {
+					break
+				}
 				changePlayBtnState()
 				MPNowPlayingInfoCenter.default().nowPlayingInfo![MPNowPlayingInfoPropertyElapsedPlaybackTime] = CMTimeGetSeconds(self.player.player.currentTime())
 				MPNowPlayingInfoCenter.default().nowPlayingInfo![MPNowPlayingInfoPropertyPlaybackRate] = 0
 				
 			case .remoteControlPlay:
+				guard MPNowPlayingInfoCenter.default().nowPlayingInfo != nil else {
+					break
+				}
 				changePlayBtnState()
 				MPNowPlayingInfoCenter.default().nowPlayingInfo![MPNowPlayingInfoPropertyElapsedPlaybackTime] = CMTimeGetSeconds(self.player.player.currentTime())
 				MPNowPlayingInfoCenter.default().nowPlayingInfo![MPNowPlayingInfoPropertyPlaybackRate] = 1
@@ -177,10 +181,8 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 				break
 				
 			case .remoteControlNextTrack:
-				player.skipSong(complition: {
-					DispatchQueue.main.async { [unowned self] in
+				player.skipSong(complition: { [unowned self] in
 						self.updateUI()
-					}
 				})
 			default:
 				break
@@ -193,10 +195,8 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 			return
 		}
 		DispatchQueue.global(qos: .background).async {
-			Downloader.sharedInstance.load {
-				DispatchQueue.main.async {
+			Downloader.sharedInstance.load { [unowned self] in
 					self.updateUI()
-				}
 			}
 		}
 	}
@@ -204,9 +204,7 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 	// MARK: Notification Selectors
 	func songDidPlay() {
 		self.player.nextTrack { [unowned self] in
-			DispatchQueue.main.async {
 				self.updateUI()
-			}
 		}
 		self.progressView.isHidden = true
 	}
@@ -290,9 +288,7 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 				
 				MPNowPlayingInfoCenter.default().nowPlayingInfo![MPNowPlayingInfoPropertyElapsedPlaybackTime] = CMTimeGetSeconds(self.player.player.currentTime())
 				MPNowPlayingInfoCenter.default().nowPlayingInfo![MPNowPlayingInfoPropertyPlaybackRate] = 0
-				DispatchQueue.main.async {
 					self.updateUI()
-				}
 				})
 		}else {
 			//иначе - возобновляем проигрывание если возможно или начинаем проигрывать новый трек
@@ -300,9 +296,7 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 			
 				MPNowPlayingInfoCenter.default().nowPlayingInfo![MPNowPlayingInfoPropertyElapsedPlaybackTime] = CMTimeGetSeconds(self.player.player.currentTime())
 				MPNowPlayingInfoCenter.default().nowPlayingInfo![MPNowPlayingInfoPropertyPlaybackRate] = 1
-				DispatchQueue.main.async {
 					self.updateUI()
-				}
 				})
 		}
 	}
@@ -322,8 +316,9 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 	
 	//обновление UI
 	func updateUI() {
+		DispatchQueue.main.async { [unowned self] in
         
-        if isStartListening == true {
+        if self.isStartListening == true {
             self.trackNameLbl.text = self.player.playingSong.name
             self.authorNameLbl.text = self.player.playingSong.artistName
         }
@@ -357,13 +352,13 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 		//обновление кнопки playPause
 		if self.player.isPlaying == false {
 			self.playPauseBtn.setImage(UIImage(named: "playImg"), for: UIControlState.normal)
-			self.leftPlayBtnConstraint.constant = playBtnConstraintConstant
+			self.leftPlayBtnConstraint.constant = self.playBtnConstraintConstant
 		} else {
 			self.playPauseBtn.setImage(UIImage(named: "pauseImg"), for: UIControlState.normal)
-			self.leftPlayBtnConstraint.constant = pauseBtnConstraintConstant
+			self.leftPlayBtnConstraint.constant = self.pauseBtnConstraintConstant
 		}
 		
-		getCountFilesInCache()
+		self.getCountFilesInCache()
 		// обновление количевства записей в базе данных
 		self.numberOfFilesInDB.text = String(CoreDataManager.instance.chekCountOfEntitiesFor(entityName: "TrackEntity"))
 		// update table 
@@ -371,8 +366,9 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 		self.tableView.reloadData()
 		
 		self.freeSpaceLbl.text = String(DiskStatus.freeDiskSpaceInBytes)
-		self.folderSpaceLbl.text = String(DiskStatus.folderSize(folderPath: tracksUrlString))
+		self.folderSpaceLbl.text = String(DiskStatus.folderSize(folderPath: self.tracksUrlString))
 		
+	}
 	}
 	
 	// MARK: UITableViewDataSource
@@ -415,9 +411,7 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 		self.progressView.configure()
 		
 		self.player.skipSong { [unowned self] in
-			DispatchQueue.main.async { [unowned self] in
 				self.updateUI()
-			}
 		}
 		if self.timeObserverToken != nil {
 			self.timeObserverToken = nil
