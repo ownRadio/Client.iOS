@@ -32,6 +32,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	var playbackProgres: Double!
 	var currentPlaybackTime: CMTime!
 	var timer = Timer()
+	var shouldRemoveObserve: Bool!
 	
 	var wasInterreption = false
 	// MARK: Overrides
@@ -39,6 +40,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		super.init()
 		//подписываемся на уведомления плеера
 		//трек проигран до конца
+		
 		NotificationCenter.default.addObserver(self, selector: #selector(playerItemDidReachEnd(_:)), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player.currentItem)
 		//проигрывание было прервано
 		NotificationCenter.default.addObserver(self, selector: #selector(crashNetwork(_:)), name: NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: self.player.currentItem)
@@ -47,7 +49,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	
 	deinit {
 		
-		playerItem.removeObserver(self, forKeyPath: #keyPath(AVPlayerItem.status))
+		self.removeObserver(self, forKeyPath: #keyPath(AudioPlayerManager.playerItem.status))
 		
 		NotificationCenter.default.removeObserver(self, name:  NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player.currentItem)
 		NotificationCenter.default.removeObserver(self, name:  NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: self.player.currentItem)
@@ -73,7 +75,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	                           change: [NSKeyValueChangeKey : Any]?,
 	                           context: UnsafeMutableRawPointer?) {
 		
-		if keyPath == #keyPath(AVPlayerItem.status) {
+		if keyPath == #keyPath(AudioPlayerManager.playerItem.status) {
 			let status: AVPlayerItemStatus
 			
 			// Get the status change from the change dictionary
@@ -250,12 +252,12 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	func playAudioWith(trackURL:URL) {
 		
 		if playerItem != nil {
-			playerItem.removeObserver(self, forKeyPath: #keyPath(AVPlayerItem.status))
+			self.removeObserver(self, forKeyPath: #keyPath(AudioPlayerManager.playerItem.status))
 		}
 		
 		createPlayerItemWith(url: trackURL)
-		playerItem.addObserver(self,
-		                       forKeyPath: #keyPath(AVPlayerItem.status),
+		self.addObserver(self,
+		                       forKeyPath: #keyPath(AudioPlayerManager.playerItem.status),
 		                       options: [.old, .new],
 		                       context: nil)
 		player = AVPlayer(playerItem: playerItem)

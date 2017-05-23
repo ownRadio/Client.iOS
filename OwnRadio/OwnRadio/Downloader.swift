@@ -118,12 +118,13 @@ class Downloader {
 					if self.completionHandler != nil {
 						self.completionHandler!()
 					}
-					self.load {
-						
-					}
+						self.load(complition: self.completionHandler!)
 					self.requestCount += 1
-				} else {
-					self.requestCount = 0
+					} else {
+						if self.completionHandler != nil {
+							self.completionHandler!()
+						}
+						self.requestCount = 0
 				}
 				
 //				complition()
@@ -158,10 +159,10 @@ class Downloader {
 				print("Error with remove file ")
 			}
 			// удаляем трек с базы
-			CoreDataManager.instance.managedObjectContext.performAndWait {
+//			CoreDataManager.instance.managedObjectContext.performAndWait {
 				CoreDataManager.instance.deleteTrackFor(trackID: (song?.trackID)!)
 				CoreDataManager.instance.saveContext()
-			}
+//			}
 			
 		}
 	}
