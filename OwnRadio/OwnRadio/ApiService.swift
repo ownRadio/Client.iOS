@@ -98,6 +98,11 @@ class ApiService {
 		//отправляем историю на сервер
 		let task = URLSession.shared.dataTask(with: request as URLRequest){ data,response,error in
 			
+			if error != nil{
+				print(error?.localizedDescription)
+				return
+			}
+			
 			if data != nil {
 				//если история передана успешна - удаляем из таблицы история запись об этом треке
 				CoreDataManager.instance.deleteHistoryFor(trackID: trackId)
@@ -107,11 +112,8 @@ class ApiService {
 //			let dataString = String(data: data!, encoding: String.Encoding.utf8)!
 			}
 
-			if error != nil{
-				print(error?.localizedDescription)
-				return
-			}
 		}
 		task.resume()
+		
 	}
 }
