@@ -41,16 +41,21 @@ class ApiService {
 			guard let data = data else {
 				return
 			}
-			do {
-				let anyJson = try JSONSerialization.jsonObject(with: data, options: [])
-				
-				if let json = anyJson as? [String:AnyObject] {
-						complition(json)
+			if let httpResponse = response as? HTTPURLResponse {
+				if httpResponse.statusCode == 200 {
+					
+					do {
+						let anyJson = try JSONSerialization.jsonObject(with: data, options: [])
+						
+						if let json = anyJson as? [String:AnyObject] {
+							complition(json)
+						}
+						NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"Получена информация о следующем треке"])
+						print("Получена информация о следующем треке")
+					} catch (let error) {
+						print("Achtung! Eror! \(error)")
+					}
 				}
-				NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"Получена информация о следующем треке"])
-				print("Получена информация о следующем треке")
-			} catch (let error) {
-				print("Achtung! Eror! \(error)")
 			}
 		})
 		
@@ -103,15 +108,21 @@ class ApiService {
 				return
 			}
 			
-			if data != nil {
-				//если история передана успешна - удаляем из таблицы история запись об этом треке
-				CoreDataManager.instance.deleteHistoryFor(trackID: trackId)
-				NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"История передана на сервер"])
-				print("История передана на сервер")
-				
-//			let dataString = String(data: data!, encoding: String.Encoding.utf8)!
+			if let httpResponse = response as? HTTPURLResponse {
+				print("error \(httpResponse.statusCode)")
+				if httpResponse.statusCode == 200 {
+					
+					if data != nil {
+						//если история передана успешна - удаляем из таблицы история запись об этом треке
+						CoreDataManager.instance.deleteHistoryFor(trackID: trackId)
+						NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"История передана на сервер"])
+						print("История передана на сервер")
+						
+						//			let dataString = String(data: data!, encoding: String.Encoding.utf8)!
+					}
+				}
 			}
-
+			
 		}
 		task.resume()
 		
