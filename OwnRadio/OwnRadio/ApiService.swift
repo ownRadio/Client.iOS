@@ -13,6 +13,7 @@ import UIKit
 class ApiService {
 	
 	let tracksUrl = URL(string: "http://api.ownradio.ru/v3/tracks/")
+	var countRequest:Int! = 0
 	static let shared = ApiService()
 	init() {
 
@@ -38,6 +39,14 @@ class ApiService {
 		
 		let task = session.dataTask(with: urlRequest as URLRequest, completionHandler: { (data, response, error) in
 			// do stuff with response, data & error here
+			
+			if error != nil {
+				if self.countRequest < 10 {
+					Downloader.sharedInstance.load(complition: { 
+						
+					})
+				}
+			}
 			guard let data = data else {
 				return
 			}
