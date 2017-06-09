@@ -364,8 +364,8 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		let creationDateString = dateFormetter.string(from: creatinDate)
 		let historyEntity = HistoryEntity()
 		
-		historyEntity.recId = playingSong.trackID
-		historyEntity.trackId = playingSong.trackID
+		historyEntity.recId = NSUUID().uuidString
+        historyEntity.trackId = playingSong.trackID
 		historyEntity.isListen = playingSong.isListen!
 		historyEntity.recCreated = creationDateString
 		

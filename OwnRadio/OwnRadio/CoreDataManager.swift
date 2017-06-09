@@ -157,7 +157,7 @@ class CoreDataManager {
 				if track.trackId == buff {
 					print("TRACKS IDs are equal!!! ")
 				}
-				ApiService.shared.saveHistory(trackId: track.trackId!, isListen: Int(track.isListen))
+                ApiService.shared.saveHistory(historyId: track.recId!, trackId: track.trackId!, isListen: Int(track.isListen))
 				
 				buff = track.trackId!
 			}
