@@ -346,7 +346,7 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 		//		self.timeObserverToken =
 		 self.timeObserverToken = self.player.player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(1.0, 1) , queue: DispatchQueue.main) { [unowned self] (time) in
 			if self.player.isPlaying == true {
-                self.progressView.setProgress(Float(CGFloat(time.seconds) / CGFloat((self.player.playingSong.trackLength)!)), animated: true)
+                self.progressView.setProgress(Float(CGFloat(time.seconds) / CGFloat((self.player.playingSong.trackLength)!)), animated: false)
 //				self.progressView.progress = (CGFloat(time.seconds) / CGFloat((self.player.playingSong.trackLength)!))
 			}
 			} as AnyObject?
