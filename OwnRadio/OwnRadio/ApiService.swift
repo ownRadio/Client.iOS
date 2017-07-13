@@ -142,7 +142,6 @@ class ApiService {
     func registerDevice(){
         //формируем URL
         let registerDeviceUrl = URL(string: "http://api.ownradio.ru/v5/devices")
-        //формируем URL для отправки истории прослушивания на сервер
         guard let url = registerDeviceUrl else {
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"Error: cannot create registerDeviceUrl"])
             print("Error: cannot create registerDeviceUrl")
@@ -183,11 +182,8 @@ class ApiService {
                 print("status code \(httpResponse.statusCode)")
                 if (httpResponse.allHeaderFields["Location"] as? String) != nil || httpResponse.statusCode == 201 {
                     if data != nil {
-                        //если история передана успешна - удаляем из таблицы история запись об этом треке
                         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"Устройство зарегистрировано, код: \(httpResponse.statusCode)"])
                         print("Устройство зарегистрировано")
-                        
-                        //			let dataString = String(data: data!, encoding: String.Encoding.utf8)!
                     }
                 } else {
                     NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"Сбой регистрации устройства, код: \(httpResponse.statusCode)"])
@@ -198,4 +194,57 @@ class ApiService {
         task.resume()
         
     }
+    
+    //функция сохранения истории прослушивания треков
+    func setTrackIsCorrect(trackId: String, isCorrect: Int) {
+        
+        let trackUrl = URL(string: "http://api.ownradio.ru/v5/tracks/")
+        //формируем URL
+        let setTrackIsCorrect = trackUrl?.appendingPathComponent(trackId).appendingPathComponent((UIDevice.current.identifierForVendor?.uuidString.lowercased())!)
+        
+        guard let url = setTrackIsCorrect else {
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"Error: cannot create URL"])
+            print("Error: cannot create URL")
+            return
+        }
+        
+        let request = NSMutableURLRequest(url: url as URL)
+        request.httpMethod = "POST"
+        request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+        
+        //добавляем параметры в тело запроса: iscorrect - 0, если файл битый
+        let dict = ["iscorrect":isCorrect] as [String : Any]
+        do {
+            let data = try JSONSerialization.data(withJSONObject: dict, options: [])
+            request.httpBody = data
+            
+        } catch {
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"JSON serialization failed: \(error)"])
+            print("JSON serialization failed:  \(error)")
+        }
+        
+        let task = URLSession.shared.dataTask(with: request as URLRequest){ data,response,error in
+            
+            if error != nil{
+                print(error?.localizedDescription)
+                return
+            }
+            
+            if let httpResponse = response as? HTTPURLResponse {
+                print("status code \(httpResponse.statusCode)")
+                if httpResponse.statusCode == 201 {
+                    if data != nil {
+                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"Трек помечен некорректным, код: \(httpResponse.statusCode)"])
+                        print("Трек помечен некорректным")
+                    }
+                } else {
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"Сбой отправки информации о битом треке, код: \(httpResponse.statusCode)"])
+                }
+            }
+            
+        }
+        task.resume()
+        
+    }
+
 }

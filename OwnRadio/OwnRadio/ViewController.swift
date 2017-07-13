@@ -295,10 +295,11 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 		}else {
 			//иначе - возобновляем проигрывание если возможно или начинаем проигрывать новый трек
 			player.resumeSong(complition: { [unowned self] in
-			
+                if CoreDataManager.instance.getCountOfTracks() > 0 {
 				MPNowPlayingInfoCenter.default().nowPlayingInfo![MPNowPlayingInfoPropertyElapsedPlaybackTime] = CMTimeGetSeconds(self.player.player.currentTime())
 				MPNowPlayingInfoCenter.default().nowPlayingInfo![MPNowPlayingInfoPropertyPlaybackRate] = 1
 					self.updateUI()
+                }
 				})
 		}
 	}
@@ -345,9 +346,11 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 
 		//		self.timeObserverToken =
 		 self.timeObserverToken = self.player.player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(1.0, 1) , queue: DispatchQueue.main) { [unowned self] (time) in
-			if self.player.isPlaying == true {
+            if self.player.isPlaying == true {
+                if self.player.playingSong.trackLength != nil{
                 self.progressView.setProgress(Float(CGFloat(time.seconds) / CGFloat((self.player.playingSong.trackLength)!)), animated: false)
 //				self.progressView.progress = (CGFloat(time.seconds) / CGFloat((self.player.playingSong.trackLength)!))
+                }
 			}
 			} as AnyObject?
 		
