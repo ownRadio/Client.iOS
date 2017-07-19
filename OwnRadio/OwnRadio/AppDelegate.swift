@@ -31,6 +31,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //			userDefaults.synchronize()
 //		}
 		
+        //Проверяем в первый ли раз было запущено приложение
+        if userDefaults.object(forKey: "isAppAlreadyLaunchedOnce") == nil {
+            ApiService.shared.registerDevice()
+            userDefaults.set(true, forKey: "isAppAlreadyLaunchedOnce")
+            print("Приложение запущено впервые")
+        }else{
+            print("Приложение уже запускалось на этом устройстве")
+        }
+        
 		// создаем папку Tracks если ее нет
 		let applicationSupportPath = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
 		let tracksPath = applicationSupportPath.appendingPathComponent("Tracks")

@@ -35,6 +35,8 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	var shouldRemoveObserve: Bool!
 	
 	var wasInterreption = false
+    
+    let tracksUrlString =  FileManager.applicationSupportDir().appending("/Tracks/")
 	// MARK: Overrides
 	override init() {
 		super.init()
@@ -119,8 +121,49 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	// MARK: Notification selectors
 	// трек дослушан до конца
 	func playerItemDidReachEnd(_ notification: Notification) {
-		
+
 		if notification.object as? AVPlayerItem  == player.currentItem {
+            let dateLastTrackPlay = CoreDataManager.instance.getDateForTrackBy(trackId: self.playingSong.trackID)
+            let currentDate = NSDate.init(timeIntervalSinceNow: -60.0)
+            if dateLastTrackPlay != nil {
+                //Если трек был доигран менее чем за минуту после начала его воспроизведения - трек битый. Удаляем его и не отправляем по нему историю
+                if (dateLastTrackPlay.self?.compare(currentDate as Date) == .orderedDescending) {
+                    let path = self.tracksUrlString.appending((self.playingSong.path!))
+                    print(path)
+                    if FileManager.default.fileExists(atPath: path) {
+                        do{
+                            ApiService.shared.setTrackIsCorrect(trackId: self.playingSong.trackID, isCorrect: 0)
+                            // удаляем обьект по пути
+                            try FileManager.default.removeItem(atPath: path)
+                            print("Поврежденный файл был удален")
+                        }
+                        catch {
+                            print("Ошибка при удалении файла: файл не существует")
+                        }
+                    }
+                    // удаляем трек с базы
+                    CoreDataManager.instance.deleteTrackFor(trackID: self.playingSong.trackID)
+                    CoreDataManager.instance.saveContext()
+                    
+                    print("Поврежденный файл был найден и удален")
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"SПоврежденный файл был удален"])
+                    
+                    if self.checkCountFileInCache() {
+                        //запускаем следующий трек
+                        self.nextTrack{
+                            
+                        }
+                    } else {
+                        self.playingSong = SongObject()
+                        self.playingSong.trackID = nil
+                        self.player.pause()
+                        isPlaying = false
+                        self.playerItem = nil
+                        configurePlayingSong(song: playingSong)
+                    }
+                    return
+                }
+        }
 			self.playingSong.isListen = 1
 			self.addDateToHistoryTable(playingSong: self.playingSong)
 			if self.playingSong.trackID != nil  {
@@ -193,7 +236,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		songInfo[MPMediaItemPropertyAlbumTitle] = "ownRadio"
 		songInfo[MPMediaItemPropertyArtist] = song.artistName
 		songInfo[MPMediaItemPropertyArtwork] = albumArt
-		songInfo[MPMediaItemPropertyPlaybackDuration] = NSNumber.init(value: song.trackLength)
+        songInfo[MPMediaItemPropertyPlaybackDuration] = NSNumber.init(value: song.trackLength)
 		
 		MPNowPlayingInfoCenter.default().nowPlayingInfo = songInfo
 	}
@@ -222,7 +265,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	//пропуск трека
 	func skipSong(complition: @escaping (() -> Void)) {
 		
-		if (self.playingSongID != nil) {
+		if (self.playingSong.trackID != nil) {
 			self.playingSong.isListen = -1
 			self.addDateToHistoryTable(playingSong: self.playingSong)
 			if  self.playingSong.path != nil {
@@ -256,11 +299,13 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		}
 		
 		createPlayerItemWith(url: trackURL)
+  //      playerItem.addObserver(self, forKeyPath: "status", options: NSKeyValueObservingOptions(), context: nil)
+
 		self.addObserver(self,
 		                       forKeyPath: #keyPath(AudioPlayerManager.playerItem.status),
 		                       options: [.old, .new],
 		                       context: nil)
-		player = AVPlayer(playerItem: playerItem)
+        player = AVPlayer(playerItem: playerItem)
 		if currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable{
 			CoreDataManager.instance.sentHistory()
 		}
@@ -279,7 +324,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		//если есть кешированные треки - играем из кеша
 		if self.checkCountFileInCache() {
 			self.playFromCache(complition: complition)
-		}
+        }
 		//проверка подключения к интернету
 		guard currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable else {
 			return
@@ -364,8 +409,8 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		let creationDateString = dateFormetter.string(from: creatinDate)
 		let historyEntity = HistoryEntity()
 		
-		historyEntity.recId = playingSong.trackID
-		historyEntity.trackId = playingSong.trackID
+		historyEntity.recId = NSUUID().uuidString
+        historyEntity.trackId = playingSong.trackID
 		historyEntity.isListen = playingSong.isListen!
 		historyEntity.recCreated = creationDateString
 		

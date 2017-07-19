@@ -18,6 +18,7 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 	
 	@IBOutlet weak var infoView: UIView!
 	@IBOutlet weak var circleViewConteiner: UIView!
+    @IBOutlet weak var progressView: UIProgressView!
 	
 	@IBOutlet weak var freeSpaceLbl:UILabel!
 	@IBOutlet weak var folderSpaceLbl: UILabel!
@@ -52,7 +53,7 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 	var timer = Timer()
 	var timeObserverToken:AnyObject? = nil
 	
-	let progressView = CircularView(frame: CGRect.zero)
+	//let progressView = CircularView(frame: CGRect.zero)
 	
 	let playBtnConstraintConstant = CGFloat(15.0)
 	let pauseBtnConstraintConstant = CGFloat(10.0)
@@ -68,11 +69,12 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
-        if isStartListening == false {
-            self.authorNameLbl.text = "ownRadio"
-        }
+//        if isStartListening == false {
+//            self.authorNameLbl.text = "ownRadio"
+//        }
 		self.trackNameLbl.text = ""
-		
+        self.authorNameLbl.text = ""
+        
 		self.checkMemoryWarning()
 		
 		cachingView.frame = self.view.bounds
@@ -85,9 +87,9 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 				self.versionLabel.text =  "v" + version
 			}
 		}
-		self.circleViewConteiner.addSubview(self.progressView)
-		self.progressView.frame = self.circleViewConteiner.bounds
-		self.progressView.autoresizingMask = [.flexibleWidth,.flexibleHeight]
+		//self.circleViewConteiner.addSubview(self.progressView)
+		//self.progressView.frame = self.circleViewConteiner.bounds
+		//self.circleViewConteiner.autoresizingMask = [.flexibleWidth,.flexibleHeight]
 		
 		self.player = AudioPlayerManager.sharedInstance
 		self.detectedHeadphones()
@@ -206,7 +208,7 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 		self.player.nextTrack { [unowned self] in
 				self.updateUI()
 		}
-		self.progressView.isHidden = true
+//		self.progressView.isHidden = true
 	}
 	
 	//функция обновления поля Info системной информации
@@ -293,10 +295,11 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 		}else {
 			//иначе - возобновляем проигрывание если возможно или начинаем проигрывать новый трек
 			player.resumeSong(complition: { [unowned self] in
-			
+                if CoreDataManager.instance.getCountOfTracks() > 0 {
 				MPNowPlayingInfoCenter.default().nowPlayingInfo![MPNowPlayingInfoPropertyElapsedPlaybackTime] = CMTimeGetSeconds(self.player.player.currentTime())
 				MPNowPlayingInfoCenter.default().nowPlayingInfo![MPNowPlayingInfoPropertyPlaybackRate] = 1
 					self.updateUI()
+                }
 				})
 		}
 	}
@@ -343,19 +346,21 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 
 		//		self.timeObserverToken =
 		 self.timeObserverToken = self.player.player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(1.0, 1) , queue: DispatchQueue.main) { [unowned self] (time) in
-			if self.player.isPlaying == true {
-
-				self.progressView.progress = (CGFloat(time.seconds) / CGFloat((self.player.playingSong.trackLength)!))
+            if self.player.isPlaying == true {
+                if self.player.playingSong.trackLength != nil{
+                self.progressView.setProgress(Float(CGFloat(time.seconds) / CGFloat((self.player.playingSong.trackLength)!)), animated: false)
+//				self.progressView.progress = (CGFloat(time.seconds) / CGFloat((self.player.playingSong.trackLength)!))
+                }
 			}
 			} as AnyObject?
 		
 		//обновление кнопки playPause
 		if self.player.isPlaying == false {
 			self.playPauseBtn.setImage(UIImage(named: "playImg"), for: UIControlState.normal)
-			self.leftPlayBtnConstraint.constant = self.playBtnConstraintConstant
+			//self.leftPlayBtnConstraint.constant = self.playBtnConstraintConstant
 		} else {
 			self.playPauseBtn.setImage(UIImage(named: "pauseImg"), for: UIControlState.normal)
-			self.leftPlayBtnConstraint.constant = self.pauseBtnConstraintConstant
+			//self.leftPlayBtnConstraint.constant = self.pauseBtnConstraintConstant
 		}
 		
 		self.getCountFilesInCache()
@@ -407,9 +412,10 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 		if player.isPlaying == true {
 			self.player.player.pause()
 		}
-		self.progressView.isHidden = true
-		self.progressView.configure()
-		
+//		self.progressView.isHidden = true
+//		self.progressView.configure()
+        self.progressView.setProgress(0.0, animated: true)
+        
 		self.player.skipSong { [unowned self] in
 				self.updateUI()
 		}

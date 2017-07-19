@@ -73,9 +73,9 @@ class ApiService {
 	}
 	
 	//функция сохранения истории прослушивания треков
-	func saveHistory(trackId: String, isListen:Int) {
+    func saveHistory(historyId: String, trackId: String, isListen:Int) {
 		
-		let historyUrl = URL(string: "http://api.ownradio.ru/v3/histories/")
+		let historyUrl = URL(string: "http://api.ownradio.ru/v5/histories/")
 		//формируем URL для отправки истории прослушивания на сервер
 		let trackHistoryUrl = historyUrl?.appendingPathComponent((UIDevice.current.identifierForVendor?.uuidString.lowercased())!).appendingPathComponent(trackId)
 		
@@ -92,12 +92,12 @@ class ApiService {
 		dateFormatter.dateFormat = "yyyy-MM-dd'T'H:m:s"
 		dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
 		let lastListen = dateFormatter.string(from: nowDate as Date)
-		
+
 		request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
 		
 		//добавляем параметры в тело запроса: lastListen - дата и время последнего прослушивания трека,
 		//isListen - флаг прослушан или пропущен трек, methodid - метод выдачи трека пользователю
-		let dict = ["lastListen":lastListen, "isListen":isListen, "methodid":1] as [String : Any]
+		let dict = ["recid":historyId, "lastListen":lastListen, "isListen":isListen] as [String : Any]
 		do {
 			let data = try JSONSerialization.data(withJSONObject: dict, options: [])
 //			let dataString = String(data: data, encoding: String.Encoding.utf8)!
@@ -118,22 +118,133 @@ class ApiService {
 			}
 			
 			if let httpResponse = response as? HTTPURLResponse {
-				print("error \(httpResponse.statusCode)")
-				if httpResponse.statusCode == 200 {
-					
-					if data != nil {
-						//если история передана успешна - удаляем из таблицы история запись об этом треке
-						CoreDataManager.instance.deleteHistoryFor(trackID: trackId)
-						NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"История передана на сервер"])
-						print("История передана на сервер")
+				print("status code \(httpResponse.statusCode)")
+                if (httpResponse.allHeaderFields["Location"] as? String) != nil || httpResponse.statusCode == 201 {
+                        if data != nil {
+                            //если история передана успешна - удаляем из таблицы история запись об этом треке
+                            CoreDataManager.instance.deleteHistoryFor(trackID: trackId)
+                            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"История передана на сервер, код: \(httpResponse.statusCode)"])
+                            print("История передана на сервер")
 						
-						//			let dataString = String(data: data!, encoding: String.Encoding.utf8)!
-					}
-				}
+                            //			let dataString = String(data: data!, encoding: String.Encoding.utf8)!
+                        }
+                } else {
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"История не передана, код: \(httpResponse.statusCode)"])
+                }
 			}
 			
 		}
 		task.resume()
 		
 	}
+    
+    //Функция регистрации устройства
+    func registerDevice(){
+        //формируем URL
+        let registerDeviceUrl = URL(string: "http://api.ownradio.ru/v5/devices")
+        guard let url = registerDeviceUrl else {
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"Error: cannot create registerDeviceUrl"])
+            print("Error: cannot create registerDeviceUrl")
+            return
+        }
+        
+        let request = NSMutableURLRequest(url: url as URL)
+        request.httpMethod = "POST"
+        request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+        let systemVersion = UIDevice.current.systemVersion
+        let model = UIDevice.current.model
+        var deviceName: String? = model + " " + systemVersion
+        
+        if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
+            if (Bundle.main.infoDictionary?["CFBundleVersion"] as? String) != nil {
+                deviceName = deviceName! + " " + "v" + version
+            }
+        }
+        
+        //добавляем параметры в тело запроса
+        let dict = ["recid":(UIDevice.current.identifierForVendor?.uuidString.lowercased())!, "recname":deviceName ?? "New iOS device"] as [String : Any]
+        do {
+            let data = try JSONSerialization.data(withJSONObject: dict, options: [])
+            request.httpBody = data
+        } catch {
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"JSON serialization failed: \(error)"])
+            print("JSON serialization failed:  \(error)")
+        }
+        
+        let task = URLSession.shared.dataTask(with: request as URLRequest){ data,response,error in
+            
+            if error != nil{
+                print(error?.localizedDescription)
+                return
+            }
+            
+            if let httpResponse = response as? HTTPURLResponse {
+                print("status code \(httpResponse.statusCode)")
+                if (httpResponse.allHeaderFields["Location"] as? String) != nil || httpResponse.statusCode == 201 {
+                    if data != nil {
+                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"Устройство зарегистрировано, код: \(httpResponse.statusCode)"])
+                        print("Устройство зарегистрировано")
+                    }
+                } else {
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"Сбой регистрации устройства, код: \(httpResponse.statusCode)"])
+                }
+            }
+            
+        }
+        task.resume()
+        
+    }
+    
+    //функция сохранения истории прослушивания треков
+    func setTrackIsCorrect(trackId: String, isCorrect: Int) {
+        
+        let trackUrl = URL(string: "http://api.ownradio.ru/v5/tracks/")
+        //формируем URL
+        let setTrackIsCorrect = trackUrl?.appendingPathComponent(trackId).appendingPathComponent((UIDevice.current.identifierForVendor?.uuidString.lowercased())!)
+        
+        guard let url = setTrackIsCorrect else {
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"Error: cannot create URL"])
+            print("Error: cannot create URL")
+            return
+        }
+        
+        let request = NSMutableURLRequest(url: url as URL)
+        request.httpMethod = "POST"
+        request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+        
+        //добавляем параметры в тело запроса: iscorrect - 0, если файл битый
+        let dict = ["iscorrect":isCorrect] as [String : Any]
+        do {
+            let data = try JSONSerialization.data(withJSONObject: dict, options: [])
+            request.httpBody = data
+            
+        } catch {
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"JSON serialization failed: \(error)"])
+            print("JSON serialization failed:  \(error)")
+        }
+        
+        let task = URLSession.shared.dataTask(with: request as URLRequest){ data,response,error in
+            
+            if error != nil{
+                print(error?.localizedDescription)
+                return
+            }
+            
+            if let httpResponse = response as? HTTPURLResponse {
+                print("status code \(httpResponse.statusCode)")
+                if httpResponse.statusCode == 201 {
+                    if data != nil {
+                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"Трек помечен некорректным, код: \(httpResponse.statusCode)"])
+                        print("Трек помечен некорректным")
+                    }
+                } else {
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"Сбой отправки информации о битом треке, код: \(httpResponse.statusCode)"])
+                }
+            }
+            
+        }
+        task.resume()
+        
+    }
+
 }

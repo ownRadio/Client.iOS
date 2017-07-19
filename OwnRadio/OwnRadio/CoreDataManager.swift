@@ -157,7 +157,7 @@ class CoreDataManager {
 				if track.trackId == buff {
 					print("TRACKS IDs are equal!!! ")
 				}
-				ApiService.shared.saveHistory(trackId: track.trackId!, isListen: Int(track.isListen))
+                ApiService.shared.saveHistory(historyId: track.recId!, trackId: track.trackId!, isListen: Int(track.isListen))
 				
 				buff = track.trackId!
 			}
@@ -281,6 +281,19 @@ class CoreDataManager {
 		return song
 	}
 
+    // возвращает время начала проигрывания трека с заданным trackId
+    func getDateForTrackBy(trackId:String) -> NSDate? {
+        let fetchRequest: NSFetchRequest<TrackEntity> = TrackEntity.fetchRequest()
+        // устанавливаем предикат для запроса
+        fetchRequest.predicate = NSPredicate(format: "recId = %@", trackId)
+        if let result = try? self.managedObjectContext.fetch(fetchRequest) {
+            for object in result {
+                return object.playingDate
+            }
+        }
+        return nil
+    }
+    
 	// MARK: - Core Data Saving support
 	// функция сохранения контекста
 	func saveContext () {

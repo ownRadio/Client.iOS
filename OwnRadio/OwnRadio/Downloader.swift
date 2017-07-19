@@ -8,12 +8,13 @@
 //	Download track in cache
 
 import Foundation
+import UIKit
 
 class Downloader {
 	
 	static let sharedInstance = Downloader()
 	//	var taskQueue: OperationQueue?
-	let baseURL = URL(string: "http://api.ownradio.ru/v3/tracks/")
+	let baseURL = URL(string: "http://api.ownradio.ru/v5/tracks/")
 	let applicationSupportPath = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
 	let tracksPath = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!.appendingPathComponent("Tracks/")
 	let tracksUrlString =  FileManager.applicationSupportDir().appending("/Tracks/")
@@ -34,10 +35,10 @@ class Downloader {
 					return
 				}
 				print(dict["id"])
-				let trackURL = self.baseURL?.appendingPathComponent(dict["id"] as! String)
+				let trackURL = self.baseURL?.appendingPathComponent(dict["id"] as! String).appendingPathComponent((UIDevice.current.identifierForVendor?.uuidString.lowercased())!)
 				if let audioUrl = trackURL {
 					//задаем директорию для сохранения трека
-					let destinationUrl = self.tracksPath.appendingPathComponent(audioUrl.lastPathComponent)
+					let destinationUrl = self.tracksPath.appendingPathComponent(dict["id"] as! String)
 					//если этот трек не еще не загружен - загружаем трек
 					//						let mp3Path = destinationUrl.appendingPathExtension("mp3")
 					guard FileManager.default.fileExists(atPath: destinationUrl.path ) == false else {
