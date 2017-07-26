@@ -20,14 +20,20 @@ class Downloader {
 	let tracksUrlString =  FileManager.applicationSupportDir().appending("/Tracks/")
 	
 	let limitMemory =  UInt64(DiskStatus.freeDiskSpaceInBytes / 2)
+	var maxMemory = UInt64(1073741824)
 	
 	var requestCount = 0;
 	var completionHandler:(()->Void)? = nil
 	
 	func load(complition: @escaping (() -> Void)) {
 		
+		if limitMemory < 1073741824 * (UserDefaults.standard.object(forKey: "maxMemorySize") as? UInt64)! {
+			maxMemory = limitMemory
+		} else {
+			maxMemory = 1073741824 * (UserDefaults.standard.object(forKey: "maxMemorySize") as? UInt64)!
+		}
 		//проверяем свободное место, если его достаточно - загружаем треки
-		if DiskStatus.folderSize(folderPath: tracksUrlString) < limitMemory  {
+		if DiskStatus.folderSize(folderPath: tracksUrlString) < maxMemory  {
 			//получаем trackId следующего трека и информацию о нем
 			self.completionHandler = complition
 			ApiService.shared.getTrackIDFromServer { [unowned self] (dict) in

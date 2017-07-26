@@ -97,7 +97,8 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 					if isPlaying == true {
 						self.resumeSong {
 							if let rootController = UIApplication.shared.keyWindow?.rootViewController {
-								let radioViewContr = rootController as! RadioViewController
+								let navigationController = rootController as! UINavigationController
+								let radioViewContr = navigationController.topViewController as! RadioViewController
 								DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
 									radioViewContr.progressView.isHidden = false
 								})

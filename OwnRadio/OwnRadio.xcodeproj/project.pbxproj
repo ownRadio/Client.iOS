@@ -34,6 +34,7 @@
 		09D52F8C1E3F36EF006B66E6 /* CachingView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 09D52F8B1E3F36EF006B66E6 /* CachingView.xib */; };
 		09D52F8E1E3F3F37006B66E6 /* CachingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09D52F8D1E3F3F37006B66E6 /* CachingView.swift */; };
 		09EA799B1DE57D040034B8DF /* AudioPlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EA799A1DE57D040034B8DF /* AudioPlayerManager.swift */; };
+		4ED299581F28977A00E2616F /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED299571F28977A00E2616F /* SettingsViewController.swift */; };
 		50D8269A1DE74B0800238F96 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50D826981DE74B0800238F96 /* Fabric.framework */; };
 		50D8269B1DE74B0800238F96 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50D826991DE74B0800238F96 /* Crashlytics.framework */; };
 /* End PBXBuildFile section */
@@ -71,8 +72,8 @@
 
 /* Begin PBXFileReference section */
 		091679511DE451CF00619B3F /* OwnRadio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OwnRadio.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		091679541DE451CF00619B3F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		091679561DE451CF00619B3F /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		091679541DE451CF00619B3F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; usesTabs = 1; };
+		091679561DE451CF00619B3F /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; usesTabs = 1; };
 		091679591DE451CF00619B3F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		0916795B1DE451CF00619B3F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0916795E1DE451CF00619B3F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -91,18 +92,19 @@
 		0979B1B61DF01020003C01C7 /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
 		0979B1B81DF01085003C01C7 /* CoreDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CoreDataManager.swift; path = OwnRadio/CoreDataManager.swift; sourceTree = "<group>"; };
 		098886851DFB069700E401B9 /* TrackEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TrackEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		0989BD761DF5B01C005FE001 /* Downloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Downloader.swift; sourceTree = "<group>"; };
+		0989BD761DF5B01C005FE001 /* Downloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Downloader.swift; sourceTree = "<group>"; usesTabs = 1; };
 		0989BD7E1DF6F33C005FE001 /* TrackEntity+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "TrackEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
 		098B51541DF95E5000293DE5 /* HistoryEntity+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HistoryEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
 		098B51581DF95FC100293DE5 /* DataModel 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "DataModel 2.xcdatamodel"; sourceTree = "<group>"; };
 		098B515B1DF9623A00293DE5 /* HistoryEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "HistoryEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		099EAE471E2FAA05005478F2 /* SFUIText-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SFUIText-Regular.otf"; sourceTree = "<group>"; };
 		099EAE4A1E2FADDF005478F2 /* SFUIDisplay-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "SFUIDisplay-Regular.otf"; sourceTree = "<group>"; };
-		09A054141DF168170008ACE7 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		09A054141DF168170008ACE7 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; usesTabs = 1; };
 		09B953A01DFEBED70098417C /* CircularView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircularView.swift; sourceTree = "<group>"; };
 		09D52F8B1E3F36EF006B66E6 /* CachingView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CachingView.xib; sourceTree = "<group>"; };
 		09D52F8D1E3F3F37006B66E6 /* CachingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachingView.swift; sourceTree = "<group>"; };
-		09EA799A1DE57D040034B8DF /* AudioPlayerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioPlayerManager.swift; sourceTree = "<group>"; };
+		09EA799A1DE57D040034B8DF /* AudioPlayerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioPlayerManager.swift; sourceTree = "<group>"; usesTabs = 1; };
+		4ED299571F28977A00E2616F /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; usesTabs = 1; };
 		50D826981DE74B0800238F96 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
 		50D826991DE74B0800238F96 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Crashlytics.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -180,6 +182,7 @@
 				091679C61DE47D4400619B3F /* ApiService.swift */,
 				09EA799A1DE57D040034B8DF /* AudioPlayerManager.swift */,
 				091679561DE451CF00619B3F /* ViewController.swift */,
+				4ED299571F28977A00E2616F /* SettingsViewController.swift */,
 				09D52F8A1E3F36BA006B66E6 /* View */,
 				091679581DE451CF00619B3F /* Main.storyboard */,
 				0916795B1DE451CF00619B3F /* Assets.xcassets */,
@@ -396,7 +399,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "buildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\")\nbuildNumber=$(($buildNumber + 1))\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\"\nAPP_PATH=\"${TARGET_BUILD_DIR}/${WRAPPER_NAME}\"\n\n# This script loops through the frameworks embedded in the application and\n# removes unused architectures.\nfind \"/Users/a.polunina/Client.iOS/OwnRadio/Carthage/Build/iOS\" -name '*.framework' -type d | while read -r FRAMEWORK\ndo\nFRAMEWORK_EXECUTABLE_NAME=$(defaults read \"$FRAMEWORK/Info.plist\" CFBundleExecutable)\nFRAMEWORK_EXECUTABLE_PATH=\"$FRAMEWORK/$FRAMEWORK_EXECUTABLE_NAME\"\necho \"Executable is $FRAMEWORK_EXECUTABLE_PATH\"\n\nEXTRACTED_ARCHS=()\n\nfor ARCH in $ARCHS\ndo\necho \"Extracting $ARCH from $FRAMEWORK_EXECUTABLE_NAME\"\nlipo -extract \"$ARCH\" \"$FRAMEWORK_EXECUTABLE_PATH\" -o \"$FRAMEWORK_EXECUTABLE_PATH-$ARCH\"\nEXTRACTED_ARCHS+=(\"$FRAMEWORK_EXECUTABLE_PATH-$ARCH\")\ndone\n\necho \"Merging extracted architectures: ${ARCHS}\"\nlipo -o \"$FRAMEWORK_EXECUTABLE_PATH-merged\" -create \"${EXTRACTED_ARCHS[@]}\"\nrm \"${EXTRACTED_ARCHS[@]}\"\n\necho \"Replacing original executable with thinned version\"\nrm \"$FRAMEWORK_EXECUTABLE_PATH\"\nmv \"$FRAMEWORK_EXECUTABLE_PATH-merged\" \"$FRAMEWORK_EXECUTABLE_PATH\"\n\ndone";
+			shellScript = "buildNumber=$(/usr/libexec/PlistBuddy -c \"Print CFBundleVersion\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\")\nbuildNumber=$(($buildNumber + 1))\n/usr/libexec/PlistBuddy -c \"Set :CFBundleVersion $buildNumber\" \"${PROJECT_DIR}/${INFOPLIST_FILE}\"\n";
 		};
 		50D826971DE747C900238F96 /* Fabric */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -431,6 +434,7 @@
 				0989BD771DF5B01C005FE001 /* Downloader.swift in Sources */,
 				0979B1B71DF01020003C01C7 /* DataModel.xcdatamodeld in Sources */,
 				091679551DE451CF00619B3F /* AppDelegate.swift in Sources */,
+				4ED299581F28977A00E2616F /* SettingsViewController.swift in Sources */,
 				098886861DFB069700E401B9 /* TrackEntity+CoreDataProperties.swift in Sources */,
 				098B515C1DF9623A00293DE5 /* HistoryEntity+CoreDataProperties.swift in Sources */,
 				098B51561DF95E5000293DE5 /* HistoryEntity+CoreDataClass.swift in Sources */,
