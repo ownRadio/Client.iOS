@@ -42,8 +42,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
 		//TODO сохранять флаг, когда будут готовы все настройки
 		if userDefaults.object(forKey: "isSettingsDefault") == nil{
-			userDefaults.set(1, forKey: "maxMemorySize")
-			userDefaults.set(false, forKey: "isOnlyWiFi")
+			userDefaults.register(defaults: ["maxMemorySize" : 1])
+			userDefaults.register(defaults: ["isOnlyWiFi" : false])
+			
+			//userDefaults.set(1, forKey: "maxMemorySize")
+			//userDefaults.set(false, forKey: "isOnlyWiFi")
 			//userDefaults.set(true, forKey: "isSettingsDefault")
 			print("Настройки по умолчанию заданы")
 		}

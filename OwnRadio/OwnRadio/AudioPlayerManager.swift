@@ -98,10 +98,12 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 						self.resumeSong {
 							if let rootController = UIApplication.shared.keyWindow?.rootViewController {
 								let navigationController = rootController as! UINavigationController
-								let radioViewContr = navigationController.topViewController as! RadioViewController
-								DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
-									radioViewContr.progressView.isHidden = false
-								})
+
+								if let radioViewContr = navigationController.viewControllers.first  as? RadioViewController {
+									DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
+										radioViewContr.progressView.isHidden = false
+									})
+								}
 							}
 							CoreDataManager.instance.setCountOfPlayForTrackBy(trackId: self.playingSong.trackID)
 							CoreDataManager.instance.setDateForTrackBy(trackId: self.playingSong.trackID)

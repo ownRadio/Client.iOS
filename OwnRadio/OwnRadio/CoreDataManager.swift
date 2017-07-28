@@ -293,7 +293,42 @@ class CoreDataManager {
         }
         return nil
     }
-    
+	
+	//выбираем все прослушанные треки
+	func getListenTracks() -> [SongObject] {
+		//задаем сортировку по убыванию количества проигрываний
+		let sectionSortDescriptor = NSSortDescriptor(key: "countPlay", ascending: false)
+		let sortDescriptors = [sectionSortDescriptor]
+		// создание запроса
+		let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "TrackEntity") //TrackEntity.fetchRequest()
+		fetchRequest.sortDescriptors = sortDescriptors
+		fetchRequest.predicate = NSPredicate(format: "countPlay > %@", "0")
+		var  song = SongObject()
+		var listenTracks = [SongObject]()
+		do {
+			//выполняем запрос к БД
+			let searchResults = try self.managedObjectContext.fetch(fetchRequest)
+			//если в таблице нет записей - возращаем пустой объект listenTracks
+			guard searchResults.count != 0 else {
+				return listenTracks
+			}
+			//сохраняем результат выборки в массив
+			let trackEntity = searchResults as! [TrackEntity]
+			for _track in trackEntity {
+				song.name = _track.trackName
+				song.artistName = _track.artistName
+				song.trackLength = _track.trackLength
+				song.trackID = _track.recId
+				song.path = _track.path
+				listenTracks.append(song)
+				song = SongObject()
+			}
+		} catch {
+			print("Error with request: \(error)")
+		}
+		return listenTracks
+	}
+
 	// MARK: - Core Data Saving support
 	// функция сохранения контекста
 	func saveContext () {

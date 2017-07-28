@@ -20,17 +20,17 @@ class Downloader {
 	let tracksUrlString =  FileManager.applicationSupportDir().appending("/Tracks/")
 	
 	let limitMemory =  UInt64(DiskStatus.freeDiskSpaceInBytes / 2)
-	var maxMemory = UInt64(1073741824)
+	var maxMemory = UInt64(1000000000)
 	
 	var requestCount = 0;
 	var completionHandler:(()->Void)? = nil
 	
 	func load(complition: @escaping (() -> Void)) {
-		
-		if limitMemory < 1073741824 * (UserDefaults.standard.object(forKey: "maxMemorySize") as? UInt64)! {
+
+		if limitMemory < 1000000000 * (UserDefaults.standard.object(forKey: "maxMemorySize") as? UInt64)! {
 			maxMemory = limitMemory
 		} else {
-			maxMemory = 1073741824 * (UserDefaults.standard.object(forKey: "maxMemorySize") as? UInt64)!
+			maxMemory = 1000000000 * (UserDefaults.standard.object(forKey: "maxMemorySize") as? UInt64)!
 		}
 		//проверяем свободное место, если его достаточно - загружаем треки
 		if DiskStatus.folderSize(folderPath: tracksUrlString) < maxMemory  {
@@ -175,6 +175,19 @@ class Downloader {
 			CoreDataManager.instance.saveContext()
 			//			}
 			
+		}
+	}
+	
+	func fillCache () {
+		let limitMemory =  UInt64(DiskStatus.freeDiskSpaceInBytes / 2)
+		let maxMemory = 1000000000 * (UserDefaults.standard.object(forKey: "maxMemorySize") as? UInt64)!
+		let folderSize = DiskStatus.folderSize(folderPath: tracksUrlString)
+		
+		if folderSize < limitMemory && folderSize < maxMemory  {
+			self.load {
+				
+				self.fillCache()
+			}
 		}
 	}
 	

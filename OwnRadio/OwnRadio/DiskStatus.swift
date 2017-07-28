@@ -19,6 +19,15 @@ class DiskStatus {
 		formatter.includesUnit = false
 		return formatter.string(fromByteCount: bytes) as String
 	}
+    
+    //MARK: Formatter GB only
+    class func GBFormatter(_ bytes: Int64) -> String {
+        let formatter = ByteCountFormatter()
+        formatter.allowedUnits = ByteCountFormatter.Units.useGB
+        formatter.countStyle = ByteCountFormatter.CountStyle.decimal
+        formatter.includesUnit = false
+        return formatter.string(fromByteCount: bytes) as String
+    }
 	
 	//MARK: Get String Value
 	class var totalDiskSpace:String {
@@ -99,6 +108,29 @@ class DiskStatus {
 			return usedSpace
 		}
 	}
+    
+    //возвращает количество памяти, занимаемое треками
+    class func listenTracksSize(folderPath:String, tracks:[SongObject]) -> UInt64{
+        let tracksUrlString =  FileManager.applicationSupportDir().appending("/Tracks/")
+        var fileSize:UInt64 = 0
+        
+        for _track in tracks {
+            let path = tracksUrlString.appending((_track.path!))
+            
+            if FileManager.default.fileExists(atPath: path) {
+                do{
+                    let fileDictionary:NSDictionary = try FileManager.default.attributesOfItem(atPath: path) as NSDictionary
+                    fileSize += UInt64(fileDictionary.fileSize())
+                } catch {
+                    print(error.localizedDescription)
+                }
+            } else {
+                print("Ошибка: файл не существует")
+            }
+        }
+        
+        return fileSize
+    }
 	
 }
 
