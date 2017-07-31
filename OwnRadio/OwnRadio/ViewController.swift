@@ -69,6 +69,13 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
+		//задаем цвет навигационного бара
+		self.navigationController?.navigationBar.barTintColor = UIColor(red: 3.0/255.0, green: 169.0/255.0, blue: 244.0/255.0, alpha: 1.0)
+		//цвет кнопки и иконки
+		self.navigationController?.navigationBar.tintColor = UIColor.white
+		//цвет заголовка
+		self.navigationController?.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName : UIColor.white]
+		
 //        if isStartListening == false {
 //            self.authorNameLbl.text = "ownRadio"
 //        }
