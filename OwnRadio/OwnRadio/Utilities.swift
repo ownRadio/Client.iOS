@@ -61,9 +61,14 @@ extension NSObject:Utilities{
 			// The target host is not reachable.
 			return .notReachable
 		}
-		else if flags.contains(.isWWAN) == true && isOnlyWiFi == false {
+		else if flags.contains(.isWWAN) == true {
 			// WWAN connections are OK if the calling application is using the CFNetwork APIs.
-			return .reachableViaWWAN
+			// Если в настройках задано "только wifi" - возвращаем "нет подключения"
+			if isOnlyWiFi == false {
+				return .reachableViaWWAN
+			} else {
+				return .notReachable
+			}
 		}
 		else if flags.contains(.connectionRequired) == false {
 			// If the target host is reachable and no connection is required then we'll assume that you're on Wi-Fi...
