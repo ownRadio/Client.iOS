@@ -22,6 +22,10 @@ class SettingsViewController: UITableViewController {
 	@IBOutlet weak var deviceIdLbl: UILabel!
 
 	@IBOutlet weak var delAllTracksCell: UITableViewCell!
+	@IBOutlet weak var countPlayingTracksTable: UILabel!
+
+	//получаем таблицу с количеством треков сгруппированных по количестсву их прослушиваний
+	var playedTracks: NSArray = CoreDataManager.instance.getGroupedTracks()
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -56,6 +60,23 @@ class SettingsViewController: UITableViewController {
 		}
 		deviceIdLbl.text = "DeviceID: " + (UIDevice.current.identifierForVendor?.uuidString.lowercased())!
 		
+		
+		var str = "" as NSString
+		for track in playedTracks {
+		let dict = track as! [String: Any]
+		let countOfPlay = dict["countPlay"] as? Int
+		let countOfTracks = dict["count"] as? Int
+		if countOfPlay != nil && countOfTracks != nil {
+			if str == "" {
+				str = NSString(format: "Count play: %d - Count tracks: %d", countOfPlay! , countOfTracks!)
+			} else {
+				str = NSString(format: "%@ \nCount play: %d - Count tracks: %d", str, countOfPlay! , countOfTracks!)
+			}
+			}
+		}
+		
+		countPlayingTracksTable.numberOfLines = playedTracks.count
+		countPlayingTracksTable.text = str as String
 	}
 	
 	@IBAction func onlyWiFiSwitchValueChanged(_ sender: UISwitch) {
@@ -163,4 +184,42 @@ class SettingsViewController: UITableViewController {
 	@IBAction func rateAppBtn(_ sender: UIButton) {
 		UIApplication.shared.openURL(NSURL(string: "itms://itunes.apple.com/ru/app/ownradio/id1179868370")! as URL)
 	}
+	
+//	override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+////		if indexPath.section == 4 && indexPath.row == 0 {
+////
+////			return 100
+////		} else {
+////			let row = tableView.cellForRow(at: indexPath)// dequeueReusableCell(withIdentifier: "Cell")//(at: indexPath) //.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+////			let h = row?.bounds.size.height
+////			print (h ?? 1)
+//			return UITableViewAutomaticDimension
+////		}
+//	}
+	// MARK: UITableViewDataSource
+	//	 override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+	////		if section == 4 {
+	//			return self.playedTracks.count-1
+	////		}
+	////		if (section == 0) {
+	////			return 1;
+	////		} else {
+	////			var frcSection = section - 1;
+	////			id <NSFetchedResultsSectionInfo> sectionInfo = [[self.fetchedResultsController sections] objectAtIndex:frcSection];
+	////			return sectionInfo numberOfObjects];
+	////		}
+	//	}
+	
+//		 override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+//			let cell = tableView.cellForRow(at: indexPath) //countListeningTableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+//			
+////			let dict = playedTracks[indexPath.row] as! [String: Any]
+////			let countOfPlay = dict["countPlay"] as? Int
+////			let countOfTracks = dict["count"] as? Int
+////			if countOfPlay != nil && countOfTracks != nil {
+////				let str = NSString(format: "Count play: %d - Count tracks: %d", countOfPlay! , countOfTracks! )
+////				cell.textLabel?.text = str as String
+////			}
+//			return cell
+//		}
 }

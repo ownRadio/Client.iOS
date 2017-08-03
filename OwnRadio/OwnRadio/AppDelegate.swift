@@ -40,16 +40,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print("Приложение уже запускалось на этом устройстве")
         }
         
-		//TODO сохранять флаг, когда будут готовы все настройки
-		if userDefaults.object(forKey: "isSettingsDefault") == nil{
-			userDefaults.register(defaults: ["maxMemorySize" : 1])
-			userDefaults.register(defaults: ["isOnlyWiFi" : false])
-			
-			//userDefaults.set(1, forKey: "maxMemorySize")
-			//userDefaults.set(false, forKey: "isOnlyWiFi")
-			//userDefaults.set(true, forKey: "isSettingsDefault")
-			print("Настройки по умолчанию заданы")
-		}
+		//Регистрируем настройки по умолчанию (не меняя имеющиеся значения, если они уже есть)
+		userDefaults.register(defaults: ["maxMemorySize" : 1])
+		userDefaults.register(defaults: ["isOnlyWiFi" : false])
+
 		// создаем папку Tracks если ее нет
 		let applicationSupportPath = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
 		let tracksPath = applicationSupportPath.appendingPathComponent("Tracks")
