@@ -105,11 +105,11 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 									})
 								}
 							}
-							CoreDataManager.instance.setCountOfPlayForTrackBy(trackId: self.playingSong.trackID)
-							CoreDataManager.instance.setDateForTrackBy(trackId: self.playingSong.trackID)
-							CoreDataManager.instance.saveContext()
 						}
 					}
+					CoreDataManager.instance.setCountOfPlayForTrackBy(trackId: self.playingSong.trackID)
+					CoreDataManager.instance.setDateForTrackBy(trackId: self.playingSong.trackID)
+					CoreDataManager.instance.saveContext()
 				}
 			case .failed:
 				Downloader.sharedInstance.createPostNotificationSysInfo(message: "Playeer Item was fail")
