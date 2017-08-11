@@ -60,7 +60,7 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 	
 	var cachingView = CachingView.instanceFromNib()
 	var playedTracks: NSArray = CoreDataManager.instance.getGroupedTracks()
-	var reachability = NetworkReachabilityManager(host: "http://api.ownradio.ru/v3")
+	var reachability = NetworkReachabilityManager(host: "http://api.ownradio.ru/v5")
 	
 	let tracksUrlString =  FileManager.applicationSupportDir().appending("/Tracks/")
 	
@@ -68,6 +68,9 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 	//выполняется при загрузке окна
 	override func viewDidLoad() {
 		super.viewDidLoad()
+		
+		//включаем отображение навигационной панели
+		self.navigationController?.isNavigationBarHidden = false
 		
 		//задаем цвет навигационного бара
 		self.navigationController?.navigationBar.barTintColor = UIColor(red: 3.0/255.0, green: 169.0/255.0, blue: 244.0/255.0, alpha: 1.0)
@@ -187,6 +190,16 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 				MPNowPlayingInfoCenter.default().nowPlayingInfo![MPNowPlayingInfoPropertyPlaybackRate] = 1
 				
 			case .remoteControlTogglePlayPause:
+				guard MPNowPlayingInfoCenter.default().nowPlayingInfo != nil else {
+					break
+				}
+				changePlayBtnState()
+				MPNowPlayingInfoCenter.default().nowPlayingInfo![MPNowPlayingInfoPropertyElapsedPlaybackTime] = CMTimeGetSeconds(self.player.player.currentTime())
+				if player.isPlaying == false {
+					MPNowPlayingInfoCenter.default().nowPlayingInfo![MPNowPlayingInfoPropertyPlaybackRate] = 0
+				} else {
+					MPNowPlayingInfoCenter.default().nowPlayingInfo![MPNowPlayingInfoPropertyPlaybackRate] = 1
+				}
 				break
 				
 			case .remoteControlNextTrack:
@@ -420,8 +433,7 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 			self.player.player.pause()
 		}
 //		self.progressView.isHidden = true
-//		self.progressView.configure()
-        self.progressView.setProgress(0.0, animated: true)
+		self.progressView.setProgress(0.0, animated: false)
         
 		self.player.skipSong { [unowned self] in
 				self.updateUI()
