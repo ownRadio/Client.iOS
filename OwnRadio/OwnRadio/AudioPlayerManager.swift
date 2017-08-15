@@ -99,7 +99,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 							if let rootController = UIApplication.shared.keyWindow?.rootViewController {
 								let navigationController = rootController as! UINavigationController
 
-								if let radioViewContr = navigationController.viewControllers.first  as? RadioViewController {
+								if let radioViewContr = navigationController.topViewController  as? RadioViewController {
 									DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
 										radioViewContr.progressView.isHidden = false
 									})
@@ -200,9 +200,13 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 				if interruptionOption == AVAudioSessionInterruptionOptions.shouldResume {
 					self.pauseSong {
 						if let rootController = UIApplication.shared.keyWindow?.rootViewController {
-							let radioViewContr = rootController as! RadioViewController
-							DispatchQueue.main.async {
-								radioViewContr.updateUI()
+							let navigationController = rootController as! UINavigationController
+							
+							if let radioViewContr = navigationController.topViewController  as? RadioViewController {
+								DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
+									radioViewContr.updateUI()
+								})
+								
 							}
 						}
 					}

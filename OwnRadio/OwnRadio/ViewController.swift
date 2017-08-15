@@ -131,7 +131,7 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 	}
 	
 	func checkMemoryWarning() {
-		guard DiskStatus.freeDiskSpaceInBytes < 104857600 else {
+		guard DiskStatus.freeDiskSpaceInBytes < 104857600 && CoreDataManager.instance.chekCountOfEntitiesFor(entityName: "TrackEntity") < 1 else {
 			return
 		}
 		self.authorNameLbl.text = "Not enough free memory. To work correctly, you need at least 100 mb"
