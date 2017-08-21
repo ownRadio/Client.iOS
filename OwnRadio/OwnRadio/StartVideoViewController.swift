@@ -30,8 +30,16 @@ class StartVideoViewController: UIViewController, UIPageViewControllerDataSource
 	override func viewDidLoad(){
 		super.viewDidLoad()
 		
-		//если приложение уже запускалось на устройстве - не показываем видео-слайдер.
-		if UserDefaults.standard.object(forKey: "isAppAlreadyLaunchedOnce") != nil {
+		let userDefaults = UserDefaults.standard
+		
+		//Проверяем в первый ли раз было запущено приложение
+		if userDefaults.object(forKey: "isAppAlreadyLaunchedOnce") == nil {
+			ApiService.shared.registerDevice()
+			userDefaults.set(true, forKey: "isAppAlreadyLaunchedOnce")
+			print("Приложение запущено впервые")
+		}else{
+			print("Приложение уже запускалось на этом устройстве")
+			//если приложение уже запускалось на устройстве - не показываем видео-слайдер.
 			openMainViewController()
 		}
 		

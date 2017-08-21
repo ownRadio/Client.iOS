@@ -34,14 +34,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //			userDefaults.synchronize()
 //		}
 		
-        //Проверяем в первый ли раз было запущено приложение
-        if userDefaults.object(forKey: "isAppAlreadyLaunchedOnce") == nil {
-            ApiService.shared.registerDevice()
-            userDefaults.set(true, forKey: "isAppAlreadyLaunchedOnce")
-            print("Приложение запущено впервые")
-        }else{
-            print("Приложение уже запускалось на этом устройстве")
-        }
         
 		//Регистрируем настройки по умолчанию (не меняя имеющиеся значения, если они уже есть)
 		userDefaults.register(defaults: ["maxMemorySize" : 1])
