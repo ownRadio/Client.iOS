@@ -50,10 +50,6 @@ class StartVideoViewController: UIViewController, UIPageViewControllerDataSource
 		//отключаем отображение навигационной панели
 		self.navigationController?.isNavigationBarHidden = true
 		
-		
-		let delegate = UIApplication.shared.delegate as! AppDelegate
-		delegate.startVideoController = self
-		
 		let path = Bundle.main.path(forResource: "video", ofType: "mp4")
 		player = AVPlayer.init(url: URL.init(fileURLWithPath: path!))
 		
@@ -274,6 +270,7 @@ class StartVideoViewController: UIViewController, UIPageViewControllerDataSource
 	func openMainViewController() -> Void {
 		print("\(self.index)")
 		player.pause()
+		playerLayer = nil
 		NotificationCenter.default.removeObserver(self, name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: player.currentItem)
 		let storyboard = UIStoryboard(name: "Main", bundle: nil)
 		let viewController = storyboard.instantiateViewController(withIdentifier: "RadioViewController")

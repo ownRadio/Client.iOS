@@ -15,7 +15,6 @@ import Crashlytics
 class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	var window: UIWindow?
-	var startVideoController: StartVideoViewController?
 	//Задаём ориентацию экрана по умолчанию
 	var orientationLock = UIInterfaceOrientationMask.portrait
 	
@@ -115,7 +114,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	func applicationDidBecomeActive(_ application: UIApplication) {
 		// Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-		startVideoController?.playVideoBackgroud()
+		if let rootController = UIApplication.shared.keyWindow?.rootViewController {
+			let navigationController = rootController as! UINavigationController
+			//получаем отображаемый в текущий момент контроллер, если это контроллер видео-слайдера - возобновляем воспроизведение видео.
+			if let startViewContr = navigationController.topViewController  as? StartVideoViewController {
+				DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
+					startViewContr.playVideoBackgroud()
+				})
+				
+			}
+		}
 	}
 	
 	func applicationWillTerminate(_ application: UIApplication) {

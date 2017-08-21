@@ -67,6 +67,27 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		
 		UIApplication.shared.beginReceivingRemoteControlEvents()
 		
+		//Для того, чтобы убрать кнопку "назад" на заблокированном экране
+		//явно задаем отображаемые кнопки и функции, вызываемые по их нажатию
+		let commandCenter = MPRemoteCommandCenter.shared()
+		
+		let centre = MPRemoteCommandCenter.shared()
+		let handler: (String) -> ((MPRemoteCommandEvent) -> (MPRemoteCommandHandlerStatus)) = { (name) in
+			return { (event) -> MPRemoteCommandHandlerStatus in
+				dump("\(name) \(event.timestamp) \(event.command)")
+				return .success
+			}
+		}
+		
+		commandCenter.nextTrackCommand.isEnabled = true
+		commandCenter.nextTrackCommand.addTarget(handler: handler("skipSong"))
+		
+		commandCenter.playCommand.isEnabled = true
+		commandCenter.playCommand.addTarget(handler: handler("resumeSong"))
+		
+		commandCenter.pauseCommand.isEnabled = true
+		commandCenter.pauseCommand.addTarget(handler: handler("pauseSong"))
+		
 		NotificationCenter.default.addObserver(self, selector: #selector(onAudioSessionEvent(_:)), name: Notification.Name.AVAudioSessionInterruption, object: AVAudioSession.sharedInstance())
 	}
 	
@@ -149,7 +170,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
                     CoreDataManager.instance.saveContext()
                     
                     print("Поврежденный файл был найден и удален")
-                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"SПоврежденный файл был удален"])
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"Поврежденный файл был удален"])
                     
                     if self.checkCountFileInCache() {
                         //запускаем следующий трек
