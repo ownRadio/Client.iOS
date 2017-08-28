@@ -37,6 +37,9 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	var wasInterreption = false
     
     let tracksUrlString =  FileManager.applicationSupportDir().appending("/Tracks/")
+	
+	var isSkipped = false
+	
 	// MARK: Overrides
 	override init() {
 		super.init()
@@ -149,7 +152,8 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		if notification.object as? AVPlayerItem  == player.currentItem {
             let dateLastTrackPlay = CoreDataManager.instance.getDateForTrackBy(trackId: self.playingSong.trackID)
             let currentDate = NSDate.init(timeIntervalSinceNow: -60.0)
-            if dateLastTrackPlay != nil {
+            if dateLastTrackPlay != nil && !isSkipped{
+				isSkipped = false
                 //Если трек был доигран менее чем за минуту после начала его воспроизведения - трек битый. Удаляем его и не отправляем по нему историю
                 if (dateLastTrackPlay.self?.compare(currentDate as Date) == .orderedDescending) {
                     let path = self.tracksUrlString.appending((self.playingSong.path!))
@@ -187,7 +191,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
                     }
                     return
                 }
-        }
+			}
 			self.playingSong.isListen = 1
 			self.addDateToHistoryTable(playingSong: self.playingSong)
 			if self.playingSong.trackID != nil  {
@@ -246,6 +250,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	
 	func crashNetwork(_ notification: Notification) {
 		//		self.playerItem = nil
+		print("crashNetwork")
 		self.player.pause()
 		guard currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable else {
 			return
@@ -443,5 +448,10 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		historyEntity.recCreated = creationDateString
 		
 		CoreDataManager.instance.saveContext()
+	}
+	
+	func fwdTrackToEnd(){
+		isSkipped = true
+		player.seek(to: (player.currentItem?.duration)!-CMTimeMake(3, 1))
 	}
 }

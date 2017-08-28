@@ -460,5 +460,10 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 	@IBAction func refreshPressed() {
 		updateUI()
 	}
+	
+	@IBAction func skipTrackToEnd(_ sender: UIButton) {
+		self.player.fwdTrackToEnd()
+	}
+	
 }
 

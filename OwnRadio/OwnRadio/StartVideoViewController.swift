@@ -41,6 +41,7 @@ class StartVideoViewController: UIViewController, UIPageViewControllerDataSource
 			print("Приложение уже запускалось на этом устройстве")
 			//если приложение уже запускалось на устройстве - не показываем видео-слайдер.
 			openMainViewController()
+			return
 		}
 		
 		//убираем отступ от навигационной панели
