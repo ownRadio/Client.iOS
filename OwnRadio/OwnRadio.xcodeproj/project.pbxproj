@@ -10,7 +10,6 @@
 		091679551DE451CF00619B3F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 091679541DE451CF00619B3F /* AppDelegate.swift */; };
 		091679571DE451CF00619B3F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 091679561DE451CF00619B3F /* ViewController.swift */; };
 		0916795A1DE451CF00619B3F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 091679581DE451CF00619B3F /* Main.storyboard */; };
-		0916795C1DE451CF00619B3F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0916795B1DE451CF00619B3F /* Assets.xcassets */; };
 		0916795F1DE451CF00619B3F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0916795D1DE451CF00619B3F /* LaunchScreen.storyboard */; };
 		0916796A1DE451CF00619B3F /* OwnRadioTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 091679691DE451CF00619B3F /* OwnRadioTests.swift */; };
 		091679751DE451CF00619B3F /* OwnRadioUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 091679741DE451CF00619B3F /* OwnRadioUITests.swift */; };
@@ -34,6 +33,10 @@
 		09D52F8C1E3F36EF006B66E6 /* CachingView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 09D52F8B1E3F36EF006B66E6 /* CachingView.xib */; };
 		09D52F8E1E3F3F37006B66E6 /* CachingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09D52F8D1E3F3F37006B66E6 /* CachingView.swift */; };
 		09EA799B1DE57D040034B8DF /* AudioPlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EA799A1DE57D040034B8DF /* AudioPlayerManager.swift */; };
+		4E09FC7A1F331E810055CD84 /* ItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E09FC791F331E810055CD84 /* ItemViewController.swift */; };
+		4E09FC7C1F3325C40055CD84 /* StartVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E09FC7B1F3325C40055CD84 /* StartVideoViewController.swift */; };
+		4E09FC7F1F344DC00055CD84 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4E09FC7E1F344DC00055CD84 /* Assets.xcassets */; };
+		4E09FC801F3453FD0055CD84 /* video.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 4E09FC7D1F344D760055CD84 /* video.mp4 */; };
 		4E8D43571F2B778B00D77C87 /* AboutAppViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E8D43561F2B778B00D77C87 /* AboutAppViewController.swift */; };
 		4ED299581F28977A00E2616F /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ED299571F28977A00E2616F /* SettingsViewController.swift */; };
 		50D8269A1DE74B0800238F96 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50D826981DE74B0800238F96 /* Fabric.framework */; };
@@ -76,7 +79,6 @@
 		091679541DE451CF00619B3F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; usesTabs = 1; };
 		091679561DE451CF00619B3F /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; usesTabs = 1; };
 		091679591DE451CF00619B3F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		0916795B1DE451CF00619B3F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0916795E1DE451CF00619B3F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		091679601DE451CF00619B3F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		091679651DE451CF00619B3F /* OwnRadioTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OwnRadioTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -105,6 +107,10 @@
 		09D52F8B1E3F36EF006B66E6 /* CachingView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CachingView.xib; sourceTree = "<group>"; };
 		09D52F8D1E3F3F37006B66E6 /* CachingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CachingView.swift; sourceTree = "<group>"; };
 		09EA799A1DE57D040034B8DF /* AudioPlayerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioPlayerManager.swift; sourceTree = "<group>"; usesTabs = 1; };
+		4E09FC791F331E810055CD84 /* ItemViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ItemViewController.swift; sourceTree = "<group>"; };
+		4E09FC7B1F3325C40055CD84 /* StartVideoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartVideoViewController.swift; sourceTree = "<group>"; };
+		4E09FC7D1F344D760055CD84 /* video.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; name = video.mp4; path = ../video.mp4; sourceTree = "<group>"; };
+		4E09FC7E1F344DC00055CD84 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4E8D43561F2B778B00D77C87 /* AboutAppViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutAppViewController.swift; sourceTree = "<group>"; };
 		4ED299571F28977A00E2616F /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; usesTabs = 1; };
 		50D826981DE74B0800238F96 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Fabric.framework; sourceTree = "<group>"; };
@@ -161,6 +167,7 @@
 				091679C81DE47D9900619B3F /* Frameworks */,
 			);
 			sourceTree = "<group>";
+			usesTabs = 1;
 		};
 		091679521DE451CF00619B3F /* Products */ = {
 			isa = PBXGroup;
@@ -181,16 +188,19 @@
 				0971662E1DF84A7F005AB0CE /* DiskStatus.swift */,
 				093FBD0B1DEEFEB800038EF0 /* SongObject.swift */,
 				0989BD761DF5B01C005FE001 /* Downloader.swift */,
+				4E09FC7B1F3325C40055CD84 /* StartVideoViewController.swift */,
 				091679C61DE47D4400619B3F /* ApiService.swift */,
 				09EA799A1DE57D040034B8DF /* AudioPlayerManager.swift */,
 				091679561DE451CF00619B3F /* ViewController.swift */,
 				4ED299571F28977A00E2616F /* SettingsViewController.swift */,
 				4E8D43561F2B778B00D77C87 /* AboutAppViewController.swift */,
+				4E09FC791F331E810055CD84 /* ItemViewController.swift */,
 				09D52F8A1E3F36BA006B66E6 /* View */,
 				091679581DE451CF00619B3F /* Main.storyboard */,
-				0916795B1DE451CF00619B3F /* Assets.xcassets */,
+				4E09FC7E1F344DC00055CD84 /* Assets.xcassets */,
 				0916795D1DE451CF00619B3F /* LaunchScreen.storyboard */,
 				091679601DE451CF00619B3F /* Info.plist */,
+				4E09FC7D1F344D760055CD84 /* video.mp4 */,
 				090501101DE70FB400B1841C /* Fonts */,
 			);
 			path = OwnRadio;
@@ -321,7 +331,7 @@
 			attributes = {
 				LastSwiftUpdateCheck = 0800;
 				LastUpgradeCheck = 0820;
-				ORGANIZATIONNAME = "Roll'n'Code";
+				ORGANIZATIONNAME = "Netvox Lab";
 				TargetAttributes = {
 					091679501DE451CF00619B3F = {
 						CreatedOnToolsVersion = 8.0;
@@ -369,7 +379,8 @@
 				099EAE4B1E2FADDF005478F2 /* SFUIDisplay-Regular.otf in Resources */,
 				0916795F1DE451CF00619B3F /* LaunchScreen.storyboard in Resources */,
 				099EAE491E2FAA05005478F2 /* SFUIText-Regular.otf in Resources */,
-				0916795C1DE451CF00619B3F /* Assets.xcassets in Resources */,
+				4E09FC801F3453FD0055CD84 /* video.mp4 in Resources */,
+				4E09FC7F1F344DC00055CD84 /* Assets.xcassets in Resources */,
 				0916795A1DE451CF00619B3F /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -425,6 +436,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4E09FC7C1F3325C40055CD84 /* StartVideoViewController.swift in Sources */,
 				09B953A11DFEBED70098417C /* CircularView.swift in Sources */,
 				0979B1B91DF01085003C01C7 /* CoreDataManager.swift in Sources */,
 				4E8D43571F2B778B00D77C87 /* AboutAppViewController.swift in Sources */,
@@ -441,6 +453,7 @@
 				4ED299581F28977A00E2616F /* SettingsViewController.swift in Sources */,
 				098886861DFB069700E401B9 /* TrackEntity+CoreDataProperties.swift in Sources */,
 				098B515C1DF9623A00293DE5 /* HistoryEntity+CoreDataProperties.swift in Sources */,
+				4E09FC7A1F331E810055CD84 /* ItemViewController.swift in Sources */,
 				098B51561DF95E5000293DE5 /* HistoryEntity+CoreDataClass.swift in Sources */,
 				09EA799B1DE57D040034B8DF /* AudioPlayerManager.swift in Sources */,
 			);

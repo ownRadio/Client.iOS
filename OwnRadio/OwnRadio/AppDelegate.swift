@@ -15,6 +15,8 @@ import Crashlytics
 class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	var window: UIWindow?
+	//Задаём ориентацию экрана по умолчанию
+	var orientationLock = UIInterfaceOrientationMask.portrait
 	
 	//с этой функции начинается загрузка приложения
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
@@ -31,15 +33,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //			userDefaults.synchronize()
 //		}
 		
-        //Проверяем в первый ли раз было запущено приложение
-        if userDefaults.object(forKey: "isAppAlreadyLaunchedOnce") == nil {
-            ApiService.shared.registerDevice()
-            userDefaults.set(true, forKey: "isAppAlreadyLaunchedOnce")
-            print("Приложение запущено впервые")
-        }else{
-            print("Приложение уже запускалось на этом устройстве")
-        }
-        
+		//Проверяем в первый ли раз было запущено приложение
+		if userDefaults.object(forKey: "isAppAlreadyLaunchedOnce") == nil {
+			ApiService.shared.registerDevice()
+			userDefaults.set(true, forKey: "isAppAlreadyLaunchedOnce")
+			print("Приложение запущено впервые")
+		}
 		//Регистрируем настройки по умолчанию (не меняя имеющиеся значения, если они уже есть)
 		userDefaults.register(defaults: ["maxMemorySize" : 1])
 		userDefaults.register(defaults: ["isOnlyWiFi" : false])
@@ -98,6 +97,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		}
 	}
 	
+
+	//задаёт ориентацию экрана
+	func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
+		return self.orientationLock
+	}
+	
 	func applicationWillResignActive(_ application: UIApplication) {
 		// Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
 		// Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
@@ -114,6 +119,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	
 	func applicationDidBecomeActive(_ application: UIApplication) {
 		// Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+		if let rootController = UIApplication.shared.keyWindow?.rootViewController {
+			let navigationController = rootController as! UINavigationController
+			//получаем отображаемый в текущий момент контроллер, если это контроллер видео-слайдера - возобновляем воспроизведение видео.
+			if let startViewContr = navigationController.topViewController  as? StartVideoViewController {
+				DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
+					startViewContr.playVideoBackgroud()
+				})
+				
+			}
+		}
 	}
 	
 	func applicationWillTerminate(_ application: UIApplication) {

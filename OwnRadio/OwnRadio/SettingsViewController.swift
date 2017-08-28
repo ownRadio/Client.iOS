@@ -126,7 +126,7 @@ class SettingsViewController: UITableViewController {
 				
 				//удаляем треки из базы
 				CoreDataManager.instance.deleteAllTracks()
-				
+				CoreDataManager.instance.saveContext()
 				self.viewDidLoad()
 			}
 			

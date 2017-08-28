@@ -12,7 +12,7 @@ import UIKit
 
 class ApiService {
 	
-	let tracksUrl = URL(string: "http://api.ownradio.ru/v3/tracks/")
+	let tracksUrl = URL(string: "http://api.ownradio.ru/v4/tracks/")
 	var countRequest:Int! = 0
 	static let shared = ApiService()
 	init() {

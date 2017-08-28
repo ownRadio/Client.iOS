@@ -37,6 +37,9 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	var wasInterreption = false
     
     let tracksUrlString =  FileManager.applicationSupportDir().appending("/Tracks/")
+	
+	var isSkipped = false
+	
 	// MARK: Overrides
 	override init() {
 		super.init()
@@ -66,6 +69,27 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		try! audioSession.setActive(true)
 		
 		UIApplication.shared.beginReceivingRemoteControlEvents()
+		
+		//Для того, чтобы убрать кнопку "назад" на заблокированном экране
+		//явно задаем отображаемые кнопки и функции, вызываемые по их нажатию
+		let commandCenter = MPRemoteCommandCenter.shared()
+		
+		let centre = MPRemoteCommandCenter.shared()
+		let handler: (String) -> ((MPRemoteCommandEvent) -> (MPRemoteCommandHandlerStatus)) = { (name) in
+			return { (event) -> MPRemoteCommandHandlerStatus in
+				dump("\(name) \(event.timestamp) \(event.command)")
+				return .success
+			}
+		}
+		
+		commandCenter.nextTrackCommand.isEnabled = true
+		commandCenter.nextTrackCommand.addTarget(handler: handler("skipSong"))
+		
+		commandCenter.playCommand.isEnabled = true
+		commandCenter.playCommand.addTarget(handler: handler("resumeSong"))
+		
+		commandCenter.pauseCommand.isEnabled = true
+		commandCenter.pauseCommand.addTarget(handler: handler("pauseSong"))
 		
 		NotificationCenter.default.addObserver(self, selector: #selector(onAudioSessionEvent(_:)), name: Notification.Name.AVAudioSessionInterruption, object: AVAudioSession.sharedInstance())
 	}
@@ -99,7 +123,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 							if let rootController = UIApplication.shared.keyWindow?.rootViewController {
 								let navigationController = rootController as! UINavigationController
 
-								if let radioViewContr = navigationController.viewControllers.first  as? RadioViewController {
+								if let radioViewContr = navigationController.topViewController  as? RadioViewController {
 									DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
 										radioViewContr.progressView.isHidden = false
 									})
@@ -128,7 +152,8 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		if notification.object as? AVPlayerItem  == player.currentItem {
             let dateLastTrackPlay = CoreDataManager.instance.getDateForTrackBy(trackId: self.playingSong.trackID)
             let currentDate = NSDate.init(timeIntervalSinceNow: -60.0)
-            if dateLastTrackPlay != nil {
+            if dateLastTrackPlay != nil && !isSkipped{
+				isSkipped = false
                 //Если трек был доигран менее чем за минуту после начала его воспроизведения - трек битый. Удаляем его и не отправляем по нему историю
                 if (dateLastTrackPlay.self?.compare(currentDate as Date) == .orderedDescending) {
                     let path = self.tracksUrlString.appending((self.playingSong.path!))
@@ -149,7 +174,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
                     CoreDataManager.instance.saveContext()
                     
                     print("Поврежденный файл был найден и удален")
-                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"SПоврежденный файл был удален"])
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"Поврежденный файл был удален"])
                     
                     if self.checkCountFileInCache() {
                         //запускаем следующий трек
@@ -166,7 +191,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
                     }
                     return
                 }
-        }
+			}
 			self.playingSong.isListen = 1
 			self.addDateToHistoryTable(playingSong: self.playingSong)
 			if self.playingSong.trackID != nil  {
@@ -200,9 +225,13 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 				if interruptionOption == AVAudioSessionInterruptionOptions.shouldResume {
 					self.pauseSong {
 						if let rootController = UIApplication.shared.keyWindow?.rootViewController {
-							let radioViewContr = rootController as! RadioViewController
-							DispatchQueue.main.async {
-								radioViewContr.updateUI()
+							let navigationController = rootController as! UINavigationController
+							
+							if let radioViewContr = navigationController.topViewController  as? RadioViewController {
+								DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
+									radioViewContr.updateUI()
+								})
+								
 							}
 						}
 					}
@@ -221,6 +250,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	
 	func crashNetwork(_ notification: Notification) {
 		//		self.playerItem = nil
+		print("crashNetwork")
 		self.player.pause()
 		guard currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable else {
 			return
@@ -418,5 +448,10 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		historyEntity.recCreated = creationDateString
 		
 		CoreDataManager.instance.saveContext()
+	}
+	
+	func fwdTrackToEnd(){
+		isSkipped = true
+		player.seek(to: (player.currentItem?.duration)!-CMTimeMake(3, 1))
 	}
 }
