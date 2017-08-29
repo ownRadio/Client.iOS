@@ -51,7 +51,7 @@ class Downloader {
 						self.createPostNotificationSysInfo(message: "File already exist and won't load")
 						return
 					}
-					//используется замыкание для сохранения загруженного трека в файл и информации о треке в бд
+					//добавляем трек в очередь загрузки
 					let downloadRequest = self.createDownloadTask(audioUrl: audioUrl, destinationUrl: destinationUrl, dict: dict)
 					
 					downloadRequest.resume()
@@ -104,6 +104,22 @@ class Downloader {
 						let endPath = destinationUrl.appendingPathExtension("mp3")
 						try file?.write(to: endPath, options:.noFileProtection)
 						
+						//Проверяем, полностью ли скачан трек
+						if let contentLength = Int(httpResponse.allHeaderFields["Content-Length"] as! String) {
+							if file!.length != contentLength || file!.length == 0 {
+								if FileManager.default.fileExists(atPath: mp3Path.path) {
+									do{
+										// удаляем обьект по пути
+										try FileManager.default.removeItem(atPath: mp3Path.path)
+										self.createPostNotificationSysInfo(message: "Файл с длиной = \(file!.length), ContentLength = \(contentLength) удален")
+									}
+									catch {
+										print("Ошибка при удалении недокачанного трека")
+									}
+								}
+								return
+							}
+						}
 						//сохраняем информацию о файле в базу данных
 						
 						guard FileManager.default.fileExists(atPath: mp3Path.absoluteString ) == false else {

@@ -136,8 +136,19 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 					CoreDataManager.instance.saveContext()
 				}
 			case .failed:
-				Downloader.sharedInstance.createPostNotificationSysInfo(message: "Playeer Item was fail")
+				Downloader.sharedInstance.createPostNotificationSysInfo(message: "Player Item was fail")
 				print(playerItem.error.debugDescription)
+				self.skipSong{
+					if let rootController = UIApplication.shared.keyWindow?.rootViewController {
+						let navigationController = rootController as! UINavigationController
+						
+						if let radioViewContr = navigationController.topViewController  as? RadioViewController {
+							DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
+								radioViewContr.updateUI()
+							})
+						}
+					}
+				}
 				break
 			case .unknown:
 				break
