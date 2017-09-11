@@ -74,7 +74,6 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		//явно задаем отображаемые кнопки и функции, вызываемые по их нажатию
 		let commandCenter = MPRemoteCommandCenter.shared()
 		
-		let centre = MPRemoteCommandCenter.shared()
 		let handler: (String) -> ((MPRemoteCommandEvent) -> (MPRemoteCommandHandlerStatus)) = { (name) in
 			return { (event) -> MPRemoteCommandHandlerStatus in
 				dump("\(name) \(event.timestamp) \(event.command)")
@@ -131,9 +130,6 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 							}
 						}
 					}
-					CoreDataManager.instance.setCountOfPlayForTrackBy(trackId: self.playingSong.trackID)
-					CoreDataManager.instance.setDateForTrackBy(trackId: self.playingSong.trackID)
-					CoreDataManager.instance.saveContext()
 				}
 			case .failed:
 				Downloader.sharedInstance.createPostNotificationSysInfo(message: "Player Item was fail")
@@ -422,6 +418,9 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 //		}
 		//получаем из БД трек для проигрывания
 		self.playingSong = CoreDataManager.instance.getTrackToPlaing()
+		CoreDataManager.instance.setCountOfPlayForTrackBy(trackId: self.playingSong.trackID)
+		CoreDataManager.instance.setDateForTrackBy(trackId: self.playingSong.trackID)
+		CoreDataManager.instance.saveContext()
 		let str = FileManager.applicationSupportDir().addingPercentEncoding(withAllowedCharacters:.urlHostAllowed)
 		let docUrl = NSURL(string:str!)?.appendingPathComponent("Tracks")
 		let resUrl = docUrl?.absoluteURL.appendingPathComponent(playingSong.path!)

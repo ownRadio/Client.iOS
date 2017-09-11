@@ -369,6 +369,9 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
             if self.player.isPlaying == true {
                 if self.player.playingSong.trackLength != nil{
                 self.progressView.setProgress(Float(CGFloat(time.seconds) / CGFloat((self.player.playingSong.trackLength)!)), animated: false)
+					UserDefaults.standard.set(time.seconds.description, forKey:"lastTrackPosition")
+					UserDefaults.standard.set(self.player.playingSong.trackID as String, forKey:"lastTrack")
+					UserDefaults.standard.synchronize()
 //				self.progressView.progress = (CGFloat(time.seconds) / CGFloat((self.player.playingSong.trackLength)!))
                 }
 			}
