@@ -172,10 +172,12 @@ class Downloader {
 		// получаем трек проиграный большее кол-во раз
 		let song: SongObject? = CoreDataManager.instance.getOldTrack()
 		// получаем путь файла
-		guard song != nil else {
+		guard song != nil && song?.trackID != nil else {
 			return
 		}
-		let path = self.tracksUrlString.appending((song?.path!)!)
+		let path = self.tracksUrlString.appending((song?.path)!)
+		print("Удаляем \(song!.trackID)")
+		self.createPostNotificationSysInfo(message: "Удаляем \(song!.trackID.description)")
 		if FileManager.default.fileExists(atPath: path) {
 			do{
 				// удаляем обьект по пути
@@ -183,15 +185,21 @@ class Downloader {
 				self.createPostNotificationSysInfo(message: "File was delete")
 			}
 			catch {
-				print("Error with remove file ")
+				print("Deletion of file failed. Abort with error: \(error)")
+				self.createPostNotificationSysInfo(message: "Deletion of file failed. Abort with error: \(error)")
 			}
+		}
 			// удаляем трек с базы
 			//			CoreDataManager.instance.managedObjectContext.performAndWait {
 			CoreDataManager.instance.deleteTrackFor(trackID: (song?.trackID)!)
 			CoreDataManager.instance.saveContext()
 			//			}
 			
-		}
+//		} else {
+//			CoreDataManager.instance.deleteTrackFor(trackID: song!.trackID)
+//			CoreDataManager.instance.saveContext()
+//			self.createPostNotificationSysInfo(message: "Трек был удален ранее. Удалена запись о треке")
+//		}
 	}
 	
 	func fillCache () {

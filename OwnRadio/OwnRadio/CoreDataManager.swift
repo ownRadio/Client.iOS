@@ -246,7 +246,7 @@ class CoreDataManager {
 		return count
 	}
 	
-	// получает трек с найбольшим кол-вом проигрываний
+	// получает трек с наибольшим кол-вом проигрываний
 	func getOldTrack () -> SongObject? {
 		// устанавливаем сортировку по кол-ву поигрываний и по дате
 		let countSortDescriptor = NSSortDescriptor(key: "countPlay", ascending: false)
@@ -328,6 +328,36 @@ class CoreDataManager {
 		}
 		return listenTracks
 	}
+	
+	//возвращаем трек по id
+	func getTrackById(trackId: String) -> SongObject {
+		// создание запроса
+		let fetchRequest: NSFetchRequest<TrackEntity> = TrackEntity.fetchRequest()
+		// устанавливаем предикат для запроса
+		fetchRequest.predicate = NSPredicate(format: "recId = %@", trackId)
+		let song = SongObject()
+		do {
+			//выполняем запрос к БД
+			let searchResults = try self.managedObjectContext.fetch(fetchRequest)
+			//если в таблице нет записей - возращаем пустой объект song
+			guard searchResults.count != 0 else {
+				return song
+			}
+			//выбираем первую запись
+			let track = searchResults.first
+			
+			song.name = track?.trackName
+			song.artistName = track?.artistName
+			song.trackLength = track?.trackLength
+			song.trackID = track?.recId
+			song.path = track?.path
+//			song.isCorrect = track?.isCorrect
+		} catch {
+			print("Error with request: \(error)")
+		}
+		return song
+	}
+
 
 	// MARK: - Core Data Saving support
 	// функция сохранения контекста
