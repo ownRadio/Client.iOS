@@ -67,6 +67,12 @@ class CoreDataManager {
 	
 	lazy var managedObjectContext: NSManagedObjectContext = {
 		let coordinator = self.persistentStoreCoordinator
+		
+//		let mainObjectcontext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
+
+//		var managedObjectContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+//		managedObjectContext.parent = mainObjectcontext
+		
 		var managedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
 		managedObjectContext.persistentStoreCoordinator = coordinator
 		return managedObjectContext
@@ -175,6 +181,7 @@ class CoreDataManager {
 		// создание запроса
 		let fetchRequest: NSFetchRequest<TrackEntity> = TrackEntity.fetchRequest()
 		fetchRequest.sortDescriptors = sortDescriptors
+//		fetchRequest.predicate = NSPredicate(format: "isCorrect = %d", 1)
 		fetchRequest.fetchLimit = 1
 		let  song = SongObject()
 		do {
@@ -192,6 +199,7 @@ class CoreDataManager {
 			song.trackLength = track?.trackLength
 			song.trackID = track?.recId
 			song.path = track?.path
+//			song.isCorrect = track?.isCorrect
 			
 		} catch {
 			print("Error with request: \(error)")
@@ -274,6 +282,7 @@ class CoreDataManager {
 			song.trackLength = track?.trackLength
 			song.trackID = track?.recId
 			song.path = track?.path
+//			song.isCorrect = track?.isCorrect
 			
 		} catch {
 			print("Error with request: \(error)")

@@ -131,9 +131,22 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 		NotificationCenter.default.addObserver(self, selector: #selector(songDidPlay), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
 		//обновление системной информации
 		NotificationCenter.default.addObserver(self, selector: #selector(updateSysInfo(_:)), name: NSNotification.Name(rawValue:"updateSysInfo"), object: nil)
+		
 		NotificationCenter.default.addObserver(self, selector: #selector(AudioPlayerManager.sharedInstance.onAudioSessionEvent(_:)), name: Notification.Name.AVAudioSessionInterruption, object: AVAudioSession.sharedInstance())
-
+//		//
+//		NotificationCenter.default.addObserver(self, selector: #selector(updateUIAfterCleanCache(_:)), name: NSNotification.Name(rawValue:"updateUIAfterCleanCache"), object:
 	}
+//	override var shouldAutorotate: Bool {
+//		get{
+//			return false
+//		}
+//	}
+//	
+//	override var supportedInterfaceOrientations: UIInterfaceOrientationMask{
+//		get{
+//			return .portrait
+//		}
+//	}
 	
 	func checkMemoryWarning() {
 		guard DiskStatus.freeDiskSpaceInBytes < 104857600 && CoreDataManager.instance.chekCountOfEntitiesFor(entityName: "TrackEntity") < 1 else {
@@ -384,6 +397,12 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 					UserDefaults.standard.set(time.seconds.description, forKey:"lastTrackPosition")
 					UserDefaults.standard.set(self.player.playingSong.trackID as String, forKey:"lastTrack")
 					UserDefaults.standard.synchronize()
+					
+//					print("trackid = \(self.player.playingSong.trackID)")
+//					print(UserDefaults.standard.object(forKey: "lastTrack") ?? "lastTracks")
+//					print(UserDefaults.standard.object(forKey: "lastTrackPosition") ?? "lastTrackPositionlk")
+					
+//					print("progress is \(time.seconds) from \(self.player.playingSong.trackLength)")
 //				self.progressView.progress = (CGFloat(time.seconds) / CGFloat((self.player.playingSong.trackLength)!))
                 }
 			}
@@ -485,5 +504,18 @@ class RadioViewController: UIViewController, UITableViewDataSource, UITableViewD
 			dest.controlsAudioDelegat = self
 		}
 	}
+	
+//	func updateUIAfterCleanCache(_ notification: Notification){
+//		DispatchQueue.main.async {
+//
+////				guard let userInfo = notification.userInfo,
+////					let message = userInfo["message"] as? String else
+//			
+//			if CoreDataManager.instance.getCountOfTracks() < 1 {
+//				self.view.addSubview(self.cachingView)
+//			}
+//		}
+//	}
+	
 }
 

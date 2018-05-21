@@ -19,7 +19,7 @@
 	<key>CFBundleShortVersionString</key>
 	<string>2018.03.05</string>
 	<key>CFBundleVersion</key>
-	<string>4674</string>
+	<string>4680</string>
 	<key>Fabric</key>
 	<dict>
 		<key>APIKey</key>
@@ -56,8 +56,6 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>

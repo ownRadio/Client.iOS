@@ -136,6 +136,7 @@ class Downloader {
 						trackEntity.trackLength = NSString(string: dict["length"] as! String).doubleValue
 						trackEntity.recId = dict["id"] as! String?
 						trackEntity.playingDate = NSDate.init(timeIntervalSinceNow: -315360000.0042889)
+//						trackEntity.isCorrect = 1
 						
 						CoreDataManager.instance.saveContext()
 						

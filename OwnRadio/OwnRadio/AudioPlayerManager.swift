@@ -46,6 +46,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		//подписываемся на уведомления плеера
 		//трек проигран до конца
 		
+		print("init audioPlayerManager")
 		NotificationCenter.default.addObserver(self, selector: #selector(playerItemDidReachEnd(_:)), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player.currentItem)
 		//проигрывание было прервано
 		NotificationCenter.default.addObserver(self, selector: #selector(crashNetwork(_:)), name: NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: self.player.currentItem)
@@ -53,7 +54,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	}
 	
 	deinit {
-		
+		print("deinit audioPlayerManager")
 		self.removeObserver(self, forKeyPath: #keyPath(AudioPlayerManager.playerItem.status))
 		
 		NotificationCenter.default.removeObserver(self, name:  NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player.currentItem)
@@ -166,6 +167,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
             let dateLastTrackPlay = CoreDataManager.instance.getDateForTrackBy(trackId: self.playingSong.trackID)
             let currentDate = NSDate.init(timeIntervalSinceNow: -60.0)
             if dateLastTrackPlay != nil && !isSkipped{
+				print(NSDate(), "isSkipped=", isSkipped.description)
                 //Если трек был доигран менее чем за минуту после начала его воспроизведения - трек битый. Удаляем его и не отправляем по нему историю
                 if (dateLastTrackPlay.self?.compare(currentDate as Date) == .orderedDescending) {
                     let path = self.tracksUrlString.appending((self.playingSong.path!))
@@ -225,9 +227,11 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		guard let userInfo = notification.userInfo as? [String: AnyObject] else { return }
 		guard let rawInterruptionType = userInfo[AVAudioSessionInterruptionTypeKey] as? NSNumber else { return }
 		//получаем информацию о прерывании
-		guard let interruptionType = AVAudioSessionInterruptionType.init(rawValue: rawInterruptionType.uintValue) else {
-			return
-		}
+//		do{
+			guard let interruptionType = /*try*/ AVAudioSessionInterruptionType.init(rawValue: rawInterruptionType.uintValue) else {
+				return
+			}
+		
 		
 		switch interruptionType {
 			
@@ -258,7 +262,14 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 				print("Began Playing - FALSE")
 				wasInterreption = true
 			}
+			
+			
+		
 		}
+//
+//		}catch {
+//
+//		}
 	}
 	
 	func crashNetwork(_ notification: Notification) {
@@ -437,6 +448,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		self.playAudioWith(trackURL: url as URL)
 		self.playingSongID = self.playingSong.trackID
 		self.configurePlayingSong(song: self.playingSong)
+		print("Трек для проигрывания", self.playingSong.trackID)
 		if complition != nil {
 			complition!()
 		}
@@ -469,5 +481,42 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	func fwdTrackToEnd(){
 		isSkipped = true
 		player.seek(to: (player.currentItem?.duration)!-CMTimeMake(3, 1))
+//		print(player.currentItem?.currentTime().seconds)
+//		preloadTrack()
+		
+		
+	}
+	
+	func preloadTrack(){
+		if let lastTrack = UserDefaults.standard.string(forKey: "lastTrack") {
+			
+			
+			self.playingSong = CoreDataManager.instance.getTrackById(trackId: lastTrack)
+			CoreDataManager.instance.setDateForTrackBy(trackId: self.playingSong.trackID)
+			CoreDataManager.instance.saveContext()
+			let str = FileManager.applicationSupportDir().addingPercentEncoding(withAllowedCharacters:.urlHostAllowed)
+			let docUrl = NSURL(string:str!)?.appendingPathComponent("Tracks")
+			let resUrl = docUrl?.absoluteURL.appendingPathComponent(playingSong.path!)
+			guard let url = resUrl else {
+				return
+			}
+			self.player.pause()
+			self.playAudioWith(trackURL: url as URL)
+			self.playingSongID = self.playingSong.trackID
+			self.configurePlayingSong(song: self.playingSong)
+//			if complition != nil {
+//				complition!()
+//			}
+			
+			
+			
+			var lastPosition = CMTimeMake(Int64(UserDefaults.standard.float(forKey: "lastTrackPosition")*10), 10) - CMTimeMake(5, 1)
+			if lastPosition.seconds < 0 {
+				lastPosition = CMTimeMake(0, 1)
+			}
+			
+			player.seek(to: lastPosition)
+			print(player.currentItem?.currentTime().seconds)
+		}
 	}
 }

@@ -192,6 +192,7 @@ class SettingsViewController: UITableViewController {
 				CoreDataManager.instance.saveContext()
 			}
 			
+//			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateUIAfterCleanCache"), object: nil)
 			self.viewDidLoad()
 		}))
 		

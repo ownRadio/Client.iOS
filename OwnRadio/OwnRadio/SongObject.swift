@@ -17,6 +17,7 @@ class SongObject: NSObject {
 	var methodId: String!
 	var isListen: Int32?
 	var path: String?
+//	var isCorrect: Int32?
 
 	func initWithDict(dict:Dictionary<String,AnyObject>) {
 		self.name = dict["name"] as? String
@@ -24,6 +25,7 @@ class SongObject: NSObject {
 		self.trackLength =  NSString(string: dict["length"] as! String).doubleValue
 		self.artistName = dict["artist"] as? String!
 		self.methodId = dict["methodid"] as? String!
+//		self.isCorrect = NSString(String: dict["isCorrect"] as! String).
 	}
 
 }
