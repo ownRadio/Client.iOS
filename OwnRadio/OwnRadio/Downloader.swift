@@ -51,7 +51,7 @@ class Downloader {
 						self.createPostNotificationSysInfo(message: "File already exist and won't load")
 						return
 					}
-					//используется замыкание для сохранения загруженного трека в файл и информации о треке в бд
+					//добавляем трек в очередь загрузки
 					let downloadRequest = self.createDownloadTask(audioUrl: audioUrl, destinationUrl: destinationUrl, dict: dict)
 					
 					downloadRequest.resume()
@@ -104,6 +104,22 @@ class Downloader {
 						let endPath = destinationUrl.appendingPathExtension("mp3")
 						try file?.write(to: endPath, options:.noFileProtection)
 						
+						//Проверяем, полностью ли скачан трек
+						if let contentLength = Int(httpResponse.allHeaderFields["Content-Length"] as! String) {
+							if file!.length != contentLength || file!.length == 0 {
+								if FileManager.default.fileExists(atPath: mp3Path.path) {
+									do{
+										// удаляем обьект по пути
+										try FileManager.default.removeItem(atPath: mp3Path.path)
+										self.createPostNotificationSysInfo(message: "Файл с длиной = \(file!.length), ContentLength = \(contentLength) удален")
+									}
+									catch {
+										print("Ошибка при удалении недокачанного трека")
+									}
+								}
+								return
+							}
+						}
 						//сохраняем информацию о файле в базу данных
 						
 						guard FileManager.default.fileExists(atPath: mp3Path.absoluteString ) == false else {
@@ -120,6 +136,7 @@ class Downloader {
 						trackEntity.trackLength = NSString(string: dict["length"] as! String).doubleValue
 						trackEntity.recId = dict["id"] as! String?
 						trackEntity.playingDate = NSDate.init(timeIntervalSinceNow: -315360000.0042889)
+//						trackEntity.isCorrect = 1
 						
 						CoreDataManager.instance.saveContext()
 						
@@ -156,10 +173,12 @@ class Downloader {
 		// получаем трек проиграный большее кол-во раз
 		let song: SongObject? = CoreDataManager.instance.getOldTrack()
 		// получаем путь файла
-		guard song != nil else {
+		guard song != nil && song?.trackID != nil else {
 			return
 		}
-		let path = self.tracksUrlString.appending((song?.path!)!)
+		let path = self.tracksUrlString.appending((song?.path)!)
+		print("Удаляем \(song!.trackID)")
+		self.createPostNotificationSysInfo(message: "Удаляем \(song!.trackID.description)")
 		if FileManager.default.fileExists(atPath: path) {
 			do{
 				// удаляем обьект по пути
@@ -167,15 +186,21 @@ class Downloader {
 				self.createPostNotificationSysInfo(message: "File was delete")
 			}
 			catch {
-				print("Error with remove file ")
+				print("Deletion of file failed. Abort with error: \(error)")
+				self.createPostNotificationSysInfo(message: "Deletion of file failed. Abort with error: \(error)")
 			}
+		}
 			// удаляем трек с базы
 			//			CoreDataManager.instance.managedObjectContext.performAndWait {
 			CoreDataManager.instance.deleteTrackFor(trackID: (song?.trackID)!)
 			CoreDataManager.instance.saveContext()
 			//			}
 			
-		}
+//		} else {
+//			CoreDataManager.instance.deleteTrackFor(trackID: song!.trackID)
+//			CoreDataManager.instance.saveContext()
+//			self.createPostNotificationSysInfo(message: "Трек был удален ранее. Удалена запись о треке")
+//		}
 	}
 	
 	func fillCache () {

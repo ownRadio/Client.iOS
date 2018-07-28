@@ -46,6 +46,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		//подписываемся на уведомления плеера
 		//трек проигран до конца
 		
+		print("init audioPlayerManager")
 		NotificationCenter.default.addObserver(self, selector: #selector(playerItemDidReachEnd(_:)), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player.currentItem)
 		//проигрывание было прервано
 		NotificationCenter.default.addObserver(self, selector: #selector(crashNetwork(_:)), name: NSNotification.Name.AVPlayerItemFailedToPlayToEndTime, object: self.player.currentItem)
@@ -53,7 +54,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	}
 	
 	deinit {
-		
+		print("deinit audioPlayerManager")
 		self.removeObserver(self, forKeyPath: #keyPath(AudioPlayerManager.playerItem.status))
 		
 		NotificationCenter.default.removeObserver(self, name:  NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player.currentItem)
@@ -74,7 +75,6 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		//явно задаем отображаемые кнопки и функции, вызываемые по их нажатию
 		let commandCenter = MPRemoteCommandCenter.shared()
 		
-		let centre = MPRemoteCommandCenter.shared()
 		let handler: (String) -> ((MPRemoteCommandEvent) -> (MPRemoteCommandHandlerStatus)) = { (name) in
 			return { (event) -> MPRemoteCommandHandlerStatus in
 				dump("\(name) \(event.timestamp) \(event.command)")
@@ -131,13 +131,27 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 							}
 						}
 					}
-					CoreDataManager.instance.setCountOfPlayForTrackBy(trackId: self.playingSong.trackID)
-					CoreDataManager.instance.setDateForTrackBy(trackId: self.playingSong.trackID)
-					CoreDataManager.instance.saveContext()
+//					CoreDataManager.instance.setCountOfPlayForTrackBy(trackId: self.playingSong.trackID)
+//					CoreDataManager.instance.setDateForTrackBy(trackId: self.playingSong.trackID)
+//					CoreDataManager.instance.saveContext()
 				}
 			case .failed:
-				Downloader.sharedInstance.createPostNotificationSysInfo(message: "Playeer Item was fail")
+				Downloader.sharedInstance.createPostNotificationSysInfo(message: "Player Item was fail")
 				print(playerItem.error.debugDescription)
+//				CoreDataManager.instance.setCountOfPlayForTrackBy(trackId: self.playingSong.trackID)
+//				CoreDataManager.instance.setDateForTrackBy(trackId: self.playingSong.trackID)
+//				CoreDataManager.instance.saveContext()
+				self.skipSong{
+					if let rootController = UIApplication.shared.keyWindow?.rootViewController {
+						let navigationController = rootController as! UINavigationController
+						
+						if let radioViewContr = navigationController.topViewController  as? RadioViewController {
+							DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
+								radioViewContr.updateUI()
+							})
+						}
+					}
+				}
 				break
 			case .unknown:
 				break
@@ -153,7 +167,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
             let dateLastTrackPlay = CoreDataManager.instance.getDateForTrackBy(trackId: self.playingSong.trackID)
             let currentDate = NSDate.init(timeIntervalSinceNow: -60.0)
             if dateLastTrackPlay != nil && !isSkipped{
-				isSkipped = false
+				print(NSDate(), "isSkipped=", isSkipped.description)
                 //Если трек был доигран менее чем за минуту после начала его воспроизведения - трек битый. Удаляем его и не отправляем по нему историю
                 if (dateLastTrackPlay.self?.compare(currentDate as Date) == .orderedDescending) {
                     let path = self.tracksUrlString.appending((self.playingSong.path!))
@@ -175,28 +189,29 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
                     
                     print("Поврежденный файл был найден и удален")
                     NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"Поврежденный файл был удален"])
-                    
-                    if self.checkCountFileInCache() {
-                        //запускаем следующий трек
-                        self.nextTrack{
-                            
-                        }
-                    } else {
-                        self.playingSong = SongObject()
-                        self.playingSong.trackID = nil
-                        self.player.pause()
-                        isPlaying = false
-                        self.playerItem = nil
-                        configurePlayingSong(song: playingSong)
-                    }
-                    return
-                }
+					return
+				}
+			}
+			isSkipped = false
+			
+			if self.checkCountFileInCache() {
+				//запускаем следующий трек
+				self.nextTrack{
+					
+				}
+			} else {
+				self.playingSong = SongObject()
+				self.playingSong.trackID = nil
+				self.player.pause()
+				isPlaying = false
+				self.playerItem = nil
+				configurePlayingSong(song: playingSong)
 			}
 			self.playingSong.isListen = 1
 			self.addDateToHistoryTable(playingSong: self.playingSong)
 			if self.playingSong.trackID != nil  {
-//				CoreDataManager.instance.setDateForTrackBy(trackId: self.playingSong.trackID)
-//								CoreDataManager.instance.setCountOfPlayForTrackBy(trackId: self.playingSong.trackID)
+				CoreDataManager.instance.setDateForTrackBy(trackId: self.playingSong.trackID)
+				CoreDataManager.instance.setCountOfPlayForTrackBy(trackId: self.playingSong.trackID)
 				CoreDataManager.instance.saveContext()
 			}
 		}
@@ -212,9 +227,11 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		guard let userInfo = notification.userInfo as? [String: AnyObject] else { return }
 		guard let rawInterruptionType = userInfo[AVAudioSessionInterruptionTypeKey] as? NSNumber else { return }
 		//получаем информацию о прерывании
-		guard let interruptionType = AVAudioSessionInterruptionType.init(rawValue: rawInterruptionType.uintValue) else {
-			return
-		}
+//		do{
+			guard let interruptionType = /*try*/ AVAudioSessionInterruptionType.init(rawValue: rawInterruptionType.uintValue) else {
+				return
+			}
+		
 		
 		switch interruptionType {
 			
@@ -245,7 +262,14 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 				print("Began Playing - FALSE")
 				wasInterreption = true
 			}
+			
+			
+		
 		}
+//
+//		}catch {
+//
+//		}
 	}
 	
 	func crashNetwork(_ notification: Notification) {
@@ -409,8 +433,11 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 //		if currentReachabilityStatus != NSObject.ReachabilityStatus.notReachable{
 //			CoreDataManager.instance.sentHistory()
 //		}
-		//получаем из БД трек для проигрывания
+		//получаем из БД трек для проигрывания и сразу сохраняем факт начала проигрывания
 		self.playingSong = CoreDataManager.instance.getTrackToPlaing()
+		CoreDataManager.instance.setCountOfPlayForTrackBy(trackId: self.playingSong.trackID)
+		CoreDataManager.instance.setDateForTrackBy(trackId: self.playingSong.trackID)
+		CoreDataManager.instance.saveContext()
 		let str = FileManager.applicationSupportDir().addingPercentEncoding(withAllowedCharacters:.urlHostAllowed)
 		let docUrl = NSURL(string:str!)?.appendingPathComponent("Tracks")
 		let resUrl = docUrl?.absoluteURL.appendingPathComponent(playingSong.path!)
@@ -421,6 +448,7 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 		self.playAudioWith(trackURL: url as URL)
 		self.playingSongID = self.playingSong.trackID
 		self.configurePlayingSong(song: self.playingSong)
+		print("Трек для проигрывания", self.playingSong.trackID)
 		if complition != nil {
 			complition!()
 		}
@@ -453,5 +481,42 @@ class AudioPlayerManager: NSObject, AVAssetResourceLoaderDelegate, NSURLConnecti
 	func fwdTrackToEnd(){
 		isSkipped = true
 		player.seek(to: (player.currentItem?.duration)!-CMTimeMake(3, 1))
+//		print(player.currentItem?.currentTime().seconds)
+//		preloadTrack()
+		
+		
+	}
+	
+	func preloadTrack(){
+		if let lastTrack = UserDefaults.standard.string(forKey: "lastTrack") {
+			
+			
+			self.playingSong = CoreDataManager.instance.getTrackById(trackId: lastTrack)
+			CoreDataManager.instance.setDateForTrackBy(trackId: self.playingSong.trackID)
+			CoreDataManager.instance.saveContext()
+			let str = FileManager.applicationSupportDir().addingPercentEncoding(withAllowedCharacters:.urlHostAllowed)
+			let docUrl = NSURL(string:str!)?.appendingPathComponent("Tracks")
+			let resUrl = docUrl?.absoluteURL.appendingPathComponent(playingSong.path!)
+			guard let url = resUrl else {
+				return
+			}
+			self.player.pause()
+			self.playAudioWith(trackURL: url as URL)
+			self.playingSongID = self.playingSong.trackID
+			self.configurePlayingSong(song: self.playingSong)
+//			if complition != nil {
+//				complition!()
+//			}
+			
+			
+			
+			var lastPosition = CMTimeMake(Int64(UserDefaults.standard.float(forKey: "lastTrackPosition")*10), 10) - CMTimeMake(5, 1)
+			if lastPosition.seconds < 0 {
+				lastPosition = CMTimeMake(0, 1)
+			}
+			
+			player.seek(to: lastPosition)
+			print(player.currentItem?.currentTime().seconds)
+		}
 	}
 }

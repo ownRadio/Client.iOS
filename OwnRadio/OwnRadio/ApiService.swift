@@ -118,7 +118,7 @@ class ApiService {
 			}
 			
 			if let httpResponse = response as? HTTPURLResponse {
-				print("status code \(httpResponse.statusCode)")
+				print("saveHistory: status code \(httpResponse.statusCode)")
                 if (httpResponse.allHeaderFields["Location"] as? String) != nil || httpResponse.statusCode == 201 {
                         if data != nil {
                             //если история передана успешна - удаляем из таблицы история запись об этом треке
@@ -179,7 +179,7 @@ class ApiService {
             }
             
             if let httpResponse = response as? HTTPURLResponse {
-                print("status code \(httpResponse.statusCode)")
+				print("registerDevice: status code \(httpResponse.statusCode)")
                 if (httpResponse.allHeaderFields["Location"] as? String) != nil || httpResponse.statusCode == 201 {
                     if data != nil {
                         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"Устройство зарегистрировано, код: \(httpResponse.statusCode)"])
@@ -231,7 +231,7 @@ class ApiService {
             }
             
             if let httpResponse = response as? HTTPURLResponse {
-                print("status code \(httpResponse.statusCode)")
+				print("setTrackIsCorrect: status code \(httpResponse.statusCode)")
                 if httpResponse.statusCode == 201 {
                     if data != nil {
                         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSysInfo"), object: nil, userInfo: ["message":"Трек помечен некорректным, код: \(httpResponse.statusCode)"])

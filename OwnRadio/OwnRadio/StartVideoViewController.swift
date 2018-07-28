@@ -77,6 +77,19 @@ class StartVideoViewController: UIViewController, UIPageViewControllerDataSource
 		}
 	}
 	
+	
+	override var shouldAutorotate: Bool {
+		get{
+			return false
+		}
+	}
+	
+	override var supportedInterfaceOrientations: UIInterfaceOrientationMask{
+		get{
+			return .portrait
+		}
+	}
+	
 	func timerStart() -> Void {
 		timer.invalidate()
 		timer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: "timerUpdate", userInfo: Date(), repeats: true)

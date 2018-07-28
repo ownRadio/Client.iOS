@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MediaPlayer
 import Foundation
 
 class SettingsViewController: UITableViewController {
@@ -26,7 +27,8 @@ class SettingsViewController: UITableViewController {
 
 	//получаем таблицу с количеством треков сгруппированных по количестсву их прослушиваний
 	var playedTracks: NSArray = CoreDataManager.instance.getGroupedTracks()
-	
+	var controlsAudioDelegat: controlsAudio?
+
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		let userDefaults = UserDefaults.standard
@@ -77,6 +79,28 @@ class SettingsViewController: UITableViewController {
 		
 		countPlayingTracksTable.numberOfLines = playedTracks.count
 		countPlayingTracksTable.text = str as String
+		
+		
+		UIApplication.shared.beginReceivingRemoteControlEvents()
+		let commandCenter = MPRemoteCommandCenter.shared()
+		
+		let handler: (String) -> ((MPRemoteCommandEvent) -> (MPRemoteCommandHandlerStatus)) = { (name) in
+			return { (event) -> MPRemoteCommandHandlerStatus in
+				dump("\(name) \(event.timestamp) \(event.command)")
+				return .success
+			}
+		}
+		
+		commandCenter.nextTrackCommand.isEnabled = true
+		commandCenter.nextTrackCommand.addTarget(handler: handler("skipSong"))
+		
+		commandCenter.playCommand.isEnabled = true
+		commandCenter.playCommand.addTarget(handler: handler("resumeSong"))
+		
+		commandCenter.pauseCommand.isEnabled = true
+		commandCenter.pauseCommand.addTarget(handler: handler("pauseSong"))
+		
+		NotificationCenter.default.addObserver(self, selector: #selector(AudioPlayerManager.sharedInstance.onAudioSessionEvent(_:)), name: Notification.Name.AVAudioSessionInterruption, object: AVAudioSession.sharedInstance())
 	}
 	
 	@IBAction func onlyWiFiSwitchValueChanged(_ sender: UISwitch) {
@@ -168,6 +192,7 @@ class SettingsViewController: UITableViewController {
 				CoreDataManager.instance.saveContext()
 			}
 			
+//			NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateUIAfterCleanCache"), object: nil)
 			self.viewDidLoad()
 		}))
 		
@@ -185,6 +210,14 @@ class SettingsViewController: UITableViewController {
 		UIApplication.shared.openURL(NSURL(string: "itms://itunes.apple.com/ru/app/ownradio/id1179868370")! as URL)
 	}
 	
+	
+	override func remoteControlReceived(with event: UIEvent?) {
+		guard let controlsAudio = controlsAudioDelegat else {
+			print("ControlsAudio delegate wasn't set!")
+			return
+		}
+		controlsAudio.remoteControlReceived(with: event)
+	}
 //	override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
 ////		if indexPath.section == 4 && indexPath.row == 0 {
 ////
